@@ -1,0 +1,167 @@
+import { getDb } from "@/lib/db";
+import {
+  turmas,
+  turmaStudents,
+  turmaLessons,
+  turmaTasks,
+  students,
+  user,
+  lessons,
+  tasks,
+} from "@/lib/db/schema";
+import { eq, and, desc, count, notInArray, inArray } from "drizzle-orm";
+
+export async function getTurmas(teacherId: string) {
+  const db = getDb();
+
+  const turmaList = await db
+    .select()
+    .from(turmas)
+    .where(eq(turmas.teacherId, teacherId))
+    .orderBy(desc(turmas.createdAt));
+
+  const turmaIds = turmaList.map((t) => t.id);
+
+  if (turmaIds.length === 0) return [];
+
+  const studentCounts = await db
+    .select({
+      turmaId: turmaStudents.turmaId,
+      count: count(),
+    })
+    .from(turmaStudents)
+    .where(inArray(turmaStudents.turmaId, turmaIds))
+    .groupBy(turmaStudents.turmaId);
+
+  const countMap = new Map(studentCounts.map((sc) => [sc.turmaId, sc.count]));
+
+  return turmaList.map((t) => ({
+    ...t,
+    studentCount: countMap.get(t.id) ?? 0,
+  }));
+}
+
+export async function getTurma(id: string, teacherId: string) {
+  const db = getDb();
+  return db.query.turmas.findFirst({
+    where: (t, { eq: e, and: a }) =>
+      a(e(t.id, id), e(t.teacherId, teacherId)),
+  });
+}
+
+export async function getTurmaMembers(turmaId: string) {
+  const db = getDb();
+
+  return db
+    .select({
+      studentId: students.id,
+      studentUserId: students.userId,
+      xp: students.xp,
+      currentStreak: students.currentStreak,
+      joinedAt: turmaStudents.createdAt,
+      userName: user.name,
+      userEmail: user.email,
+    })
+    .from(turmaStudents)
+    .innerJoin(students, eq(turmaStudents.studentId, students.id))
+    .innerJoin(user, eq(students.userId, user.id))
+    .where(eq(turmaStudents.turmaId, turmaId))
+    .orderBy(desc(turmaStudents.createdAt));
+}
+
+export async function getTurmaLessons(turmaId: string, teacherId: string) {
+  const db = getDb();
+
+  return db
+    .select({
+      id: lessons.id,
+      title: lessons.title,
+      category: lessons.category,
+      status: lessons.status,
+      linkedAt: turmaLessons.createdAt,
+    })
+    .from(turmaLessons)
+    .innerJoin(lessons, eq(turmaLessons.lessonId, lessons.id))
+    .where(
+      and(
+        eq(turmaLessons.turmaId, turmaId),
+        eq(lessons.teacherId, teacherId),
+      ),
+    )
+    .orderBy(desc(turmaLessons.createdAt));
+}
+
+export async function getTurmaTasks(turmaId: string, teacherId: string) {
+  const db = getDb();
+
+  return db
+    .select({
+      id: tasks.id,
+      title: tasks.title,
+      taskType: tasks.taskType,
+      level: tasks.level,
+      status: tasks.status,
+      linkedAt: turmaTasks.createdAt,
+    })
+    .from(turmaTasks)
+    .innerJoin(tasks, eq(turmaTasks.taskId, tasks.id))
+    .where(
+      and(eq(turmaTasks.turmaId, turmaId), eq(tasks.teacherId, teacherId)),
+    )
+    .orderBy(desc(turmaTasks.createdAt));
+}
+
+export async function getAvailableLessons(
+  teacherId: string,
+  turmaId: string,
+) {
+  const db = getDb();
+
+  const linkedLessonIds = await db
+    .select({ lessonId: turmaLessons.lessonId })
+    .from(turmaLessons)
+    .where(eq(turmaLessons.turmaId, turmaId));
+
+  const excludeIds = linkedLessonIds.map((l) => l.lessonId);
+
+  const conditions = [
+    eq(lessons.teacherId, teacherId),
+    eq(lessons.status, "published"),
+  ];
+
+  if (excludeIds.length > 0) {
+    conditions.push(notInArray(lessons.id, excludeIds));
+  }
+
+  return db
+    .select({ id: lessons.id, title: lessons.title })
+    .from(lessons)
+    .where(and(...conditions))
+    .orderBy(desc(lessons.createdAt));
+}
+
+export async function getAvailableTasks(teacherId: string, turmaId: string) {
+  const db = getDb();
+
+  const linkedTaskIds = await db
+    .select({ taskId: turmaTasks.taskId })
+    .from(turmaTasks)
+    .where(eq(turmaTasks.turmaId, turmaId));
+
+  const excludeIds = linkedTaskIds.map((t) => t.taskId);
+
+  const conditions = [
+    eq(tasks.teacherId, teacherId),
+    eq(tasks.status, "published"),
+  ];
+
+  if (excludeIds.length > 0) {
+    conditions.push(notInArray(tasks.id, excludeIds));
+  }
+
+  return db
+    .select({ id: tasks.id, title: tasks.title })
+    .from(tasks)
+    .where(and(...conditions))
+    .orderBy(desc(tasks.createdAt));
+}
