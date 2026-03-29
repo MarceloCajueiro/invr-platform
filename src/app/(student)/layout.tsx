@@ -1,0 +1,34 @@
+import { redirect } from "next/navigation";
+import { headers } from "next/headers";
+import { createAuth } from "@/lib/auth/server";
+import { Sidebar } from "@/components/shared/sidebar";
+import { MobileNav } from "@/components/shared/mobile-nav";
+
+export default async function StudentLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const auth = await createAuth();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session) {
+    redirect("/sign-in");
+  }
+
+  if (session.user.role !== "student") {
+    redirect("/dashboard");
+  }
+
+  return (
+    <div className="flex min-h-screen">
+      <Sidebar role="student" userName={session.user.name} />
+      <main className="flex-1 max-w-[1200px] px-4 md:px-8 py-6 md:py-8 pb-16 md:pb-0">
+        {children}
+      </main>
+      <MobileNav role="student" />
+    </div>
+  );
+}
