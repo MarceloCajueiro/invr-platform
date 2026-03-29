@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { createAuth } from "@/lib/auth/server";
 import { Sidebar } from "@/components/shared/sidebar";
 import { MobileNav } from "@/components/shared/mobile-nav";
+import { NewContentModal } from "@/components/teacher/new-content-modal";
 
 export default async function TeacherLayout({
   children,
@@ -29,6 +30,7 @@ export default async function TeacherLayout({
         {children}
       </main>
       <MobileNav role="teacher" />
+      <NewContentModal />
     </div>
   );
 }
