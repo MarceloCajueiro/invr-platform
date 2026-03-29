@@ -1,0 +1,3145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fluent — Design System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'dark':       '#1a1a2e',
+            'light':      '#fafafa',
+            'card':       '#ffffff',
+            'primary':    '#2d3436',
+            'secondary':  '#636e72',
+            'muted':      '#9aa3b8',
+            'border':     '#e8ecf4',
+            'aulas':      { DEFAULT: '#6c5ce7', light: '#a29bfe', bg: '#f0eeff' },
+            'tarefas':    { DEFAULT: '#00b894', light: '#55efc4', bg: '#eafff7' },
+            'fora':       { DEFAULT: '#e17055', light: '#fab1a0', bg: '#fff3f0' },
+            'challenges': { DEFAULT: '#fdcb6e', light: '#ffeaa7', bg: '#fffcf0' },
+            'info':       '#0984e3',
+          },
+          fontFamily: {
+            'display': ['Bricolage Grotesque', 'serif'],
+            'body':    ['Outfit', 'sans-serif'],
+            'mono':    ['JetBrains Mono', 'monospace'],
+          },
+          borderRadius: {
+            'sm': '6px',
+            'md': '12px',
+            'lg': '16px',
+            'xl': '20px',
+          },
+          boxShadow: {
+            'sm': '0 1px 3px rgba(0,0,0,0.06)',
+            'md': '0 4px 12px rgba(0,0,0,0.08)',
+            'lg': '0 8px 24px rgba(0,0,0,0.12)',
+            'xl': '0 12px 48px rgba(0,0,0,0.16)',
+          },
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="design-system.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗣️</text></svg>">
+</head>
+<body class="bg-light font-body text-primary">
+
+  <!-- Hamburger menu (mobile only) -->
+  <button
+    id="hamburger-btn"
+    class="fixed top-4 left-4 z-[60] bg-dark text-white w-10 h-10 rounded-lg items-center justify-center md:hidden hidden"
+    onclick="toggleMobileMenu()"
+    aria-label="Menu"
+  >
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect y="2" width="18" height="2" rx="1" fill="white"/>
+      <rect y="8" width="18" height="2" rx="1" fill="white"/>
+      <rect y="14" width="18" height="2" rx="1" fill="white"/>
+    </svg>
+  </button>
+
+  <!-- Fixed sidebar navigation (dark, 240px) -->
+  <nav class="catalog-sidebar fixed left-0 top-0 h-screen w-60 bg-dark overflow-y-auto flex flex-col z-50">
+
+    <!-- Logo section -->
+    <div class="px-5 py-6 border-b border-white/10">
+      <div class="flex items-baseline gap-0.5">
+        <span class="text-2xl font-display font-extrabold bg-gradient-to-r from-aulas via-tarefas to-fora bg-clip-text text-transparent">F</span>
+        <span class="text-xl font-display font-bold text-white">luent</span>
+      </div>
+      <div class="text-xs text-white/40 mt-1 tracking-wider uppercase">Design System</div>
+    </div>
+
+    <!-- Navigation links -->
+    <div class="flex-1 py-4 px-3 space-y-0.5">
+      <a href="#tokens" class="nav-link active" data-section="tokens">
+        <span class="nav-number">01</span> Tokens
+      </a>
+      <a href="#typography" class="nav-link" data-section="typography">
+        <span class="nav-number">02</span> Typography
+      </a>
+      <a href="#buttons" class="nav-link" data-section="buttons">
+        <span class="nav-number">03</span> Buttons
+      </a>
+      <a href="#badges" class="nav-link" data-section="badges">
+        <span class="nav-number">04</span> Badges &amp; Pills
+      </a>
+      <a href="#avatars" class="nav-link" data-section="avatars">
+        <span class="nav-number">05</span> Avatars &amp; Icons
+      </a>
+      <a href="#forms" class="nav-link" data-section="forms">
+        <span class="nav-number">06</span> Forms
+      </a>
+      <a href="#cards" class="nav-link" data-section="cards">
+        <span class="nav-number">07</span> Cards
+      </a>
+      <a href="#navigation" class="nav-link" data-section="navigation">
+        <span class="nav-number">08</span> Navigation
+      </a>
+      <a href="#progress" class="nav-link" data-section="progress">
+        <span class="nav-number">09</span> Progress
+      </a>
+      <a href="#feedback" class="nav-link" data-section="feedback">
+        <span class="nav-number">10</span> Feedback
+      </a>
+      <a href="#data-display" class="nav-link" data-section="data-display">
+        <span class="nav-number">11</span> Data Display
+      </a>
+      <a href="#layouts" class="nav-link" data-section="layouts">
+        <span class="nav-number">12</span> Layouts
+      </a>
+      <a href="#animations" class="nav-link" data-section="animations">
+        <span class="nav-number">13</span> Animations
+      </a>
+    </div>
+
+    <!-- Footer -->
+    <div class="px-5 py-4 border-t border-white/10 text-xs text-white/30">
+      Fluent v0.1 — 2026
+    </div>
+  </nav>
+
+  <!-- Main scrollable content -->
+  <main class="ml-60 px-8 py-8 max-w-[1200px]">
+
+    <!-- Page title -->
+    <div class="mb-12">
+      <h1 class="font-display text-4xl font-extrabold text-primary">Fluent Design System</h1>
+      <p class="text-secondary text-lg mt-2">Catálogo de componentes para a plataforma de ensino de inglês</p>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+         SECTION 01 — TOKENS
+         ═══════════════════════════════════════════════ -->
+    <section id="tokens" class="pt-16 pb-8 border-b border-border">
+
+      <!-- Section header -->
+      <div class="mb-10">
+        <div class="section-label">01 — Tokens</div>
+        <h2 class="section-title">Tokens</h2>
+        <p class="section-desc">Os blocos primitivos do design system: cores, espaçamentos, tipografia, bordas e sombras que compõem toda a identidade visual da plataforma Fluent.</p>
+      </div>
+
+      <!-- ─── Colors ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Cores</h3>
+
+        <!-- Base colors -->
+        <div class="mb-8">
+          <p class="text-xs font-mono text-muted uppercase tracking-widest mb-4">Base Colors</p>
+          <div class="grid grid-cols-4 gap-4">
+            <!-- bg-dark -->
+            <div>
+              <div class="w-full h-20 rounded-lg mb-2" style="background:#1a1a2e;"></div>
+              <div class="text-xs font-mono text-secondary">bg-dark</div>
+              <div class="text-xs font-mono text-muted">#1a1a2e</div>
+            </div>
+            <!-- bg-light -->
+            <div>
+              <div class="w-full h-20 rounded-lg mb-2 border border-border" style="background:#fafafa;"></div>
+              <div class="text-xs font-mono text-secondary">bg-light</div>
+              <div class="text-xs font-mono text-muted">#fafafa</div>
+            </div>
+            <!-- bg-card -->
+            <div>
+              <div class="w-full h-20 rounded-lg mb-2 border border-border" style="background:#ffffff;"></div>
+              <div class="text-xs font-mono text-secondary">bg-card</div>
+              <div class="text-xs font-mono text-muted">#ffffff</div>
+            </div>
+            <!-- text-primary -->
+            <div>
+              <div class="w-full h-20 rounded-lg mb-2" style="background:#2d3436;"></div>
+              <div class="text-xs font-mono text-secondary">text-primary</div>
+              <div class="text-xs font-mono text-muted">#2d3436</div>
+            </div>
+            <!-- text-secondary -->
+            <div>
+              <div class="w-full h-20 rounded-lg mb-2" style="background:#636e72;"></div>
+              <div class="text-xs font-mono text-secondary">text-secondary</div>
+              <div class="text-xs font-mono text-muted">#636e72</div>
+            </div>
+            <!-- text-muted -->
+            <div>
+              <div class="w-full h-20 rounded-lg mb-2" style="background:#9aa3b8;"></div>
+              <div class="text-xs font-mono text-secondary">text-muted</div>
+              <div class="text-xs font-mono text-muted">#9aa3b8</div>
+            </div>
+            <!-- border -->
+            <div>
+              <div class="w-full h-20 rounded-lg mb-2 border border-border" style="background:#e8ecf4;"></div>
+              <div class="text-xs font-mono text-secondary">border</div>
+              <div class="text-xs font-mono text-muted">#e8ecf4</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Channel colors -->
+        <div class="mb-8">
+          <p class="text-xs font-mono text-muted uppercase tracking-widest mb-4">Channel Colors</p>
+          <div class="space-y-6">
+
+            <!-- Aulas -->
+            <div>
+              <p class="text-xs font-mono text-muted mb-3">aulas</p>
+              <div class="grid grid-cols-4 gap-4">
+                <div>
+                  <div class="w-full h-20 rounded-lg mb-2" style="background:#6c5ce7;"></div>
+                  <div class="text-xs font-mono text-secondary">aulas.DEFAULT</div>
+                  <div class="text-xs font-mono text-muted">#6c5ce7</div>
+                </div>
+                <div>
+                  <div class="w-full h-20 rounded-lg mb-2" style="background:#a29bfe;"></div>
+                  <div class="text-xs font-mono text-secondary">aulas.light</div>
+                  <div class="text-xs font-mono text-muted">#a29bfe</div>
+                </div>
+                <div>
+                  <div class="w-full h-20 rounded-lg mb-2 border border-border" style="background:#f0eeff;"></div>
+                  <div class="text-xs font-mono text-secondary">aulas.bg</div>
+                  <div class="text-xs font-mono text-muted">#f0eeff</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tarefas -->
+            <div>
+              <p class="text-xs font-mono text-muted mb-3">tarefas</p>
+              <div class="grid grid-cols-4 gap-4">
+                <div>
+                  <div class="w-full h-20 rounded-lg mb-2" style="background:#00b894;"></div>
+                  <div class="text-xs font-mono text-secondary">tarefas.DEFAULT</div>
+                  <div class="text-xs font-mono text-muted">#00b894</div>
+                </div>
+                <div>
+                  <div class="w-full h-20 rounded-lg mb-2" style="background:#55efc4;"></div>
+                  <div class="text-xs font-mono text-secondary">tarefas.light</div>
+                  <div class="text-xs font-mono text-muted">#55efc4</div>
+                </div>
+                <div>
+                  <div class="w-full h-20 rounded-lg mb-2 border border-border" style="background:#eafff7;"></div>
+                  <div class="text-xs font-mono text-secondary">tarefas.bg</div>
+                  <div class="text-xs font-mono text-muted">#eafff7</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Fora -->
+            <div>
+              <p class="text-xs font-mono text-muted mb-3">fora</p>
+              <div class="grid grid-cols-4 gap-4">
+                <div>
+                  <div class="w-full h-20 rounded-lg mb-2" style="background:#e17055;"></div>
+                  <div class="text-xs font-mono text-secondary">fora.DEFAULT</div>
+                  <div class="text-xs font-mono text-muted">#e17055</div>
+                </div>
+                <div>
+                  <div class="w-full h-20 rounded-lg mb-2" style="background:#fab1a0;"></div>
+                  <div class="text-xs font-mono text-secondary">fora.light</div>
+                  <div class="text-xs font-mono text-muted">#fab1a0</div>
+                </div>
+                <div>
+                  <div class="w-full h-20 rounded-lg mb-2 border border-border" style="background:#fff3f0;"></div>
+                  <div class="text-xs font-mono text-secondary">fora.bg</div>
+                  <div class="text-xs font-mono text-muted">#fff3f0</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Challenges -->
+            <div>
+              <p class="text-xs font-mono text-muted mb-3">challenges</p>
+              <div class="grid grid-cols-4 gap-4">
+                <div>
+                  <div class="w-full h-20 rounded-lg mb-2" style="background:#fdcb6e;"></div>
+                  <div class="text-xs font-mono text-secondary">challenges.DEFAULT</div>
+                  <div class="text-xs font-mono text-muted">#fdcb6e</div>
+                </div>
+                <div>
+                  <div class="w-full h-20 rounded-lg mb-2" style="background:#ffeaa7;"></div>
+                  <div class="text-xs font-mono text-secondary">challenges.light</div>
+                  <div class="text-xs font-mono text-muted">#ffeaa7</div>
+                </div>
+                <div>
+                  <div class="w-full h-20 rounded-lg mb-2 border border-border" style="background:#fffcf0;"></div>
+                  <div class="text-xs font-mono text-secondary">challenges.bg</div>
+                  <div class="text-xs font-mono text-muted">#fffcf0</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Semantic colors -->
+        <div class="mb-8">
+          <p class="text-xs font-mono text-muted uppercase tracking-widest mb-4">Semantic Colors</p>
+          <div class="grid grid-cols-4 gap-4">
+            <div>
+              <div class="w-full h-20 rounded-lg mb-2" style="background:#00b894;"></div>
+              <div class="text-xs font-mono text-secondary">success</div>
+              <div class="text-xs font-mono text-muted">#00b894</div>
+            </div>
+            <div>
+              <div class="w-full h-20 rounded-lg mb-2" style="background:#fdcb6e;"></div>
+              <div class="text-xs font-mono text-secondary">warning</div>
+              <div class="text-xs font-mono text-muted">#fdcb6e</div>
+            </div>
+            <div>
+              <div class="w-full h-20 rounded-lg mb-2" style="background:#e17055;"></div>
+              <div class="text-xs font-mono text-secondary">error</div>
+              <div class="text-xs font-mono text-muted">#e17055</div>
+            </div>
+            <div>
+              <div class="w-full h-20 rounded-lg mb-2" style="background:#0984e3;"></div>
+              <div class="text-xs font-mono text-secondary">info</div>
+              <div class="text-xs font-mono text-muted">#0984e3</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Status colors -->
+        <div class="mb-8">
+          <p class="text-xs font-mono text-muted uppercase tracking-widest mb-4">Status Colors</p>
+          <div class="grid grid-cols-4 gap-4">
+            <div>
+              <div class="w-full h-20 rounded-lg mb-2" style="background:#00b894;"></div>
+              <div class="text-xs font-mono text-secondary">online</div>
+              <div class="text-xs font-mono text-muted">#00b894</div>
+            </div>
+            <div>
+              <div class="w-full h-20 rounded-lg mb-2" style="background:#9aa3b8;"></div>
+              <div class="text-xs font-mono text-secondary">offline</div>
+              <div class="text-xs font-mono text-muted">#9aa3b8</div>
+            </div>
+            <div>
+              <div class="w-full h-20 rounded-lg mb-2" style="background:#e17055;"></div>
+              <div class="text-xs font-mono text-secondary">warning</div>
+              <div class="text-xs font-mono text-muted">#e17055</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── Spacing ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Espaçamento</h3>
+        <div class="bg-white rounded-lg border border-border p-6 space-y-3">
+          <div class="flex items-center gap-4">
+            <span class="font-mono text-xs text-muted w-20 shrink-0">space-1</span>
+            <div class="h-5 rounded-sm bg-aulas" style="width:4px;"></div>
+            <span class="font-mono text-xs text-muted">4px</span>
+          </div>
+          <div class="flex items-center gap-4">
+            <span class="font-mono text-xs text-muted w-20 shrink-0">space-2</span>
+            <div class="h-5 rounded-sm bg-aulas" style="width:8px;"></div>
+            <span class="font-mono text-xs text-muted">8px</span>
+          </div>
+          <div class="flex items-center gap-4">
+            <span class="font-mono text-xs text-muted w-20 shrink-0">space-3</span>
+            <div class="h-5 rounded-sm bg-aulas" style="width:12px;"></div>
+            <span class="font-mono text-xs text-muted">12px</span>
+          </div>
+          <div class="flex items-center gap-4">
+            <span class="font-mono text-xs text-muted w-20 shrink-0">space-4</span>
+            <div class="h-5 rounded-sm bg-aulas" style="width:16px;"></div>
+            <span class="font-mono text-xs text-muted">16px</span>
+          </div>
+          <div class="flex items-center gap-4">
+            <span class="font-mono text-xs text-muted w-20 shrink-0">space-5</span>
+            <div class="h-5 rounded-sm bg-aulas" style="width:20px;"></div>
+            <span class="font-mono text-xs text-muted">20px</span>
+          </div>
+          <div class="flex items-center gap-4">
+            <span class="font-mono text-xs text-muted w-20 shrink-0">space-6</span>
+            <div class="h-5 rounded-sm bg-aulas" style="width:24px;"></div>
+            <span class="font-mono text-xs text-muted">24px</span>
+          </div>
+          <div class="flex items-center gap-4">
+            <span class="font-mono text-xs text-muted w-20 shrink-0">space-8</span>
+            <div class="h-5 rounded-sm bg-aulas" style="width:32px;"></div>
+            <span class="font-mono text-xs text-muted">32px</span>
+          </div>
+          <div class="flex items-center gap-4">
+            <span class="font-mono text-xs text-muted w-20 shrink-0">space-10</span>
+            <div class="h-5 rounded-sm bg-aulas" style="width:40px;"></div>
+            <span class="font-mono text-xs text-muted">40px</span>
+          </div>
+          <div class="flex items-center gap-4">
+            <span class="font-mono text-xs text-muted w-20 shrink-0">space-12</span>
+            <div class="h-5 rounded-sm bg-aulas" style="width:48px;"></div>
+            <span class="font-mono text-xs text-muted">48px</span>
+          </div>
+          <div class="flex items-center gap-4">
+            <span class="font-mono text-xs text-muted w-20 shrink-0">space-16</span>
+            <div class="h-5 rounded-sm bg-aulas" style="width:64px;"></div>
+            <span class="font-mono text-xs text-muted">64px</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── Border Radius ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Border Radius</h3>
+        <div class="grid grid-cols-5 gap-4">
+          <div class="text-center">
+            <div class="bg-white border border-border w-full h-24 flex flex-col items-center justify-center mb-3" style="border-radius:6px;">
+              <span class="text-xs font-mono text-secondary font-medium">sm</span>
+            </div>
+            <div class="text-xs font-mono text-muted">6px</div>
+          </div>
+          <div class="text-center">
+            <div class="bg-white border border-border w-full h-24 flex flex-col items-center justify-center mb-3" style="border-radius:12px;">
+              <span class="text-xs font-mono text-secondary font-medium">md</span>
+            </div>
+            <div class="text-xs font-mono text-muted">12px</div>
+          </div>
+          <div class="text-center">
+            <div class="bg-white border border-border w-full h-24 flex flex-col items-center justify-center mb-3" style="border-radius:16px;">
+              <span class="text-xs font-mono text-secondary font-medium">lg</span>
+            </div>
+            <div class="text-xs font-mono text-muted">16px</div>
+          </div>
+          <div class="text-center">
+            <div class="bg-white border border-border w-full h-24 flex flex-col items-center justify-center mb-3" style="border-radius:20px;">
+              <span class="text-xs font-mono text-secondary font-medium">xl</span>
+            </div>
+            <div class="text-xs font-mono text-muted">20px</div>
+          </div>
+          <div class="text-center">
+            <div class="bg-white border border-border w-full h-24 flex flex-col items-center justify-center mb-3" style="border-radius:50%;">
+              <span class="text-xs font-mono text-secondary font-medium">full</span>
+            </div>
+            <div class="text-xs font-mono text-muted">50%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── Shadows ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Sombras</h3>
+        <div class="grid grid-cols-4 gap-6">
+          <div class="text-center">
+            <div class="bg-white rounded-lg w-full h-24 flex flex-col items-center justify-center mb-3" style="box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+              <span class="text-xs font-mono text-secondary font-medium">shadow-sm</span>
+            </div>
+            <div class="text-xs font-mono text-muted">0 1px 3px rgba(0,0,0,0.06)</div>
+          </div>
+          <div class="text-center">
+            <div class="bg-white rounded-lg w-full h-24 flex flex-col items-center justify-center mb-3" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
+              <span class="text-xs font-mono text-secondary font-medium">shadow-md</span>
+            </div>
+            <div class="text-xs font-mono text-muted">0 4px 12px rgba(0,0,0,0.08)</div>
+          </div>
+          <div class="text-center">
+            <div class="bg-white rounded-lg w-full h-24 flex flex-col items-center justify-center mb-3" style="box-shadow:0 8px 24px rgba(0,0,0,0.12);">
+              <span class="text-xs font-mono text-secondary font-medium">shadow-lg</span>
+            </div>
+            <div class="text-xs font-mono text-muted">0 8px 24px rgba(0,0,0,0.12)</div>
+          </div>
+          <div class="text-center">
+            <div class="bg-white rounded-lg w-full h-24 flex flex-col items-center justify-center mb-3" style="box-shadow:0 12px 48px rgba(0,0,0,0.16);">
+              <span class="text-xs font-mono text-secondary font-medium">shadow-xl</span>
+            </div>
+            <div class="text-xs font-mono text-muted">0 12px 48px rgba(0,0,0,0.16)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── Easing ─── -->
+      <div class="mb-4">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Easing</h3>
+        <div class="bg-white rounded-lg border border-border p-6 space-y-8">
+
+          <!-- ease-out-expo -->
+          <div class="flex items-center gap-6">
+            <div class="w-36 shrink-0">
+              <div class="text-sm font-medium text-primary mb-1">ease-out-expo</div>
+              <div class="text-xs font-mono text-muted">cubic-bezier(0.16, 1, 0.3, 1)</div>
+            </div>
+            <div class="flex-1 relative h-12 flex items-center">
+              <div class="easing-ball w-10 h-10 rounded-full bg-aulas cursor-pointer shrink-0"
+                   style="transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);"
+                   onmouseenter="this.style.transform='translateX(200px)'"
+                   onmouseleave="this.style.transform='translateX(0)'"></div>
+            </div>
+          </div>
+
+          <!-- ease-spring -->
+          <div class="flex items-center gap-6">
+            <div class="w-36 shrink-0">
+              <div class="text-sm font-medium text-primary mb-1">ease-spring</div>
+              <div class="text-xs font-mono text-muted">cubic-bezier(0.34, 1.56, 0.64, 1)</div>
+            </div>
+            <div class="flex-1 relative h-12 flex items-center">
+              <div class="easing-ball w-10 h-10 rounded-full bg-tarefas cursor-pointer shrink-0"
+                   style="transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);"
+                   onmouseenter="this.style.transform='translateX(200px)'"
+                   onmouseleave="this.style.transform='translateX(0)'"></div>
+            </div>
+          </div>
+
+          <!-- ease-smooth -->
+          <div class="flex items-center gap-6">
+            <div class="w-36 shrink-0">
+              <div class="text-sm font-medium text-primary mb-1">ease-smooth</div>
+              <div class="text-xs font-mono text-muted">cubic-bezier(0.22, 0.61, 0.36, 1)</div>
+            </div>
+            <div class="flex-1 relative h-12 flex items-center">
+              <div class="easing-ball w-10 h-10 rounded-full bg-fora cursor-pointer shrink-0"
+                   style="transition: transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);"
+                   onmouseenter="this.style.transform='translateX(200px)'"
+                   onmouseleave="this.style.transform='translateX(0)'"></div>
+            </div>
+          </div>
+
+        </div>
+        <p class="text-xs text-muted mt-3">Passe o mouse sobre as bolinhas para ver o easing em ação.</p>
+      </div>
+
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+         SECTION 02 — TYPOGRAPHY
+         ═══════════════════════════════════════════════ -->
+    <section id="typography" class="pt-16 pb-8 border-b border-border">
+
+      <!-- Section header -->
+      <div class="mb-10">
+        <div class="section-label">02 — Typography</div>
+        <h2 class="section-title">Typography</h2>
+        <p class="section-desc">Sistema tipográfico com três famílias distintas: display para impacto, body para legibilidade e mono para código. Cada uma com sua escala de pesos e tamanhos.</p>
+      </div>
+
+      <!-- ─── Font families ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Famílias Tipográficas</h3>
+
+        <!-- Bricolage Grotesque -->
+        <div class="bg-white rounded-lg border border-border p-6 mb-6">
+          <div class="flex items-center justify-between mb-5">
+            <div>
+              <span class="text-xs font-mono text-muted uppercase tracking-widest">Display</span>
+              <h4 class="font-display text-xl font-bold text-primary mt-1">Bricolage Grotesque</h4>
+            </div>
+            <span class="text-xs font-mono text-muted bg-border/60 px-3 py-1 rounded-full">font-display</span>
+          </div>
+          <div class="space-y-4 border-t border-border pt-5">
+            <div class="flex items-baseline gap-4">
+              <span class="font-mono text-xs text-muted w-12 shrink-0">600</span>
+              <span class="font-display text-2xl text-primary" style="font-weight:600;">The quick brown fox jumps over the lazy dog</span>
+            </div>
+            <div class="flex items-baseline gap-4">
+              <span class="font-mono text-xs text-muted w-12 shrink-0">700</span>
+              <span class="font-display text-2xl text-primary" style="font-weight:700;">The quick brown fox jumps over the lazy dog</span>
+            </div>
+            <div class="flex items-baseline gap-4">
+              <span class="font-mono text-xs text-muted w-12 shrink-0">800</span>
+              <span class="font-display text-2xl text-primary" style="font-weight:800;">The quick brown fox jumps over the lazy dog</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Outfit -->
+        <div class="bg-white rounded-lg border border-border p-6 mb-6">
+          <div class="flex items-center justify-between mb-5">
+            <div>
+              <span class="text-xs font-mono text-muted uppercase tracking-widest">Body</span>
+              <h4 class="font-display text-xl font-bold text-primary mt-1">Outfit</h4>
+            </div>
+            <span class="text-xs font-mono text-muted bg-border/60 px-3 py-1 rounded-full">font-body</span>
+          </div>
+          <div class="space-y-4 border-t border-border pt-5">
+            <div class="flex items-baseline gap-4">
+              <span class="font-mono text-xs text-muted w-12 shrink-0">300</span>
+              <span class="font-body text-xl text-primary" style="font-weight:300;">The quick brown fox jumps over the lazy dog</span>
+            </div>
+            <div class="flex items-baseline gap-4">
+              <span class="font-mono text-xs text-muted w-12 shrink-0">400</span>
+              <span class="font-body text-xl text-primary" style="font-weight:400;">The quick brown fox jumps over the lazy dog</span>
+            </div>
+            <div class="flex items-baseline gap-4">
+              <span class="font-mono text-xs text-muted w-12 shrink-0">500</span>
+              <span class="font-body text-xl text-primary" style="font-weight:500;">The quick brown fox jumps over the lazy dog</span>
+            </div>
+            <div class="flex items-baseline gap-4">
+              <span class="font-mono text-xs text-muted w-12 shrink-0">600</span>
+              <span class="font-body text-xl text-primary" style="font-weight:600;">The quick brown fox jumps over the lazy dog</span>
+            </div>
+            <div class="flex items-baseline gap-4">
+              <span class="font-mono text-xs text-muted w-12 shrink-0">700</span>
+              <span class="font-body text-xl text-primary" style="font-weight:700;">The quick brown fox jumps over the lazy dog</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- JetBrains Mono -->
+        <div class="bg-white rounded-lg border border-border p-6 mb-6">
+          <div class="flex items-center justify-between mb-5">
+            <div>
+              <span class="text-xs font-mono text-muted uppercase tracking-widest">Code</span>
+              <h4 class="font-display text-xl font-bold text-primary mt-1">JetBrains Mono</h4>
+            </div>
+            <span class="text-xs font-mono text-muted bg-border/60 px-3 py-1 rounded-full">font-mono</span>
+          </div>
+          <div class="space-y-4 border-t border-border pt-5">
+            <div class="flex items-baseline gap-4">
+              <span class="font-mono text-xs text-muted w-12 shrink-0">400</span>
+              <span class="font-mono text-lg text-primary" style="font-weight:400;">const fluent = "Inglês que faz sentido";</span>
+            </div>
+            <div class="flex items-baseline gap-4">
+              <span class="font-mono text-xs text-muted w-12 shrink-0">500</span>
+              <span class="font-mono text-lg text-primary" style="font-weight:500;">const fluent = "Inglês que faz sentido";</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── Type scale ─── -->
+      <div class="mb-4">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Escala Tipográfica</h3>
+        <div class="bg-white rounded-lg border border-border p-6 space-y-6">
+
+          <!-- fs-xs -->
+          <div class="flex items-baseline gap-4 border-b border-border pb-5">
+            <div class="w-32 shrink-0">
+              <div class="font-mono text-xs text-muted">fs-xs</div>
+              <div class="font-mono text-xs text-muted">0.75rem / 12px</div>
+            </div>
+            <span class="font-body text-primary leading-relaxed" style="font-size:0.75rem;">Fluent é uma plataforma de ensino de inglês que conecta professores e alunos</span>
+          </div>
+
+          <!-- fs-sm -->
+          <div class="flex items-baseline gap-4 border-b border-border pb-5">
+            <div class="w-32 shrink-0">
+              <div class="font-mono text-xs text-muted">fs-sm</div>
+              <div class="font-mono text-xs text-muted">0.875rem / 14px</div>
+            </div>
+            <span class="font-body text-primary leading-relaxed" style="font-size:0.875rem;">Fluent é uma plataforma de ensino de inglês que conecta professores e alunos</span>
+          </div>
+
+          <!-- fs-base -->
+          <div class="flex items-baseline gap-4 border-b border-border pb-5">
+            <div class="w-32 shrink-0">
+              <div class="font-mono text-xs text-muted">fs-base</div>
+              <div class="font-mono text-xs text-muted">1rem / 16px</div>
+            </div>
+            <span class="font-body text-primary leading-relaxed" style="font-size:1rem;">Fluent é uma plataforma de ensino de inglês que conecta professores e alunos</span>
+          </div>
+
+          <!-- fs-lg -->
+          <div class="flex items-baseline gap-4 border-b border-border pb-5">
+            <div class="w-32 shrink-0">
+              <div class="font-mono text-xs text-muted">fs-lg</div>
+              <div class="font-mono text-xs text-muted">1.125rem / 18px</div>
+            </div>
+            <span class="font-body text-primary leading-relaxed" style="font-size:1.125rem;">Fluent é uma plataforma de ensino de inglês que conecta professores e alunos</span>
+          </div>
+
+          <!-- fs-xl -->
+          <div class="flex items-baseline gap-4 border-b border-border pb-5">
+            <div class="w-32 shrink-0">
+              <div class="font-mono text-xs text-muted">fs-xl</div>
+              <div class="font-mono text-xs text-muted">1.25rem / 20px</div>
+            </div>
+            <span class="font-body text-primary leading-relaxed" style="font-size:1.25rem;">Fluent é uma plataforma de ensino de inglês que conecta professores e alunos</span>
+          </div>
+
+          <!-- fs-2xl -->
+          <div class="flex items-baseline gap-4 border-b border-border pb-5">
+            <div class="w-32 shrink-0">
+              <div class="font-mono text-xs text-muted">fs-2xl</div>
+              <div class="font-mono text-xs text-muted">1.5rem / 24px</div>
+            </div>
+            <span class="font-display font-bold text-primary leading-tight" style="font-size:1.5rem;">Aprenda inglês de um jeito diferente</span>
+          </div>
+
+          <!-- fs-3xl -->
+          <div class="flex items-baseline gap-4 border-b border-border pb-5">
+            <div class="w-32 shrink-0">
+              <div class="font-mono text-xs text-muted">fs-3xl</div>
+              <div class="font-mono text-xs text-muted">1.875rem / 30px</div>
+            </div>
+            <span class="font-display font-bold text-primary leading-tight" style="font-size:1.875rem;">Aprenda inglês de um jeito diferente</span>
+          </div>
+
+          <!-- fs-4xl -->
+          <div class="flex items-baseline gap-4">
+            <div class="w-32 shrink-0">
+              <div class="font-mono text-xs text-muted">fs-4xl</div>
+              <div class="font-mono text-xs text-muted">2.25rem / 36px</div>
+            </div>
+            <span class="font-display font-extrabold text-primary leading-tight" style="font-size:2.25rem;">Aprenda inglês de um jeito diferente</span>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+    <!-- ═══════════════════════════════════════════════
+         SECTION 03 — BUTTONS
+         ═══════════════════════════════════════════════ -->
+    <section id="buttons" class="pt-16 pb-8 border-b border-border">
+
+      <!-- Section header -->
+      <div class="mb-10">
+        <div class="section-label">03 — Buttons</div>
+        <h2 class="section-title">Buttons</h2>
+        <p class="section-desc">Botões de ação organizados por variante, canal, tamanho e estado. O efeito 3D press reforça o feedback tátil ao interagir com os botões primários da plataforma.</p>
+      </div>
+
+      <!-- ─── Primary Buttons ─── -->
+      <div class="mb-10">
+        <h3 class="font-display text-lg font-bold text-primary mb-2">Primary</h3>
+        <p class="text-xs font-mono text-muted mb-5">Variantes por canal com efeito 3D press</p>
+        <div class="flex flex-wrap gap-4 items-center">
+          <button class="btn-3d bg-aulas text-white rounded-md px-5 py-2.5 font-semibold glow-aulas transition-all"
+                  style="box-shadow: 0 4px 0 #4a3fa5;">
+            Aulas
+          </button>
+          <button class="btn-3d bg-tarefas text-white rounded-md px-5 py-2.5 font-semibold glow-tarefas transition-all"
+                  style="box-shadow: 0 4px 0 #007d63;">
+            Tarefas
+          </button>
+          <button class="btn-3d bg-fora text-white rounded-md px-5 py-2.5 font-semibold glow-fora transition-all"
+                  style="box-shadow: 0 4px 0 #b34d37;">
+            Fora da Aula
+          </button>
+          <button class="btn-3d bg-challenges text-white rounded-md px-5 py-2.5 font-semibold glow-challenges transition-all"
+                  style="box-shadow: 0 4px 0 #c9981f; color: #5a3e00;">
+            Challenges
+          </button>
+        </div>
+      </div>
+
+      <!-- ─── Secondary Buttons ─── -->
+      <div class="mb-10">
+        <h3 class="font-display text-lg font-bold text-primary mb-2">Secondary</h3>
+        <p class="text-xs font-mono text-muted mb-5">Bordas coloridas com fundo transparente</p>
+        <div class="flex flex-wrap gap-4 items-center">
+          <button class="bg-transparent border-2 border-aulas text-aulas rounded-md px-5 py-2.5 font-semibold transition-all hover:bg-aulas-bg">
+            Aulas
+          </button>
+          <button class="bg-transparent border-2 border-tarefas text-tarefas rounded-md px-5 py-2.5 font-semibold transition-all hover:bg-tarefas-bg">
+            Tarefas
+          </button>
+          <button class="bg-transparent border-2 border-fora text-fora rounded-md px-5 py-2.5 font-semibold transition-all hover:bg-fora-bg">
+            Fora da Aula
+          </button>
+          <button class="bg-transparent border-2 border-challenges text-challenges rounded-md px-5 py-2.5 font-semibold transition-all hover:bg-challenges-bg" style="color:#c9981f; border-color:#fdcb6e;">
+            Challenges
+          </button>
+        </div>
+      </div>
+
+      <!-- ─── Ghost Buttons ─── -->
+      <div class="mb-10">
+        <h3 class="font-display text-lg font-bold text-primary mb-2">Ghost</h3>
+        <p class="text-xs font-mono text-muted mb-5">Estilo sutil sem borda, hover com fundo cinza suave</p>
+        <div class="flex flex-wrap gap-4 items-center">
+          <button class="text-secondary bg-transparent rounded-md px-5 py-2.5 font-semibold transition-all hover:bg-gray-100">
+            Aulas
+          </button>
+          <button class="text-secondary bg-transparent rounded-md px-5 py-2.5 font-semibold transition-all hover:bg-gray-100">
+            Tarefas
+          </button>
+          <button class="text-secondary bg-transparent rounded-md px-5 py-2.5 font-semibold transition-all hover:bg-gray-100">
+            Fora da Aula
+          </button>
+          <button class="text-secondary bg-transparent rounded-md px-5 py-2.5 font-semibold transition-all hover:bg-gray-100">
+            Challenges
+          </button>
+        </div>
+      </div>
+
+      <!-- ─── Danger Button ─── -->
+      <div class="mb-10">
+        <h3 class="font-display text-lg font-bold text-primary mb-2">Danger</h3>
+        <p class="text-xs font-mono text-muted mb-5">Ação destrutiva ou de alto risco</p>
+        <div class="flex flex-wrap gap-4 items-center">
+          <button class="bg-fora text-white rounded-md px-5 py-2.5 font-semibold transition-all hover:opacity-90">
+            Deletar conta
+          </button>
+        </div>
+      </div>
+
+      <!-- ─── Icon Buttons ─── -->
+      <div class="mb-10">
+        <h3 class="font-display text-lg font-bold text-primary mb-2">Icon Buttons</h3>
+        <p class="text-xs font-mono text-muted mb-5">Botões quadrados com ícone SVG por canal</p>
+        <div class="flex flex-wrap gap-4 items-center">
+          <!-- Play — Aulas -->
+          <button class="w-10 h-10 rounded-md bg-aulas-bg text-aulas flex items-center justify-center transition-all hover:bg-aulas hover:text-white" title="Aulas">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+              <polygon points="5,3 19,12 5,21"/>
+            </svg>
+          </button>
+          <!-- File — Tarefas -->
+          <button class="w-10 h-10 rounded-md bg-tarefas-bg text-tarefas flex items-center justify-center transition-all hover:bg-tarefas hover:text-white" title="Tarefas">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+            </svg>
+          </button>
+          <!-- Globe — Fora da Aula -->
+          <button class="w-10 h-10 rounded-md bg-fora-bg text-fora flex items-center justify-center transition-all hover:bg-fora hover:text-white" title="Fora da Aula">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="2" y1="12" x2="22" y2="12"/>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
+          </button>
+          <!-- Trophy — Challenges -->
+          <button class="w-10 h-10 rounded-md bg-challenges-bg flex items-center justify-center transition-all hover:bg-challenges" style="color:#c9981f;" title="Challenges"
+                  onmouseenter="this.style.color='#5a3e00'" onmouseleave="this.style.color='#c9981f'">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="8 21 12 17 16 21"/>
+              <path d="M5 3h14"/>
+              <path d="M5 3v6a7 7 0 0 0 14 0V3"/>
+              <path d="M5 7H2a5 5 0 0 0 3 4.7"/>
+              <path d="M19 7h3a5 5 0 0 1-3 4.7"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ─── Sizes ─── -->
+      <div class="mb-10">
+        <h3 class="font-display text-lg font-bold text-primary mb-2">Tamanhos</h3>
+        <p class="text-xs font-mono text-muted mb-5">sm / md / lg</p>
+        <div class="flex flex-wrap gap-4 items-center">
+          <button class="btn-3d bg-aulas text-white rounded-md px-3 py-1.5 text-sm font-semibold"
+                  style="box-shadow: 0 3px 0 #4a3fa5;">
+            Small
+          </button>
+          <button class="btn-3d bg-aulas text-white rounded-md px-5 py-2.5 font-semibold"
+                  style="box-shadow: 0 4px 0 #4a3fa5;">
+            Medium
+          </button>
+          <button class="btn-3d bg-aulas text-white rounded-md px-6 py-3 text-lg font-semibold"
+                  style="box-shadow: 0 5px 0 #4a3fa5;">
+            Large
+          </button>
+        </div>
+      </div>
+
+      <!-- ─── States ─── -->
+      <div class="mb-4">
+        <h3 class="font-display text-lg font-bold text-primary mb-2">Estados</h3>
+        <p class="text-xs font-mono text-muted mb-5">Default / Hover / Active / Disabled / Loading</p>
+        <div class="flex flex-wrap gap-4 items-center">
+          <!-- Default -->
+          <div class="flex flex-col items-center gap-2">
+            <button class="bg-aulas text-white rounded-md px-5 py-2.5 font-semibold" style="box-shadow: 0 4px 0 #4a3fa5;">
+              Default
+            </button>
+            <span class="text-xs font-mono text-muted">default</span>
+          </div>
+          <!-- Hover (simulated) -->
+          <div class="flex flex-col items-center gap-2">
+            <button class="bg-aulas-light text-white rounded-md px-5 py-2.5 font-semibold" style="box-shadow: 0 4px 0 #7b6fd0;">
+              Hover
+            </button>
+            <span class="text-xs font-mono text-muted">hover</span>
+          </div>
+          <!-- Active (simulated translateY) -->
+          <div class="flex flex-col items-center gap-2">
+            <button class="bg-aulas text-white rounded-md px-5 py-2.5 font-semibold" style="transform: translateY(2px); box-shadow: 0 2px 0 rgba(0,0,0,0.2);">
+              Active
+            </button>
+            <span class="text-xs font-mono text-muted">active</span>
+          </div>
+          <!-- Disabled -->
+          <div class="flex flex-col items-center gap-2">
+            <button class="bg-aulas text-white rounded-md px-5 py-2.5 font-semibold opacity-50 cursor-not-allowed" disabled>
+              Disabled
+            </button>
+            <span class="text-xs font-mono text-muted">disabled</span>
+          </div>
+          <!-- Loading -->
+          <div class="flex flex-col items-center gap-2">
+            <button class="bg-aulas text-white rounded-md px-5 py-2.5 font-semibold flex items-center gap-2 cursor-not-allowed" disabled>
+              <svg class="animate-spin" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+              </svg>
+              Loading
+            </button>
+            <span class="text-xs font-mono text-muted">loading</span>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+         SECTION 04 — BADGES & PILLS
+         ═══════════════════════════════════════════════ -->
+    <section id="badges" class="pt-16 pb-8 border-b border-border">
+
+      <!-- Section header -->
+      <div class="mb-10">
+        <div class="section-label">04 — Badges &amp; Pills</div>
+        <h2 class="section-title">Badges &amp; Pills</h2>
+        <p class="section-desc">Etiquetas compactas para categorização de conteúdo, indicação de status, nível do aluno e notificações. Filtros interativos com estado ativo por canal.</p>
+      </div>
+
+      <!-- ─── Channel Badges ─── -->
+      <div class="mb-10">
+        <h3 class="font-display text-lg font-bold text-primary mb-2">Channel Badges</h3>
+        <p class="text-xs font-mono text-muted mb-5">Identificadores de canal com cor de fundo suave</p>
+        <div class="flex flex-wrap gap-3 items-center">
+          <span class="bg-aulas-bg text-aulas rounded-full px-3 py-1 text-xs font-medium">Aula</span>
+          <span class="bg-tarefas-bg text-tarefas rounded-full px-3 py-1 text-xs font-medium">Tarefa</span>
+          <span class="bg-fora-bg text-fora rounded-full px-3 py-1 text-xs font-medium">Fora da Aula</span>
+          <span class="bg-challenges-bg rounded-full px-3 py-1 text-xs font-medium" style="color:#c9981f;">Challenge</span>
+        </div>
+      </div>
+
+      <!-- ─── Status Badges ─── -->
+      <div class="mb-10">
+        <h3 class="font-display text-lg font-bold text-primary mb-2">Status Badges</h3>
+        <p class="text-xs font-mono text-muted mb-5">Indicadores de estado de atividade ou tarefa</p>
+        <div class="flex flex-wrap gap-3 items-center">
+          <span class="bg-green-100 text-green-700 rounded-full px-3 py-1 text-xs font-medium">Em andamento</span>
+          <span class="bg-gray-100 text-gray-500 rounded-full px-3 py-1 text-xs font-medium">Completo</span>
+          <span class="bg-blue-100 text-blue-600 rounded-full px-3 py-1 text-xs font-medium">Novo</span>
+          <span class="bg-fora-bg text-fora rounded-full px-3 py-1 text-xs font-medium">Atenção</span>
+        </div>
+      </div>
+
+      <!-- ─── Level Badges ─── -->
+      <div class="mb-10">
+        <h3 class="font-display text-lg font-bold text-primary mb-2">Level Badges</h3>
+        <p class="text-xs font-mono text-muted mb-5">Nível de proficiência do aluno</p>
+        <div class="flex flex-wrap gap-3 items-center">
+          <span class="bg-tarefas-bg text-tarefas rounded-full px-3 py-1 text-xs font-medium">Iniciante</span>
+          <span class="bg-aulas-bg text-aulas rounded-full px-3 py-1 text-xs font-medium">Intermediário</span>
+          <span class="bg-fora-bg text-fora rounded-full px-3 py-1 text-xs font-medium">Avançado</span>
+        </div>
+      </div>
+
+      <!-- ─── AI Badge ─── -->
+      <div class="mb-10">
+        <h3 class="font-display text-lg font-bold text-primary mb-2">AI Badge</h3>
+        <p class="text-xs font-mono text-muted mb-5">Indicador de conteúdo gerado por inteligência artificial</p>
+        <div class="flex flex-wrap gap-3 items-center">
+          <span class="rounded-full px-4 py-1.5 text-xs font-semibold text-aulas"
+                style="background: linear-gradient(to right, #f0eeff, #eafff7);">
+            ✦ Gerado por IA
+          </span>
+        </div>
+      </div>
+
+      <!-- ─── Notification Dots ─── -->
+      <div class="mb-10">
+        <h3 class="font-display text-lg font-bold text-primary mb-2">Notification Dots</h3>
+        <p class="text-xs font-mono text-muted mb-5">Indicadores de atividade e contagem</p>
+        <div class="flex flex-wrap gap-8 items-center">
+
+          <!-- Small red dot -->
+          <div class="flex flex-col items-center gap-3">
+            <div class="w-2 h-2 rounded-full bg-red-500"></div>
+            <span class="text-xs font-mono text-muted">dot</span>
+          </div>
+
+          <!-- Dot with count -->
+          <div class="flex flex-col items-center gap-3">
+            <div class="w-4 h-4 rounded-full bg-red-500 text-white flex items-center justify-center" style="font-size:10px; line-height:1;">2</div>
+            <span class="text-xs font-mono text-muted">count</span>
+          </div>
+
+          <!-- Bell with dot -->
+          <div class="flex flex-col items-center gap-3">
+            <div class="relative inline-flex">
+              <button class="w-10 h-10 rounded-md bg-white border border-border text-secondary flex items-center justify-center hover:bg-gray-50 transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                </svg>
+              </button>
+              <span class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-red-500 border-2 border-white"></span>
+            </div>
+            <span class="text-xs font-mono text-muted">bell + dot</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ─── Filter Pills ─── -->
+      <div class="mb-4">
+        <h3 class="font-display text-lg font-bold text-primary mb-2">Filter Pills</h3>
+        <p class="text-xs font-mono text-muted mb-5">Filtros interativos — clique para ativar/desativar</p>
+        <div class="flex flex-wrap gap-2 items-center" id="filter-pills">
+          <button onclick="toggleSelect(this)" class="filter-pill active bg-aulas text-white rounded-full px-4 py-1.5 text-sm font-medium transition-all">Todas</button>
+          <button onclick="toggleSelect(this)" class="filter-pill bg-white border border-border text-secondary rounded-full px-4 py-1.5 text-sm font-medium transition-all hover:border-aulas hover:text-aulas">Grammar</button>
+          <button onclick="toggleSelect(this)" class="filter-pill bg-white border border-border text-secondary rounded-full px-4 py-1.5 text-sm font-medium transition-all hover:border-aulas hover:text-aulas">Vocabulary</button>
+          <button onclick="toggleSelect(this)" class="filter-pill bg-white border border-border text-secondary rounded-full px-4 py-1.5 text-sm font-medium transition-all hover:border-aulas hover:text-aulas">Conversation</button>
+          <button onclick="toggleSelect(this)" class="filter-pill bg-white border border-border text-secondary rounded-full px-4 py-1.5 text-sm font-medium transition-all hover:border-aulas hover:text-aulas">Listening</button>
+        </div>
+        <p class="text-xs text-muted mt-3">Clique nos filtros para alternar o estado ativo.</p>
+      </div>
+
+    </section>
+    <!-- ═══════════════════════════════════════════════
+         SECTION 05 — AVATARS & ICONS
+         ═══════════════════════════════════════════════ -->
+    <section id="avatars" class="pt-16 pb-8 border-b border-border">
+
+      <!-- Section header -->
+      <div class="mb-10">
+        <div class="section-label">05 — Avatars &amp; Icons</div>
+        <h2 class="section-title">Avatars &amp; Icons</h2>
+        <p class="section-desc">Representações visuais de usuários em diferentes tamanhos e estados, ícones funcionais da interface e o guia de uso de emojis para dar personalidade aos contextos da plataforma.</p>
+      </div>
+
+      <!-- ─── Avatar Sizes ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Tamanhos</h3>
+        <div class="bg-white rounded-lg border border-border p-8 flex items-end gap-10">
+          <!-- sm -->
+          <div class="flex flex-col items-center gap-3">
+            <div class="w-7 h-7 rounded-full bg-aulas flex items-center justify-center text-white font-semibold text-xs">M</div>
+            <span class="text-xs font-mono text-muted">sm · 28px</span>
+          </div>
+          <!-- md -->
+          <div class="flex flex-col items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-aulas flex items-center justify-center text-white font-semibold text-sm">M</div>
+            <span class="text-xs font-mono text-muted">md · 36px</span>
+          </div>
+          <!-- lg -->
+          <div class="flex flex-col items-center gap-3">
+            <div class="w-12 h-12 rounded-full bg-aulas flex items-center justify-center text-white font-semibold text-base">M</div>
+            <span class="text-xs font-mono text-muted">lg · 48px</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── Avatar Types ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Tipos</h3>
+        <div class="bg-white rounded-lg border border-border p-8 flex items-end gap-10">
+          <!-- Initial -->
+          <div class="flex flex-col items-center gap-3">
+            <div class="w-12 h-12 rounded-full bg-tarefas flex items-center justify-center text-white font-semibold text-base">F</div>
+            <span class="text-xs font-mono text-muted">initial</span>
+          </div>
+          <!-- Placeholder -->
+          <div class="flex flex-col items-center gap-3">
+            <div class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-muted">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+            </div>
+            <span class="text-xs font-mono text-muted">placeholder</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── With Status Dot ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Com Status</h3>
+        <div class="bg-white rounded-lg border border-border p-8 flex items-end gap-10">
+          <!-- Online -->
+          <div class="flex flex-col items-center gap-3">
+            <div class="relative inline-flex">
+              <div class="w-12 h-12 rounded-full bg-aulas flex items-center justify-center text-white font-semibold text-base">M</div>
+              <span class="w-3 h-3 rounded-full bg-[#00b894] border-2 border-white absolute bottom-0 right-0"></span>
+            </div>
+            <span class="text-xs font-mono text-muted">online</span>
+          </div>
+          <!-- Offline -->
+          <div class="flex flex-col items-center gap-3">
+            <div class="relative inline-flex">
+              <div class="w-12 h-12 rounded-full bg-aulas flex items-center justify-center text-white font-semibold text-base">M</div>
+              <span class="w-3 h-3 rounded-full bg-[#9aa3b8] border-2 border-white absolute bottom-0 right-0"></span>
+            </div>
+            <span class="text-xs font-mono text-muted">offline</span>
+          </div>
+          <!-- Warning -->
+          <div class="flex flex-col items-center gap-3">
+            <div class="relative inline-flex">
+              <div class="w-12 h-12 rounded-full bg-aulas flex items-center justify-center text-white font-semibold text-base">M</div>
+              <span class="w-3 h-3 rounded-full bg-[#e17055] border-2 border-white absolute bottom-0 right-0"></span>
+            </div>
+            <span class="text-xs font-mono text-muted">warning</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── Lucide Icon Showcase ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Ícones (Lucide)</h3>
+        <div class="bg-white rounded-lg border border-border p-8">
+          <div class="grid grid-cols-10 gap-4">
+
+            <!-- Home -->
+            <div class="flex flex-col items-center gap-2">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
+              </svg>
+              <span class="text-xs text-muted">Home</span>
+            </div>
+
+            <!-- Play -->
+            <div class="flex flex-col items-center gap-2">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <polygon points="10 8 16 12 10 16 10 8"/>
+              </svg>
+              <span class="text-xs text-muted">Play</span>
+            </div>
+
+            <!-- FileText -->
+            <div class="flex flex-col items-center gap-2">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+                <polyline points="10 9 9 9 8 9"/>
+              </svg>
+              <span class="text-xs text-muted">FileText</span>
+            </div>
+
+            <!-- Globe -->
+            <div class="flex flex-col items-center gap-2">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="2" y1="12" x2="22" y2="12"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+              <span class="text-xs text-muted">Globe</span>
+            </div>
+
+            <!-- Trophy -->
+            <div class="flex flex-col items-center gap-2">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="8 21 12 17 16 21"/>
+                <line x1="12" y1="17" x2="12" y2="11"/>
+                <path d="M7 4h10l1 7a5 5 0 0 1-5 5h0a5 5 0 0 1-5-5L7 4z"/>
+                <path d="M7 4H4a1 1 0 0 0-1 1v2a4 4 0 0 0 4 4h0"/>
+                <path d="M17 4h3a1 1 0 0 1 1 1v2a4 4 0 0 1-4 4h0"/>
+              </svg>
+              <span class="text-xs text-muted">Trophy</span>
+            </div>
+
+            <!-- Bell -->
+            <div class="flex flex-col items-center gap-2">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+              </svg>
+              <span class="text-xs text-muted">Bell</span>
+            </div>
+
+            <!-- Search -->
+            <div class="flex flex-col items-center gap-2">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <span class="text-xs text-muted">Search</span>
+            </div>
+
+            <!-- Settings -->
+            <div class="flex flex-col items-center gap-2">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+              </svg>
+              <span class="text-xs text-muted">Settings</span>
+            </div>
+
+            <!-- Plus -->
+            <div class="flex flex-col items-center gap-2">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              <span class="text-xs text-muted">Plus</span>
+            </div>
+
+            <!-- Check -->
+            <div class="flex flex-col items-center gap-2">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <span class="text-xs text-muted">Check</span>
+            </div>
+
+            <!-- X -->
+            <div class="flex flex-col items-center gap-2">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+              <span class="text-xs text-muted">X</span>
+            </div>
+
+            <!-- ChevronRight -->
+            <div class="flex flex-col items-center gap-2">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+              <span class="text-xs text-muted">Chevron</span>
+            </div>
+
+            <!-- Clock -->
+            <div class="flex flex-col items-center gap-2">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+              <span class="text-xs text-muted">Clock</span>
+            </div>
+
+            <!-- Star -->
+            <div class="flex flex-col items-center gap-2">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+              <span class="text-xs text-muted">Star</span>
+            </div>
+
+            <!-- Flame -->
+            <div class="flex flex-col items-center gap-2">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
+              </svg>
+              <span class="text-xs text-muted">Flame</span>
+            </div>
+
+            <!-- Users -->
+            <div class="flex flex-col items-center gap-2">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+              <span class="text-xs text-muted">Users</span>
+            </div>
+
+            <!-- BarChart3 -->
+            <div class="flex flex-col items-center gap-2">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="20" x2="18" y2="10"/>
+                <line x1="12" y1="20" x2="12" y2="4"/>
+                <line x1="6" y1="20" x2="6" y2="14"/>
+              </svg>
+              <span class="text-xs text-muted">BarChart</span>
+            </div>
+
+            <!-- MessageSquare -->
+            <div class="flex flex-col items-center gap-2">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+              <span class="text-xs text-muted">Message</span>
+            </div>
+
+            <!-- Upload -->
+            <div class="flex flex-col items-center gap-2">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="16 16 12 12 8 16"/>
+                <line x1="12" y1="12" x2="12" y2="21"/>
+                <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
+              </svg>
+              <span class="text-xs text-muted">Upload</span>
+            </div>
+
+            <!-- Trash2 -->
+            <div class="flex flex-col items-center gap-2">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"/>
+                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                <path d="M10 11v6"/>
+                <path d="M14 11v6"/>
+                <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+              </svg>
+              <span class="text-xs text-muted">Trash2</span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── Emoji Usage Guide ─── -->
+      <div class="mb-4">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Guia de Emojis</h3>
+        <div class="bg-white rounded-lg border border-border p-8">
+          <div class="grid grid-cols-8 gap-4">
+            <div class="flex flex-col items-center gap-2 p-3 rounded-lg bg-light">
+              <span class="text-2xl">🎬</span>
+              <span class="text-xs text-muted text-center">Filmes</span>
+            </div>
+            <div class="flex flex-col items-center gap-2 p-3 rounded-lg bg-light">
+              <span class="text-2xl">🎵</span>
+              <span class="text-xs text-muted text-center">Músicas</span>
+            </div>
+            <div class="flex flex-col items-center gap-2 p-3 rounded-lg bg-light">
+              <span class="text-2xl">📺</span>
+              <span class="text-xs text-muted text-center">Séries</span>
+            </div>
+            <div class="flex flex-col items-center gap-2 p-3 rounded-lg bg-light">
+              <span class="text-2xl">💡</span>
+              <span class="text-xs text-muted text-center">Dicas</span>
+            </div>
+            <div class="flex flex-col items-center gap-2 p-3 rounded-lg bg-light">
+              <span class="text-2xl">🔥</span>
+              <span class="text-xs text-muted text-center">Streak</span>
+            </div>
+            <div class="flex flex-col items-center gap-2 p-3 rounded-lg bg-light">
+              <span class="text-2xl">⚡</span>
+              <span class="text-xs text-muted text-center">XP</span>
+            </div>
+            <div class="flex flex-col items-center gap-2 p-3 rounded-lg bg-light">
+              <span class="text-2xl">🌟</span>
+              <span class="text-xs text-muted text-center">Achievement</span>
+            </div>
+            <div class="flex flex-col items-center gap-2 p-3 rounded-lg bg-light">
+              <span class="text-2xl">📱</span>
+              <span class="text-xs text-muted text-center">Tech</span>
+            </div>
+            <div class="flex flex-col items-center gap-2 p-3 rounded-lg bg-light">
+              <span class="text-2xl">🏅</span>
+              <span class="text-xs text-muted text-center">Badge</span>
+            </div>
+            <div class="flex flex-col items-center gap-2 p-3 rounded-lg bg-light">
+              <span class="text-2xl">🗣️</span>
+              <span class="text-xs text-muted text-center">Conversation</span>
+            </div>
+            <div class="flex flex-col items-center gap-2 p-3 rounded-lg bg-light">
+              <span class="text-2xl">📎</span>
+              <span class="text-xs text-muted text-center">Material</span>
+            </div>
+            <div class="flex flex-col items-center gap-2 p-3 rounded-lg bg-light">
+              <span class="text-2xl">📝</span>
+              <span class="text-xs text-muted text-center">Exercise</span>
+            </div>
+            <div class="flex flex-col items-center gap-2 p-3 rounded-lg bg-light">
+              <span class="text-2xl">🎧</span>
+              <span class="text-xs text-muted text-center">Audio</span>
+            </div>
+            <div class="flex flex-col items-center gap-2 p-3 rounded-lg bg-light">
+              <span class="text-2xl">🎙️</span>
+              <span class="text-xs text-muted text-center">Role-play</span>
+            </div>
+            <div class="flex flex-col items-center gap-2 p-3 rounded-lg bg-light">
+              <span class="text-2xl">✦</span>
+              <span class="text-xs text-muted text-center">AI</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+         SECTION 06 — FORMS
+         ═══════════════════════════════════════════════ -->
+    <section id="forms" class="pt-16 pb-8 border-b border-border">
+
+      <!-- Section header -->
+      <div class="mb-10">
+        <div class="section-label">06 — Forms</div>
+        <h2 class="section-title">Forms</h2>
+        <p class="section-desc">Elementos de entrada de dados: inputs de texto, busca, textarea, select, toggles e upload. Cada um documentado em seus estados: default, focus, erro e desabilitado.</p>
+      </div>
+
+      <!-- ─── Text Inputs ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Inputs de Texto</h3>
+        <div class="bg-white rounded-lg border border-border p-8">
+          <div class="grid grid-cols-2 gap-6">
+
+            <!-- Default -->
+            <div>
+              <label class="block text-xs font-mono text-muted uppercase tracking-widest mb-2">Default</label>
+              <input
+                type="text"
+                placeholder="Default input"
+                class="w-full bg-[#f8f9fb] border border-border rounded-md px-4 py-2.5 font-body text-primary outline-none"
+              />
+            </div>
+
+            <!-- Focus (simulated) -->
+            <div>
+              <label class="block text-xs font-mono text-muted uppercase tracking-widest mb-2">Focus</label>
+              <input
+                type="text"
+                placeholder="Focus state"
+                class="w-full bg-[#f8f9fb] border border-aulas ring-2 ring-aulas/20 rounded-md px-4 py-2.5 font-body text-primary outline-none"
+              />
+            </div>
+
+            <!-- Error -->
+            <div>
+              <label class="block text-xs font-mono text-muted uppercase tracking-widest mb-2">Error</label>
+              <input
+                type="text"
+                placeholder="Error state"
+                value="valor inválido"
+                class="w-full bg-[#f8f9fb] border border-fora ring-2 ring-fora/20 rounded-md px-4 py-2.5 font-body text-primary outline-none"
+              />
+              <p class="text-fora text-sm mt-1">Este campo é obrigatório</p>
+            </div>
+
+            <!-- Disabled -->
+            <div>
+              <label class="block text-xs font-mono text-muted uppercase tracking-widest mb-2">Disabled</label>
+              <input
+                type="text"
+                placeholder="Disabled input"
+                disabled
+                class="w-full bg-gray-100 border border-border rounded-md px-4 py-2.5 font-body text-primary outline-none opacity-50 cursor-not-allowed"
+              />
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── Search Input ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Busca</h3>
+        <div class="bg-white rounded-lg border border-border p-8">
+          <div class="relative">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-muted">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+            </span>
+            <input
+              type="search"
+              placeholder="Buscar aulas, vocabulário, exercícios..."
+              class="w-full bg-[#f8f9fb] border border-border rounded-md pl-10 pr-4 py-2.5 font-body text-primary outline-none focus:border-aulas focus:ring-2 focus:ring-aulas/20"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── Textarea ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Textarea</h3>
+        <div class="bg-white rounded-lg border border-border p-8">
+          <textarea
+            placeholder="Escreva aqui..."
+            class="w-full bg-[#f8f9fb] border border-border rounded-md px-4 py-2.5 font-body text-primary outline-none focus:border-aulas focus:ring-2 focus:ring-aulas/20 min-h-[120px] resize-y"
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- ─── Select ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Select</h3>
+        <div class="bg-white rounded-lg border border-border p-8">
+          <div class="relative">
+            <select class="w-full appearance-none bg-[#f8f9fb] border border-border rounded-md px-4 py-2.5 font-body text-primary outline-none focus:border-aulas focus:ring-2 focus:ring-aulas/20 pr-10 cursor-pointer">
+              <option value="">Selecione um nível</option>
+              <option value="a1">A1 — Iniciante</option>
+              <option value="a2">A2 — Básico</option>
+              <option value="b1">B1 — Intermediário</option>
+              <option value="b2">B2 — Intermediário Avançado</option>
+              <option value="c1">C1 — Avançado</option>
+              <option value="c2">C2 — Fluente</option>
+            </select>
+            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-muted pointer-events-none">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── Toggle Switches ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Toggle Switches</h3>
+        <div class="bg-white rounded-lg border border-border p-8 flex items-center gap-10">
+
+          <!-- Toggle ON -->
+          <div class="flex items-center gap-3">
+            <div
+              onclick="toggleSwitch(this)"
+              class="active w-11 h-6 rounded-full cursor-pointer transition-colors duration-200 bg-tarefas flex items-center px-0.5"
+            >
+              <div class="w-5 h-5 rounded-full bg-white shadow-sm transition-transform duration-200 translate-x-5"></div>
+            </div>
+            <span class="text-sm font-body text-secondary">Notificações ativas</span>
+          </div>
+
+          <!-- Toggle OFF -->
+          <div class="flex items-center gap-3">
+            <div
+              onclick="toggleSwitch(this)"
+              class="w-11 h-6 rounded-full cursor-pointer transition-colors duration-200 bg-gray-300 flex items-center px-0.5"
+            >
+              <div class="w-5 h-5 rounded-full bg-white shadow-sm transition-transform duration-200 translate-x-0.5"></div>
+            </div>
+            <span class="text-sm font-body text-secondary">Modo escuro</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ─── Upload Zone ─── -->
+      <div class="mb-4">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Upload</h3>
+        <div class="bg-white rounded-lg border border-border p-8">
+          <div class="border-2 border-dashed border-border rounded-lg p-8 text-center cursor-pointer hover:border-aulas hover:bg-aulas-bg transition-colors duration-200">
+            <div class="flex justify-center mb-4 text-muted">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="16 16 12 12 8 16"/>
+                <line x1="12" y1="12" x2="12" y2="21"/>
+                <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
+              </svg>
+            </div>
+            <p class="text-secondary font-body mb-1">Arraste arquivos ou clique para enviar</p>
+            <p class="text-muted text-sm font-body">PNG, JPG, PDF até 10MB</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+    <section id="cards" class="pt-16 pb-8 border-b border-border">
+
+      <!-- Section header -->
+      <div class="mb-10">
+        <div class="section-label">07 — Cards</div>
+        <h2 class="section-title">Cards</h2>
+        <p class="section-desc">Os sete tipos de card usados na plataforma Fluent: channel cards, tarefa cards, blog cards, challenge cards, KPI cards, achievement cards e dashboard cards.</p>
+      </div>
+
+      <!-- ─── Channel Cards ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Channel Cards</h3>
+        <div class="grid grid-cols-2 gap-6">
+
+          <!-- Aulas -->
+          <div class="channel-mesh-aulas glow-aulas rounded-xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-1.5 hover:scale-[1.01] min-h-[180px] flex flex-col justify-between">
+            <div class="flex items-start justify-between">
+              <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/>
+                </svg>
+              </div>
+            </div>
+            <div>
+              <h4 class="text-white font-display font-bold text-xl mb-1">Aulas</h4>
+              <p class="text-white/70 text-sm">3 novas aulas esta semana</p>
+              <div class="flex justify-end mt-3">
+                <span class="text-white/50 text-lg">→</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tarefas -->
+          <div class="channel-mesh-tarefas glow-tarefas rounded-xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-1.5 hover:scale-[1.01] min-h-[180px] flex flex-col justify-between">
+            <div class="flex items-start justify-between">
+              <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+                </svg>
+              </div>
+            </div>
+            <div>
+              <h4 class="text-white font-display font-bold text-xl mb-1">Tarefas</h4>
+              <p class="text-white/70 text-sm">2 exercícios pendentes</p>
+              <div class="flex justify-end mt-3">
+                <span class="text-white/50 text-lg">→</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fora da Aula -->
+          <div class="channel-mesh-fora glow-fora rounded-xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-1.5 hover:scale-[1.01] min-h-[180px] flex flex-col justify-between">
+            <div class="flex items-start justify-between">
+              <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                </svg>
+              </div>
+            </div>
+            <div>
+              <h4 class="text-white font-display font-bold text-xl mb-1">Fora da Aula</h4>
+              <p class="text-white/70 text-sm">5 dicas novas pra você</p>
+              <div class="flex justify-end mt-3">
+                <span class="text-white/50 text-lg">→</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Challenges -->
+          <div class="channel-mesh-challenges glow-challenges rounded-xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-1.5 hover:scale-[1.01] min-h-[180px] flex flex-col justify-between">
+            <div class="flex items-start justify-between">
+              <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5C7 4 7 7 7 7"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5C17 4 17 7 17 7"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+                </svg>
+              </div>
+            </div>
+            <div>
+              <h4 class="text-white font-display font-bold text-xl mb-1">Challenges</h4>
+              <p class="text-white/70 text-sm">1 missão ativa agora</p>
+              <div class="flex justify-end mt-3">
+                <span class="text-white/50 text-lg">→</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ─── Tarefa Cards ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Tarefa Cards</h3>
+        <div class="grid grid-cols-3 gap-6">
+
+          <!-- Active -->
+          <div class="bg-white rounded-xl border-2 border-tarefas p-5">
+            <div class="inline-flex items-center gap-1.5 text-xs font-semibold bg-tarefas-bg text-tarefas px-2.5 py-1 rounded-full mb-3">
+              <span>✦</span> Gerado por IA
+            </div>
+            <h4 class="font-display font-bold text-primary text-base mb-1">Quiz: Irregular Verbs</h4>
+            <p class="text-secondary text-sm mb-4">10 questões sobre verbos irregulares mais usados no dia a dia.</p>
+            <div class="mb-2">
+              <div class="h-2 rounded-full bg-gray-200 mb-1.5">
+                <div class="h-2 rounded-full bg-tarefas" style="width: 60%"></div>
+              </div>
+              <span class="text-xs text-secondary">6/10 questões</span>
+            </div>
+            <button class="btn-3d mt-4 w-full bg-tarefas text-white text-sm font-semibold py-2.5 rounded-lg shadow-sm hover:shadow-md transition-shadow">Continuar →</button>
+          </div>
+
+          <!-- Default -->
+          <div class="bg-white rounded-xl border border-border p-5">
+            <div class="inline-flex items-center text-xs font-semibold bg-gray-100 text-secondary px-2.5 py-1 rounded-full mb-3">
+              Prática
+            </div>
+            <h4 class="font-display font-bold text-primary text-base mb-1">Fill the Gaps: Present Perfect</h4>
+            <p class="text-secondary text-sm mb-4">Complete as frases usando a forma correta do Present Perfect.</p>
+            <div class="flex items-center gap-1.5 text-sm text-secondary mb-4">
+              <span>✏️</span> <span>Escrita • 10 min</span>
+            </div>
+            <button class="mt-auto w-full border-2 border-aulas text-aulas text-sm font-semibold py-2.5 rounded-lg hover:bg-aulas-bg transition-colors">Começar</button>
+          </div>
+
+          <!-- Done -->
+          <div class="bg-white rounded-xl border border-border p-5 opacity-75">
+            <div class="inline-flex items-center text-xs font-semibold bg-gray-100 text-secondary px-2.5 py-1 rounded-full mb-3">
+              ✓ Completa
+            </div>
+            <h4 class="font-display font-bold text-primary text-base mb-1">Quiz: Travel Vocabulary</h4>
+            <p class="text-secondary text-sm mb-4">Vocabulário de viagem — airport, hotel, directions.</p>
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-14 h-14 rounded-full border-4 border-tarefas flex items-center justify-center">
+                <span class="font-display font-extrabold text-primary text-sm">8/10</span>
+              </div>
+              <span class="text-sm text-secondary">Ótimo resultado!</span>
+            </div>
+            <button class="w-full text-secondary text-sm font-semibold py-2.5 rounded-lg border border-border hover:bg-gray-50 transition-colors">Revisar respostas</button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ─── Blog Cards ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Blog Cards</h3>
+
+        <!-- Featured card -->
+        <div class="bg-white rounded-xl border border-border p-5 flex gap-6 mb-6">
+          <div class="channel-mesh-fora w-1/3 rounded-xl flex items-center justify-center text-5xl flex-shrink-0" style="min-height: 160px;">
+            🎬
+          </div>
+          <div class="flex-1 flex flex-col justify-between">
+            <div>
+              <div class="flex gap-2 mb-3">
+                <span class="text-xs font-semibold bg-fora-bg text-fora px-2.5 py-1 rounded-full">Filme</span>
+                <span class="text-xs font-semibold bg-gray-100 text-secondary px-2.5 py-1 rounded-full">Dica</span>
+              </div>
+              <h4 class="font-display font-bold text-primary text-lg mb-2">5 filmes pra treinar listening sem legenda</h4>
+              <p class="text-secondary text-sm">Seleção de filmes com inglês claro e vocabulário acessível pra você começar a assistir sem legenda.</p>
+            </div>
+            <div class="flex items-center gap-4 text-xs text-muted mt-4">
+              <span>Hoje</span>
+              <span>•</span>
+              <span>4 min de leitura</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Regular cards -->
+        <div class="grid grid-cols-3 gap-6">
+
+          <article class="bg-white rounded-xl border border-border overflow-hidden hover:shadow-md transition-shadow">
+            <div class="channel-mesh-tarefas h-32 flex items-center justify-center text-4xl">🎵</div>
+            <div class="p-4">
+              <div class="flex gap-2 mb-2">
+                <span class="text-xs font-semibold bg-tarefas-bg text-tarefas px-2 py-0.5 rounded-full">Música</span>
+              </div>
+              <h4 class="font-display font-bold text-primary text-sm mb-1">Playlist: Easy English Songs</h4>
+              <p class="text-secondary text-xs mb-3">Músicas perfeitas pra cantar junto e melhorar pronúncia.</p>
+              <div class="flex items-center gap-2 text-xs text-muted">
+                <span>Ontem</span><span>•</span><span>2 min</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="bg-white rounded-xl border border-border overflow-hidden hover:shadow-md transition-shadow">
+            <div class="channel-mesh-aulas h-32 flex items-center justify-center text-4xl">📺</div>
+            <div class="p-4">
+              <div class="flex gap-2 mb-2">
+                <span class="text-xs font-semibold bg-aulas-bg text-aulas px-2 py-0.5 rounded-full">Série</span>
+              </div>
+              <h4 class="font-display font-bold text-primary text-sm mb-1">Por que "Friends" ainda é ouro pra aprender</h4>
+              <p class="text-secondary text-xs mb-3">Vocabulário do dia a dia, humor e repetição — a fórmula perfeita.</p>
+              <div class="flex items-center gap-2 text-xs text-muted">
+                <span>5 Mar</span><span>•</span><span>3 min</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="bg-white rounded-xl border border-border overflow-hidden hover:shadow-md transition-shadow">
+            <div class="channel-mesh-challenges h-32 flex items-center justify-center text-4xl">💡</div>
+            <div class="p-4">
+              <div class="flex gap-2 mb-2">
+                <span class="text-xs font-semibold bg-challenges-bg text-challenges px-2 py-0.5 rounded-full" style="color: #b8860b;">Dica</span>
+              </div>
+              <h4 class="font-display font-bold text-primary text-sm mb-1">Mude o celular pra inglês AGORA</h4>
+              <p class="text-secondary text-xs mb-3">Dica simples que faz mais diferença do que você imagina.</p>
+              <div class="flex items-center gap-2 text-xs text-muted">
+                <span>2 Mar</span><span>•</span><span>1 min</span>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+      <!-- ─── Challenge Cards ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Challenge Cards</h3>
+        <div class="space-y-4">
+
+          <!-- Active -->
+          <div class="bg-white rounded-xl border-2 border-challenges p-6 flex gap-4">
+            <div class="text-3xl flex-shrink-0 mt-1">🔥</div>
+            <div class="flex-1">
+              <div class="inline-flex items-center text-xs font-semibold bg-tarefas-bg text-tarefas px-2.5 py-1 rounded-full mb-2">Em andamento</div>
+              <h4 class="font-display font-bold text-primary text-base mb-1">Peça um café em inglês</h4>
+              <p class="text-secondary text-sm mb-3">Vá a uma cafeteria e faça o pedido inteiro em inglês. Pode ser simples!</p>
+              <div class="flex items-center gap-3 mb-4">
+                <span class="bg-aulas-bg text-aulas text-xs font-bold px-2.5 py-1 rounded-full">+100 XP</span>
+                <span class="text-sm text-secondary">🏅 Coffee Conqueror</span>
+              </div>
+              <div class="flex gap-2">
+                <button class="btn-3d bg-tarefas text-white text-sm font-semibold px-4 py-2 rounded-lg shadow-sm hover:shadow-md transition-shadow">Completei! ✓</button>
+                <button class="text-secondary text-sm font-semibold px-4 py-2 rounded-lg border border-border hover:bg-gray-50 transition-colors">Pular</button>
+              </div>
+            </div>
+            <div class="flex flex-col items-center gap-1 flex-shrink-0">
+              <div class="w-2.5 h-2.5 rounded-full bg-challenges"></div>
+              <div class="w-2.5 h-2.5 rounded-full bg-gray-200"></div>
+              <div class="w-2.5 h-2.5 rounded-full bg-gray-200"></div>
+              <span class="text-xs text-muted mt-1">Fácil</span>
+            </div>
+          </div>
+
+          <!-- Default -->
+          <div class="bg-white rounded-xl border border-border p-6 flex gap-4">
+            <div class="text-3xl flex-shrink-0 mt-1">⚡</div>
+            <div class="flex-1">
+              <div class="inline-flex items-center text-xs font-semibold bg-info/10 text-info px-2.5 py-1 rounded-full mb-2">Novo</div>
+              <h4 class="font-display font-bold text-primary text-base mb-1">Converse com um estranho em inglês</h4>
+              <p class="text-secondary text-sm mb-3">Inicie uma conversa casual com alguém que fale inglês. Mínimo 2 minutos!</p>
+              <div class="flex items-center gap-3">
+                <span class="bg-aulas-bg text-aulas text-xs font-bold px-2.5 py-1 rounded-full">+250 XP</span>
+                <span class="text-sm text-secondary">🗣️ Social Butterfly</span>
+              </div>
+            </div>
+            <div class="flex flex-col items-center gap-1 flex-shrink-0">
+              <div class="w-2.5 h-2.5 rounded-full bg-challenges"></div>
+              <div class="w-2.5 h-2.5 rounded-full bg-challenges"></div>
+              <div class="w-2.5 h-2.5 rounded-full bg-gray-200"></div>
+              <span class="text-xs text-muted mt-1">Médio</span>
+            </div>
+          </div>
+
+          <!-- Done -->
+          <div class="bg-white rounded-xl border border-border p-6 flex gap-4 opacity-70">
+            <div class="text-3xl flex-shrink-0 mt-1">✅</div>
+            <div class="flex-1">
+              <div class="inline-flex items-center text-xs font-semibold bg-gray-100 text-secondary px-2.5 py-1 rounded-full mb-2">Completo</div>
+              <h4 class="font-display font-bold text-primary text-base mb-1">Mude o celular para inglês por 1 semana</h4>
+              <p class="text-secondary text-sm mb-3">Troque o idioma do celular para inglês e mantenha por 7 dias.</p>
+              <div class="flex items-center gap-3">
+                <span class="bg-gray-100 text-secondary text-xs font-bold px-2.5 py-1 rounded-full">+150 XP ganhos</span>
+                <span class="text-sm text-secondary">📱 Phone Master</span>
+              </div>
+            </div>
+            <div class="flex flex-col items-center gap-1 flex-shrink-0">
+              <div class="w-2.5 h-2.5 rounded-full bg-gray-400"></div>
+              <div class="w-2.5 h-2.5 rounded-full bg-gray-200"></div>
+              <div class="w-2.5 h-2.5 rounded-full bg-gray-200"></div>
+              <span class="text-xs text-muted mt-1">Fácil</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ─── KPI Cards ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">KPI Cards</h3>
+        <div class="grid grid-cols-4 gap-4">
+
+          <!-- Alunos Ativos -->
+          <div class="bg-white rounded-xl border border-border p-5 hover:shadow-md transition-all">
+            <div class="flex items-start justify-between mb-4">
+              <div class="w-10 h-10 rounded-lg bg-aulas-bg flex items-center justify-center">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6c5ce7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+              </div>
+              <span class="text-xs font-semibold text-green-600">↑ +2</span>
+            </div>
+            <div class="font-display text-2xl font-extrabold text-primary mb-1">24</div>
+            <div class="text-sm text-secondary">Alunos Ativos</div>
+          </div>
+
+          <!-- Tarefas Entregues -->
+          <div class="bg-white rounded-xl border border-border p-5 hover:shadow-md transition-all">
+            <div class="flex items-start justify-between mb-4">
+              <div class="w-10 h-10 rounded-lg bg-tarefas-bg flex items-center justify-center">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00b894" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+                </svg>
+              </div>
+              <span class="text-xs font-semibold text-green-600">↑ +18</span>
+            </div>
+            <div class="font-display text-2xl font-extrabold text-primary mb-1">156</div>
+            <div class="text-sm text-secondary">Tarefas Entregues</div>
+          </div>
+
+          <!-- Taxa de Conclusão -->
+          <div class="bg-white rounded-xl border border-border p-5 hover:shadow-md transition-all">
+            <div class="flex items-start justify-between mb-4">
+              <div class="w-10 h-10 rounded-lg bg-challenges-bg flex items-center justify-center">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fdcb6e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+                </svg>
+              </div>
+              <span class="text-xs font-semibold text-secondary">→ estável</span>
+            </div>
+            <div class="font-display text-2xl font-extrabold text-primary mb-1">85%</div>
+            <div class="text-sm text-secondary">Taxa de Conclusão</div>
+          </div>
+
+          <!-- Inativos -->
+          <div class="bg-white rounded-xl border border-border p-5 hover:shadow-md transition-all">
+            <div class="flex items-start justify-between mb-4">
+              <div class="w-10 h-10 rounded-lg bg-fora-bg flex items-center justify-center">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e17055" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+              </div>
+              <span class="text-xs font-semibold text-red-500">↓ atenção</span>
+            </div>
+            <div class="font-display text-2xl font-extrabold text-primary mb-1">3</div>
+            <div class="text-sm text-secondary">Inativos (7d+)</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ─── Achievement Cards + Dashboard Card ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Achievement Cards</h3>
+
+        <!-- Achievement grid -->
+        <div class="grid grid-cols-6 gap-3 mb-8">
+
+          <!-- Earned -->
+          <div class="bg-white rounded-xl border border-border p-4 flex flex-col items-center gap-2 text-center" style="box-shadow: 0 0 16px rgba(108,92,231,0.15);">
+            <span class="text-3xl">📱</span>
+            <span class="text-xs font-semibold text-primary">Phone Master</span>
+          </div>
+
+          <div class="bg-white rounded-xl border border-border p-4 flex flex-col items-center gap-2 text-center" style="box-shadow: 0 0 16px rgba(225,112,85,0.15);">
+            <span class="text-3xl">🔥</span>
+            <span class="text-xs font-semibold text-primary">7 Day Streak</span>
+          </div>
+
+          <!-- Locked -->
+          <div class="bg-white rounded-xl border border-border p-4 flex flex-col items-center gap-2 text-center opacity-40 grayscale">
+            <span class="text-3xl">🏅</span>
+            <span class="text-xs font-semibold text-primary">Coffee Conqueror</span>
+          </div>
+
+          <div class="bg-white rounded-xl border border-border p-4 flex flex-col items-center gap-2 text-center opacity-40 grayscale">
+            <span class="text-3xl">🗣️</span>
+            <span class="text-xs font-semibold text-primary">Social Butterfly</span>
+          </div>
+
+          <div class="bg-white rounded-xl border border-border p-4 flex flex-col items-center gap-2 text-center opacity-40 grayscale">
+            <span class="text-3xl">🎬</span>
+            <span class="text-xs font-semibold text-primary">No Subs Hero</span>
+          </div>
+
+          <div class="bg-white rounded-xl border border-border p-4 flex flex-col items-center gap-2 text-center opacity-40 grayscale">
+            <span class="text-3xl">👑</span>
+            <span class="text-xs font-semibold text-primary">Fluent Speaker</span>
+          </div>
+
+        </div>
+
+        <!-- Dashboard card with mini chart -->
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Dashboard Card</h3>
+        <div class="bg-white rounded-xl border border-border max-w-md">
+          <div class="px-5 py-3 border-b border-border flex justify-between items-center">
+            <span class="font-display font-bold text-primary text-sm">Engajamento Semanal</span>
+            <a href="#" class="text-xs text-aulas font-semibold hover:underline">Ver tudo →</a>
+          </div>
+          <div class="p-5">
+            <div class="flex items-end gap-2 h-20">
+              <div class="flex-1 bg-aulas-bg rounded-t" style="height: 45%;"></div>
+              <div class="flex-1 bg-aulas-bg rounded-t" style="height: 70%;"></div>
+              <div class="flex-1 bg-aulas rounded-t" style="height: 90%;"></div>
+              <div class="flex-1 bg-aulas-bg rounded-t" style="height: 60%;"></div>
+              <div class="flex-1 bg-aulas-bg rounded-t" style="height: 80%;"></div>
+              <div class="flex-1 bg-aulas-bg rounded-t" style="height: 55%;"></div>
+              <div class="flex-1 bg-aulas-bg rounded-t" style="height: 75%;"></div>
+            </div>
+            <div class="flex justify-between mt-2">
+              <span class="text-xs text-muted">Seg</span>
+              <span class="text-xs text-muted">Ter</span>
+              <span class="text-xs text-muted">Qua</span>
+              <span class="text-xs text-muted">Qui</span>
+              <span class="text-xs text-muted">Sex</span>
+              <span class="text-xs text-muted">Sáb</span>
+              <span class="text-xs text-muted">Dom</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+    <section id="navigation"  class="pt-16 pb-8 border-b border-border">
+
+      <!-- Section header -->
+      <div class="mb-10">
+        <div class="section-label">08 — Navigation</div>
+        <h2 class="section-title">Navigation</h2>
+        <p class="section-desc">Componentes de navegação para student e teacher interfaces</p>
+      </div>
+
+      <!-- ─── Sidebars ─── -->
+      <div class="mb-10">
+        <h3 class="font-display text-lg font-bold text-primary mb-2">Sidebar</h3>
+        <p class="text-xs font-mono text-muted mb-5">Navegação lateral para Student e Teacher</p>
+
+        <div class="grid grid-cols-2 gap-6 max-w-2xl">
+
+          <!-- Student Sidebar -->
+          <div>
+            <p class="text-xs font-mono text-muted mb-3">Student</p>
+            <div class="border border-border rounded-xl overflow-hidden" style="max-width:280px; height:450px; background:#1a1a2e; display:flex; flex-direction:column;">
+
+              <!-- Logo -->
+              <div class="px-5 py-5 border-b" style="border-color:rgba(255,255,255,0.08);">
+                <div class="flex items-baseline gap-0.5">
+                  <span class="text-2xl font-display font-extrabold bg-gradient-to-r from-aulas via-tarefas to-fora bg-clip-text text-transparent">F</span>
+                  <span class="text-xl font-display font-bold text-white">luent</span>
+                </div>
+              </div>
+
+              <!-- Nav items -->
+              <div class="flex-1 py-3 flex flex-col gap-0.5 overflow-hidden">
+
+                <!-- Home — active -->
+                <div class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-r-md text-white font-medium" style="border-left:3px solid white; background:rgba(255,255,255,0.10);">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                  Home
+                </div>
+
+                <!-- Aulas -->
+                <div class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-r-md" style="color:rgba(255,255,255,0.60); border-left:3px solid transparent;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6c5ce7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+                  Aulas
+                </div>
+
+                <!-- Tarefas + badge -->
+                <div class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-r-md" style="color:rgba(255,255,255,0.60); border-left:3px solid transparent;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00b894" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                  Tarefas
+                  <span class="ml-auto text-xs font-semibold rounded-full px-1.5 py-0.5 leading-none" style="background:#00b894; color:#fff;">2</span>
+                </div>
+
+                <!-- Fora da Aula -->
+                <div class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-r-md" style="color:rgba(255,255,255,0.60); border-left:3px solid transparent;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e17055" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                  Fora da Aula
+                </div>
+
+                <!-- Challenges + badge -->
+                <div class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-r-md" style="color:rgba(255,255,255,0.60); border-left:3px solid transparent;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fdcb6e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5C7 4 7 7 7 7"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5C17 4 17 7 17 7"/><path d="M4 22h16"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                  Challenges
+                  <span class="ml-auto text-xs font-semibold rounded-full px-1.5 py-0.5 leading-none" style="background:#fdcb6e; color:#5a3e00;">1</span>
+                </div>
+
+              </div>
+
+              <!-- Bottom: avatar + streak + teacher link -->
+              <div class="px-4 py-4 flex flex-col gap-2" style="border-top:1px solid rgba(255,255,255,0.08);">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0" style="background:linear-gradient(135deg,#6c5ce7,#00b894); color:#fff;">M</div>
+                  <div class="flex flex-col min-w-0">
+                    <span class="text-xs font-semibold text-white truncate">Estudante</span>
+                    <span class="text-xs" style="color:rgba(255,255,255,0.40);">🔥 7 dias</span>
+                  </div>
+                </div>
+                <a href="#" class="flex items-center gap-2 text-xs" style="color:rgba(255,255,255,0.40);">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                  Painel do Professor
+                </a>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Teacher Sidebar -->
+          <div>
+            <p class="text-xs font-mono text-muted mb-3">Teacher</p>
+            <div class="border border-border rounded-xl overflow-hidden" style="max-width:280px; height:450px; background:#1a1a2e; display:flex; flex-direction:column;">
+
+              <!-- Logo + role badge -->
+              <div class="px-5 py-5 border-b" style="border-color:rgba(255,255,255,0.08);">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-baseline gap-0.5">
+                    <span class="text-2xl font-display font-extrabold bg-gradient-to-r from-aulas via-tarefas to-fora bg-clip-text text-transparent">F</span>
+                    <span class="text-xl font-display font-bold text-white">luent</span>
+                  </div>
+                  <span class="text-xs rounded-full px-2 py-0.5 font-medium" style="background:rgba(108,92,231,0.20); color:#6c5ce7;">Professor</span>
+                </div>
+              </div>
+
+              <!-- Search bar -->
+              <div class="px-4 py-3" style="border-bottom:1px solid rgba(255,255,255,0.06);">
+                <div class="flex items-center gap-2 px-3 py-2 rounded-md text-sm" style="background:rgba(255,255,255,0.07); color:rgba(255,255,255,0.40);">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                  <span>Buscar...</span>
+                </div>
+              </div>
+
+              <!-- Nav sections -->
+              <div class="flex-1 py-2 flex flex-col overflow-hidden">
+
+                <!-- Dashboard — active -->
+                <div class="flex items-center gap-3 px-4 py-2 text-sm rounded-r-md text-white font-medium" style="border-left:3px solid white; background:rgba(255,255,255,0.10);">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                  Dashboard
+                </div>
+
+                <!-- Canais label -->
+                <div class="text-xs uppercase px-4 mt-3 mb-1" style="color:rgba(255,255,255,0.30); letter-spacing:0.08em;">Canais</div>
+
+                <div class="flex items-center gap-3 px-4 py-1.5 text-xs rounded-r-md" style="color:rgba(255,255,255,0.60); border-left:3px solid transparent;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6c5ce7" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+                  Aulas
+                </div>
+                <div class="flex items-center gap-3 px-4 py-1.5 text-xs rounded-r-md" style="color:rgba(255,255,255,0.60); border-left:3px solid transparent;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00b894" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  Tarefas
+                  <span class="ml-auto text-xs rounded-full px-1.5 leading-tight" style="background:rgba(255,255,255,0.10); color:rgba(255,255,255,0.50);">14</span>
+                </div>
+                <div class="flex items-center gap-3 px-4 py-1.5 text-xs rounded-r-md" style="color:rgba(255,255,255,0.60); border-left:3px solid transparent;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#e17055" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+                  Fora da Aula
+                </div>
+                <div class="flex items-center gap-3 px-4 py-1.5 text-xs rounded-r-md" style="color:rgba(255,255,255,0.60); border-left:3px solid transparent;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fdcb6e" stroke-width="2"><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/><path d="M4 22h16"/></svg>
+                  Challenges
+                </div>
+
+                <!-- Gestão label -->
+                <div class="text-xs uppercase px-4 mt-3 mb-1" style="color:rgba(255,255,255,0.30); letter-spacing:0.08em;">Gestão</div>
+
+                <div class="flex items-center gap-3 px-4 py-1.5 text-xs rounded-r-md" style="color:rgba(255,255,255,0.60); border-left:3px solid transparent;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                  Turmas
+                </div>
+                <div class="flex items-center gap-3 px-4 py-1.5 text-xs rounded-r-md" style="color:rgba(255,255,255,0.60); border-left:3px solid transparent;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                  Alunos
+                  <span class="ml-auto text-xs rounded-full px-1.5 leading-tight" style="background:rgba(255,255,255,0.10); color:rgba(255,255,255,0.50);">12</span>
+                </div>
+                <div class="flex items-center gap-3 px-4 py-1.5 text-xs rounded-r-md" style="color:rgba(255,255,255,0.60); border-left:3px solid transparent;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 0 0-4 4c0 2 2 3 2 6H8a2 2 0 0 0 0 4h8a2 2 0 0 0 0-4h-2c0-3 2-4 2-6a4 4 0 0 0-4-4z"/></svg>
+                  IA
+                </div>
+
+              </div>
+
+              <!-- Bottom: teacher profile + link -->
+              <div class="px-4 py-4 flex flex-col gap-2" style="border-top:1px solid rgba(255,255,255,0.08);">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0" style="background:linear-gradient(135deg,#e17055,#fdcb6e); color:#fff;">F</div>
+                  <div class="flex flex-col min-w-0">
+                    <span class="text-xs font-semibold text-white truncate">Franciely Costa</span>
+                    <span class="text-xs truncate" style="color:rgba(255,255,255,0.40);">f.costa@fluent.com</span>
+                  </div>
+                </div>
+                <a href="#" class="flex items-center gap-2 text-xs" style="color:rgba(255,255,255,0.40);">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  Ver como Aluno
+                </a>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ─── Mobile Nav ─── -->
+      <div class="mb-10">
+        <h3 class="font-display text-lg font-bold text-primary mb-2">Mobile Nav</h3>
+        <p class="text-xs font-mono text-muted mb-5">Barra de navegação horizontal para dispositivos móveis</p>
+
+        <div class="max-w-sm">
+          <div class="bg-white border border-border rounded-xl p-2 flex justify-around">
+
+            <!-- Home — active -->
+            <button class="flex flex-col items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium" style="color:#6c5ce7; background:rgba(108,92,231,0.08);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              Home
+            </button>
+
+            <!-- Aulas -->
+            <button class="flex flex-col items-center gap-1 px-3 py-1.5 rounded-lg text-xs text-muted">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+              Aulas
+            </button>
+
+            <!-- Tarefas -->
+            <button class="flex flex-col items-center gap-1 px-3 py-1.5 rounded-lg text-xs text-muted">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              Tarefas
+            </button>
+
+            <!-- Mundo -->
+            <button class="flex flex-col items-center gap-1 px-3 py-1.5 rounded-lg text-xs text-muted">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              Mundo
+            </button>
+
+            <!-- Desafios -->
+            <button class="flex flex-col items-center gap-1 px-3 py-1.5 rounded-lg text-xs text-muted">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5C7 4 7 7 7 7"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5C17 4 17 7 17 7"/><path d="M4 22h16"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+              Desafios
+            </button>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── Tabs ─── -->
+      <div class="mb-10">
+        <h3 class="font-display text-lg font-bold text-primary mb-2">Tabs</h3>
+        <p class="text-xs font-mono text-muted mb-5">Navegação por abas com indicador de canal ativo</p>
+
+        <div class="max-w-lg">
+          <div class="flex gap-6 border-b border-border">
+            <button class="text-primary font-semibold pb-2 text-sm" style="border-bottom:2px solid #6c5ce7; color:#6c5ce7; margin-bottom:-1px;">Visão Geral</button>
+            <button class="text-secondary pb-2 text-sm">Membros</button>
+            <button class="text-secondary pb-2 text-sm">Conteúdo</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── Breadcrumbs ─── -->
+      <div class="mb-10">
+        <h3 class="font-display text-lg font-bold text-primary mb-2">Breadcrumbs</h3>
+        <p class="text-xs font-mono text-muted mb-5">Trilha de navegação hierárquica</p>
+
+        <div class="flex items-center gap-1.5 text-sm">
+          <a href="#" class="text-secondary hover:text-primary transition-colors">Home</a>
+          <span class="text-muted">/</span>
+          <a href="#" class="text-secondary hover:text-primary transition-colors">Aulas</a>
+          <span class="text-muted">/</span>
+          <span class="text-primary font-medium">Present Perfect — Quando usar?</span>
+        </div>
+      </div>
+
+    </section>
+    <!-- ═══════════════════════════════════════════════
+         SECTION 09 — PROGRESS
+         ═══════════════════════════════════════════════ -->
+    <section id="progress" class="pt-16 pb-8 border-b border-border">
+
+      <!-- Section header -->
+      <div class="mb-10">
+        <div class="section-label">09 — Progress</div>
+        <h2 class="section-title">Progress</h2>
+        <p class="section-desc">Indicadores visuais de progresso: anéis circulares animados, barras lineares, XP e nível. Transmitem conquista e motivação no aprendizado.</p>
+      </div>
+
+      <!-- ─── Progress Ring ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Progress Ring</h3>
+        <div class="flex items-start gap-8 flex-wrap">
+
+          <!-- Ring 70% -->
+          <div class="inline-flex items-center justify-center flex-col gap-3">
+            <div class="relative" style="width:120px;height:120px;">
+              <svg width="120" height="120" viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="52" fill="none" stroke="#e8ecf4" stroke-width="8"/>
+                <circle
+                  cx="60" cy="60" r="52"
+                  fill="none"
+                  stroke="#6c5ce7"
+                  stroke-width="8"
+                  stroke-dasharray="326.7"
+                  stroke-dashoffset="98"
+                  stroke-linecap="round"
+                  class="progress-ring-circle"
+                  style="--ring-target: 98; transform: rotate(-90deg); transform-origin: center;"
+                />
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center">
+                <span class="font-display font-bold text-xl text-primary">70%</span>
+                <span class="text-xs text-secondary">hoje</span>
+              </div>
+            </div>
+            <span class="inline-flex items-center bg-aulas-bg text-aulas text-xs font-semibold px-3 py-1 rounded-full">Nível 4</span>
+          </div>
+
+          <!-- Ring 80% tarefas -->
+          <div class="inline-flex items-center justify-center flex-col gap-3">
+            <div class="relative" style="width:120px;height:120px;">
+              <svg width="120" height="120" viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="52" fill="none" stroke="#e8ecf4" stroke-width="8"/>
+                <circle
+                  cx="60" cy="60" r="52"
+                  fill="none"
+                  stroke="#00b894"
+                  stroke-width="8"
+                  stroke-dasharray="326.7"
+                  stroke-dashoffset="65"
+                  stroke-linecap="round"
+                  class="progress-ring-circle"
+                  style="--ring-target: 65; transform: rotate(-90deg); transform-origin: center;"
+                />
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center">
+                <span class="font-display font-bold text-xl text-primary">80%</span>
+                <span class="text-xs text-secondary">tarefas</span>
+              </div>
+            </div>
+            <span class="inline-flex items-center bg-tarefas-bg text-tarefas text-xs font-semibold px-3 py-1 rounded-full">Tarefas</span>
+          </div>
+
+          <!-- Ring 30% fora -->
+          <div class="inline-flex items-center justify-center flex-col gap-3">
+            <div class="relative" style="width:120px;height:120px;">
+              <svg width="120" height="120" viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="52" fill="none" stroke="#e8ecf4" stroke-width="8"/>
+                <circle
+                  cx="60" cy="60" r="52"
+                  fill="none"
+                  stroke="#e17055"
+                  stroke-width="8"
+                  stroke-dasharray="326.7"
+                  stroke-dashoffset="229"
+                  stroke-linecap="round"
+                  class="progress-ring-circle"
+                  style="--ring-target: 229; transform: rotate(-90deg); transform-origin: center;"
+                />
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center">
+                <span class="font-display font-bold text-xl text-primary">30%</span>
+                <span class="text-xs text-secondary">fora</span>
+              </div>
+            </div>
+            <span class="inline-flex items-center bg-fora-bg text-fora text-xs font-semibold px-3 py-1 rounded-full">Fora</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ─── Linear Progress Bars ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Barras de Progresso</h3>
+        <div class="max-w-md space-y-4">
+
+          <!-- Questões -->
+          <div>
+            <div class="flex justify-between text-sm text-secondary mb-1.5">
+              <span>6/10 questões</span>
+              <span class="font-semibold text-primary">60%</span>
+            </div>
+            <div class="h-2 rounded-full bg-gray-200 w-full">
+              <div class="h-2 rounded-full bg-tarefas" style="width: 60%;"></div>
+            </div>
+          </div>
+
+          <!-- Exercícios -->
+          <div>
+            <div class="flex justify-between text-sm text-secondary mb-1.5">
+              <span>12/15 exercícios</span>
+              <span class="font-semibold text-primary">80%</span>
+            </div>
+            <div class="h-2 rounded-full bg-gray-200 w-full">
+              <div class="h-2 rounded-full bg-aulas" style="width: 80%;"></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ─── XP Bar ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Barra de XP</h3>
+        <div class="max-w-lg">
+          <div class="h-3 rounded-full bg-gray-200 w-full mb-2">
+            <div class="h-3 rounded-full bg-gradient-to-r from-aulas to-tarefas" style="width: 65%;"></div>
+          </div>
+          <p class="text-sm text-secondary">650 / 1000 XP — Nível 4</p>
+        </div>
+      </div>
+
+      <!-- ─── Level Indicator ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Indicador de Nível</h3>
+        <div class="max-w-lg">
+          <div class="flex items-center mb-1">
+            <span class="text-sm font-semibold text-primary">Nível 4</span>
+            <div class="h-2 rounded-full bg-gray-200 flex-1 mx-3">
+              <div class="h-2 rounded-full bg-aulas" style="width: 65%;"></div>
+            </div>
+            <span class="text-sm font-semibold text-muted">Nível 5</span>
+          </div>
+          <p class="text-xs text-muted mt-2">350 XP para o próximo nível</p>
+        </div>
+      </div>
+
+      <!-- ─── Streak Badge ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Streak Badge</h3>
+        <span class="inline-flex items-center gap-1.5 bg-fora-bg text-fora rounded-full px-3 py-1.5 text-sm font-medium">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 3z"/>
+          </svg>
+          7 dias
+        </span>
+      </div>
+
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+         SECTION 10 — FEEDBACK & OVERLAYS
+         ═══════════════════════════════════════════════ -->
+    <section id="feedback" class="pt-16 pb-8 border-b border-border">
+
+      <!-- Section header -->
+      <div class="mb-10">
+        <div class="section-label">10 — Feedback &amp; Overlays</div>
+        <h2 class="section-title">Feedback &amp; Overlays</h2>
+        <p class="section-desc">Componentes de resposta ao usuário: quiz interativo com feedback imediato, alertas descartáveis, modais e confetti para celebrar conquistas.</p>
+      </div>
+
+      <!-- ─── Quiz Component ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Quiz Interativo</h3>
+
+        <div class="bg-white rounded-xl border border-tarefas-light p-6 max-w-xl" data-quiz-group="quiz-1">
+          <!-- Quiz header -->
+          <div class="flex justify-between items-center">
+            <span class="text-sm text-secondary">Questão 7 de 10</span>
+            <div class="flex items-center gap-1.5 text-sm text-secondary">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+              </svg>
+              <span>02:34</span>
+            </div>
+          </div>
+
+          <!-- Question -->
+          <p class="text-lg font-medium mt-4 mb-6">Complete: "I ______ to London three times."</p>
+
+          <!-- Options -->
+          <div class="quiz-options">
+            <button
+              class="w-full text-left px-4 py-3 rounded-lg border border-border hover:border-aulas hover:bg-aulas-bg transition-all cursor-pointer mb-2"
+              onclick="toggleSelect(this); document.getElementById('quiz-feedback').style.display='none';"
+            >went</button>
+            <button
+              class="w-full text-left px-4 py-3 rounded-lg border border-border hover:border-aulas hover:bg-aulas-bg transition-all cursor-pointer mb-2"
+              onclick="toggleSelect(this); document.getElementById('quiz-feedback').style.display='block';"
+            >have been</button>
+            <button
+              class="w-full text-left px-4 py-3 rounded-lg border border-border hover:border-aulas hover:bg-aulas-bg transition-all cursor-pointer mb-2"
+              onclick="toggleSelect(this); document.getElementById('quiz-feedback').style.display='none';"
+            >was going</button>
+            <button
+              class="w-full text-left px-4 py-3 rounded-lg border border-border hover:border-aulas hover:bg-aulas-bg transition-all cursor-pointer mb-2"
+              onclick="toggleSelect(this); document.getElementById('quiz-feedback').style.display='none';"
+            >had been</button>
+          </div>
+
+          <!-- Feedback (initially hidden) -->
+          <div id="quiz-feedback" style="display:none;" class="mt-4 p-4 rounded-lg bg-tarefas-bg border border-tarefas flex items-start gap-3">
+            <span class="text-xl leading-none mt-0.5">🎯</span>
+            <div>
+              <p class="font-bold text-primary">Correto!</p>
+              <p class="text-sm text-secondary mt-1">Usamos Present Perfect para experiências de vida sem tempo definido.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── Alerts ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Alertas</h3>
+        <div class="max-w-xl space-y-3">
+
+          <!-- Info -->
+          <div data-alert class="bg-info/5 border border-info/20 rounded-lg px-4 py-3 flex items-center gap-3">
+            <svg class="text-info shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <span class="flex-1 text-sm text-primary">Nova aula publicada: Present Perfect</span>
+            <button onclick="dismissAlert(this)" class="text-muted hover:text-secondary transition-colors ml-2 shrink-0 text-xl leading-none">&times;</button>
+          </div>
+
+          <!-- Warning -->
+          <div data-alert class="bg-challenges-bg border border-challenges/30 rounded-lg px-4 py-3 flex items-center gap-3">
+            <svg class="shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fdcb6e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            <span class="flex-1 text-sm text-primary">3 alunos não acessaram há 7+ dias</span>
+            <button onclick="dismissAlert(this)" class="text-muted hover:text-secondary transition-colors ml-2 shrink-0 text-xl leading-none">&times;</button>
+          </div>
+
+          <!-- Error -->
+          <div data-alert class="bg-fora-bg border border-fora/30 rounded-lg px-4 py-3 flex items-center gap-3">
+            <svg class="shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#e17055" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
+            </svg>
+            <span class="flex-1 text-sm text-primary">Erro ao salvar exercício</span>
+            <button onclick="dismissAlert(this)" class="text-muted hover:text-secondary transition-colors ml-2 shrink-0 text-xl leading-none">&times;</button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ─── Modal ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Modal</h3>
+        <button
+          class="bg-aulas text-white rounded-md px-5 py-2.5 font-semibold btn-3d shadow-md hover:shadow-lg transition-shadow"
+          onclick="openModal('demo-modal')"
+        >Abrir Modal</button>
+      </div>
+
+      <!-- ─── Confetti ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Confetti</h3>
+        <button
+          class="bg-tarefas text-white rounded-md px-6 py-3 font-semibold btn-3d shadow-md hover:shadow-lg transition-shadow"
+          onclick="fireConfetti(this)"
+        >Completei! ✓</button>
+      </div>
+
+      <!-- ─── Toast Demos ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Toasts</h3>
+        <div class="space-y-3 max-w-sm">
+
+          <!-- Success toast -->
+          <div class="bg-white rounded-lg shadow-lg px-4 py-3 flex items-center gap-3 border-l-4 border-tarefas">
+            <svg class="text-tarefas shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            <span class="text-sm text-primary font-medium">XP ganho! +50 pontos</span>
+          </div>
+
+          <!-- Error toast -->
+          <div class="bg-white rounded-lg shadow-lg px-4 py-3 flex items-center gap-3 border-l-4 border-fora">
+            <svg class="text-fora shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
+            </svg>
+            <span class="text-sm text-primary font-medium">Erro ao enviar resposta</span>
+          </div>
+
+          <!-- Info toast -->
+          <div class="bg-white rounded-lg shadow-lg px-4 py-3 flex items-center gap-3 border-l-4 border-info">
+            <svg class="text-info shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <span class="text-sm text-primary font-medium">Nova tarefa disponível</span>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Modal overlay (outside section, fixed to viewport) -->
+    <div id="demo-modal" class="modal-overlay">
+      <div class="modal-content bg-white rounded-xl max-w-lg w-full mx-4 p-6 shadow-xl">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="font-display text-xl font-bold text-primary">Novo Conteúdo</h3>
+          <button
+            onclick="closeModal('demo-modal')"
+            class="text-muted hover:text-secondary transition-colors w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+        <p class="text-secondary text-sm leading-relaxed mb-6">
+          Adicione um novo conteúdo ao seu plano de estudos. Escolha o tipo, título e canais de distribuição para seus alunos.
+        </p>
+        <div class="flex justify-end gap-3">
+          <button
+            onclick="closeModal('demo-modal')"
+            class="px-4 py-2 rounded-md text-sm font-semibold text-secondary border border-border hover:bg-gray-50 transition-colors"
+          >Cancelar</button>
+          <button
+            onclick="closeModal('demo-modal')"
+            class="px-4 py-2 rounded-md text-sm font-semibold bg-aulas text-white hover:opacity-90 transition-opacity"
+          >Salvar</button>
+        </div>
+      </div>
+    </div>
+    <!-- ═══════════════════════════════════════════════
+         SECTION 11 — DATA DISPLAY
+         ═══════════════════════════════════════════════ -->
+    <section id="data-display" class="pt-16 pb-8 border-b border-border">
+
+      <!-- Section header -->
+      <div class="mb-10">
+        <div class="section-label">11 — Data Display</div>
+        <h2 class="section-title">Data Display</h2>
+        <p class="section-desc">Componentes para exibição de dados estruturados: timelines, feeds de atividade, tabelas e gráficos que comunicam progresso e histórico de forma clara.</p>
+      </div>
+
+      <!-- ─── Timeline ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Timeline</h3>
+
+        <div class="relative border-l-2 border-border ml-4">
+
+          <!-- Item 1 -->
+          <div class="relative pl-6 pb-8">
+            <div class="w-3 h-3 rounded-full bg-aulas border-2 border-white absolute -left-[7px] top-1 shadow-sm"></div>
+            <div class="text-xs text-muted mb-2">10 Mar 2026</div>
+            <div class="bg-white rounded-lg border border-border p-4 ml-2">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="text-xs font-semibold bg-aulas-bg text-aulas rounded-full px-2.5 py-0.5">Grammar</span>
+              </div>
+              <h4 class="font-display text-base font-semibold text-primary mb-1">Present Perfect — Quando usar?</h4>
+              <p class="text-sm text-secondary mb-3">Entenda a diferença entre Present Perfect e Simple Past de uma vez por todas.</p>
+              <div class="flex items-center gap-4 text-xs text-muted">
+                <span>📎 3 materiais</span>
+                <span>📝 Exercícios inclusos</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 2 -->
+          <div class="relative pl-6 pb-8">
+            <div class="w-3 h-3 rounded-full bg-aulas border-2 border-white absolute -left-[7px] top-1 shadow-sm"></div>
+            <div class="text-xs text-muted mb-2">7 Mar 2026</div>
+            <div class="bg-white rounded-lg border border-border p-4 ml-2">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="text-xs font-semibold bg-aulas-bg text-aulas rounded-full px-2.5 py-0.5">Vocabulary</span>
+              </div>
+              <h4 class="font-display text-base font-semibold text-primary mb-1">Travel Vocabulary — Airport &amp; Hotel</h4>
+              <p class="text-sm text-secondary mb-3">Vocabulário essencial para viagens: do check-in ao room service.</p>
+              <div class="flex items-center gap-4 text-xs text-muted">
+                <span>📎 2 materiais</span>
+                <span>🎧 Áudio incluso</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 3 -->
+          <div class="relative pl-6">
+            <div class="w-3 h-3 rounded-full bg-aulas border-2 border-white absolute -left-[7px] top-1 shadow-sm"></div>
+            <div class="text-xs text-muted mb-2">3 Mar 2026</div>
+            <div class="bg-white rounded-lg border border-border p-4 ml-2">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="text-xs font-semibold bg-aulas-bg text-aulas rounded-full px-2.5 py-0.5">Conversation</span>
+              </div>
+              <h4 class="font-display text-base font-semibold text-primary mb-1">Small Talk — Como puxar assunto</h4>
+              <p class="text-sm text-secondary mb-3">Técnicas para iniciar conversas em inglês sem travar.</p>
+              <div class="flex items-center gap-4 text-xs text-muted">
+                <span>📎 1 material</span>
+                <span>🎙️ Role-play incluso</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ─── Activity Feed ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Activity Feed</h3>
+
+        <div class="space-y-3 max-w-2xl">
+
+          <!-- Item 1 — Aula -->
+          <div class="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+            <div class="w-2.5 h-2.5 rounded-full mt-1.5 shrink-0 bg-aulas"></div>
+            <div class="flex-1 min-w-0">
+              <p class="font-semibold text-primary text-sm">Present Perfect — Quando usar?</p>
+              <p class="text-sm text-secondary">Aula assistida • 2h atrás</p>
+            </div>
+            <span class="text-xs font-semibold bg-aulas-bg text-aulas rounded-full px-2.5 py-1 shrink-0">Aula</span>
+          </div>
+
+          <!-- Item 2 — Tarefa -->
+          <div class="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+            <div class="w-2.5 h-2.5 rounded-full mt-1.5 shrink-0 bg-tarefas"></div>
+            <div class="flex-1 min-w-0">
+              <p class="font-semibold text-primary text-sm">Quiz: Irregular Verbs</p>
+              <p class="text-sm text-secondary">Nota: 8/10 • 4h atrás</p>
+            </div>
+            <span class="text-xs font-semibold bg-tarefas-bg text-tarefas rounded-full px-2.5 py-1 shrink-0">Tarefa</span>
+          </div>
+
+          <!-- Item 3 — Challenge -->
+          <div class="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+            <div class="w-2.5 h-2.5 rounded-full mt-1.5 shrink-0 bg-challenges"></div>
+            <div class="flex-1 min-w-0">
+              <p class="font-semibold text-primary text-sm">Challenge: Peça café em inglês</p>
+              <p class="text-sm text-secondary">Aceito • ontem</p>
+            </div>
+            <span class="text-xs font-semibold bg-challenges-bg text-challenges rounded-full px-2.5 py-1 shrink-0">Challenge</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ─── Table ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Tabela</h3>
+
+        <div class="bg-white rounded-xl border border-border overflow-hidden">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-gray-50 text-xs text-secondary uppercase tracking-wider">
+                <th class="text-left px-4 py-3 font-semibold">Nome</th>
+                <th class="text-left px-4 py-3 font-semibold">Nível</th>
+                <th class="text-left px-4 py-3 font-semibold">XP</th>
+                <th class="text-left px-4 py-3 font-semibold">Último Acesso</th>
+                <th class="text-left px-4 py-3 font-semibold">Status</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-border">
+              <tr class="even:bg-gray-50/50">
+                <td class="px-4 py-3 font-medium text-primary">Marcelo S.</td>
+                <td class="px-4 py-3 text-secondary">Intermediário</td>
+                <td class="px-4 py-3 font-mono text-primary">650</td>
+                <td class="px-4 py-3 text-secondary">Hoje</td>
+                <td class="px-4 py-3">
+                  <span class="flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-tarefas inline-block"></span>
+                    <span class="text-tarefas font-medium text-xs">online</span>
+                  </span>
+                </td>
+              </tr>
+              <tr class="even:bg-gray-50/50">
+                <td class="px-4 py-3 font-medium text-primary">Ana P.</td>
+                <td class="px-4 py-3 text-secondary">Iniciante</td>
+                <td class="px-4 py-3 font-mono text-primary">320</td>
+                <td class="px-4 py-3 text-secondary">Ontem</td>
+                <td class="px-4 py-3">
+                  <span class="flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-tarefas inline-block"></span>
+                    <span class="text-tarefas font-medium text-xs">online</span>
+                  </span>
+                </td>
+              </tr>
+              <tr class="even:bg-gray-50/50">
+                <td class="px-4 py-3 font-medium text-primary">Carlos R.</td>
+                <td class="px-4 py-3 text-secondary">Avançado</td>
+                <td class="px-4 py-3 font-mono text-primary">1200</td>
+                <td class="px-4 py-3 text-secondary">3 dias</td>
+                <td class="px-4 py-3">
+                  <span class="flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-muted inline-block"></span>
+                    <span class="text-muted font-medium text-xs">offline</span>
+                  </span>
+                </td>
+              </tr>
+              <tr class="even:bg-gray-50/50">
+                <td class="px-4 py-3 font-medium text-primary">Juliana M.</td>
+                <td class="px-4 py-3 text-secondary">Intermediário</td>
+                <td class="px-4 py-3 font-mono text-primary">580</td>
+                <td class="px-4 py-3 text-secondary">Hoje</td>
+                <td class="px-4 py-3">
+                  <span class="flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-tarefas inline-block"></span>
+                    <span class="text-tarefas font-medium text-xs">online</span>
+                  </span>
+                </td>
+              </tr>
+              <tr class="even:bg-gray-50/50">
+                <td class="px-4 py-3 font-medium text-primary">Pedro L.</td>
+                <td class="px-4 py-3 text-secondary">Iniciante</td>
+                <td class="px-4 py-3 font-mono text-primary">150</td>
+                <td class="px-4 py-3 text-secondary">8 dias</td>
+                <td class="px-4 py-3">
+                  <span class="flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-challenges inline-block"></span>
+                    <span class="text-challenges font-medium text-xs">inativo</span>
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ─── Bar Chart ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Gráfico de Barras</h3>
+
+        <div class="bg-white rounded-xl border border-border p-5 max-w-xl">
+          <p class="font-display text-sm font-semibold text-primary mb-5">Atividade Semanal</p>
+          <div class="flex items-end gap-3 h-40">
+            <!-- Seg 40% -->
+            <div class="flex-1 flex flex-col items-center gap-2">
+              <div class="w-full rounded-t-md bg-gray-200 transition-all" style="height: 40%;"></div>
+              <span class="text-xs text-secondary">Seg</span>
+            </div>
+            <!-- Ter 60% -->
+            <div class="flex-1 flex flex-col items-center gap-2">
+              <div class="w-full rounded-t-md bg-gray-200 transition-all" style="height: 60%;"></div>
+              <span class="text-xs text-secondary">Ter</span>
+            </div>
+            <!-- Qua 80% -->
+            <div class="flex-1 flex flex-col items-center gap-2">
+              <div class="w-full rounded-t-md bg-gray-200 transition-all" style="height: 80%;"></div>
+              <span class="text-xs text-secondary">Qua</span>
+            </div>
+            <!-- Qui 45% -->
+            <div class="flex-1 flex flex-col items-center gap-2">
+              <div class="w-full rounded-t-md bg-gray-200 transition-all" style="height: 45%;"></div>
+              <span class="text-xs text-secondary">Qui</span>
+            </div>
+            <!-- Sex 70% -->
+            <div class="flex-1 flex flex-col items-center gap-2">
+              <div class="w-full rounded-t-md bg-gray-200 transition-all" style="height: 70%;"></div>
+              <span class="text-xs text-secondary">Sex</span>
+            </div>
+            <!-- Sáb 90% — TODAY -->
+            <div class="flex-1 flex flex-col items-center gap-2">
+              <div class="w-full rounded-t-md bg-aulas transition-all" style="height: 90%;"></div>
+              <span class="text-xs text-aulas font-semibold">Sáb</span>
+            </div>
+            <!-- Dom 55% -->
+            <div class="flex-1 flex flex-col items-center gap-2">
+              <div class="w-full rounded-t-md bg-gray-200 transition-all" style="height: 55%;"></div>
+              <span class="text-xs text-secondary">Dom</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── Stats Row ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Stats Pills</h3>
+
+        <div class="flex gap-4">
+          <div class="bg-white rounded-xl border border-border px-5 py-3 text-center">
+            <div class="font-display text-2xl font-extrabold text-primary">12</div>
+            <div class="text-xs text-secondary mt-1">Completas</div>
+          </div>
+          <div class="bg-white rounded-xl border border-border px-5 py-3 text-center">
+            <div class="font-display text-2xl font-extrabold text-primary">2</div>
+            <div class="text-xs text-secondary mt-1">Pendentes</div>
+          </div>
+          <div class="bg-white rounded-xl border border-border px-5 py-3 text-center">
+            <div class="font-display text-2xl font-extrabold text-primary">85%</div>
+            <div class="text-xs text-secondary mt-1">Acerto</div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+         SECTION 12 — LAYOUTS
+         ═══════════════════════════════════════════════ -->
+    <section id="layouts" class="pt-16 pb-8 border-b border-border">
+
+      <!-- Section header -->
+      <div class="mb-10">
+        <div class="section-label">12 — Layouts</div>
+        <h2 class="section-title">Layouts</h2>
+        <p class="section-desc">Padrões de composição de página: headers, grids e seções recorrentes que estruturam as views de aluno e professor na plataforma Fluent.</p>
+      </div>
+
+      <!-- ─── Student Page Header ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Header — Aluno</h3>
+
+        <div class="border border-border rounded-xl p-6 bg-white">
+          <div class="flex justify-between items-start">
+            <!-- Left -->
+            <div>
+              <h2 class="font-display text-2xl font-bold text-primary">Hey, Marcelo!</h2>
+              <p class="text-secondary text-sm mt-1">Pronto pra mais um dia de inglês?</p>
+            </div>
+            <!-- Right -->
+            <div class="flex items-center gap-3">
+              <input
+                type="text"
+                placeholder="Buscar..."
+                class="w-48 text-sm border border-border rounded-md px-3 py-1.5 text-primary placeholder-muted focus:outline-none focus:ring-2 focus:ring-aulas/30 focus:border-aulas transition-colors"
+              >
+              <span class="text-sm font-semibold text-aulas bg-aulas-bg rounded-full px-3 py-1">⚡ 650 XP</span>
+              <button class="relative w-9 h-9 flex items-center justify-center rounded-lg border border-border hover:bg-gray-50 transition-colors text-secondary">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                </svg>
+                <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-fora border border-white"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── Teacher Page Header ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Header — Professor</h3>
+
+        <div class="border border-border rounded-xl p-6 bg-white">
+          <div class="flex justify-between items-center mb-5">
+            <!-- Left -->
+            <div>
+              <h2 class="font-display text-2xl font-bold text-primary">Dashboard</h2>
+              <p class="text-secondary text-sm mt-1">Visão geral das suas turmas</p>
+            </div>
+            <!-- Right -->
+            <button class="bg-aulas text-white btn-3d rounded-md px-5 py-2.5 text-sm font-semibold hover:opacity-90 transition-opacity">
+              Novo Conteúdo
+            </button>
+          </div>
+          <!-- Filter pills -->
+          <div class="flex gap-2">
+            <button class="text-sm font-semibold bg-aulas text-white rounded-full px-4 py-1.5">7 dias</button>
+            <button class="text-sm font-medium text-secondary border border-border rounded-full px-4 py-1.5 hover:bg-gray-50 transition-colors">30 dias</button>
+            <button class="text-sm font-medium text-secondary border border-border rounded-full px-4 py-1.5 hover:bg-gray-50 transition-colors">3 meses</button>
+            <button class="text-sm font-medium text-secondary border border-border rounded-full px-4 py-1.5 hover:bg-gray-50 transition-colors">Ano</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── Grid Layout Demos ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Grid Layouts</h3>
+
+        <div class="space-y-8">
+
+          <!-- 2-column -->
+          <div class="border border-border rounded-xl p-5 bg-white">
+            <p class="text-xs font-mono text-muted mb-4">grid grid-cols-2 gap-4</p>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="bg-gray-100 rounded-lg h-24 flex items-center justify-center text-sm text-muted">Channel Card</div>
+              <div class="bg-gray-100 rounded-lg h-24 flex items-center justify-center text-sm text-muted">Channel Card</div>
+              <div class="bg-gray-100 rounded-lg h-24 flex items-center justify-center text-sm text-muted">Channel Card</div>
+              <div class="bg-gray-100 rounded-lg h-24 flex items-center justify-center text-sm text-muted">Channel Card</div>
+            </div>
+            <p class="text-xs text-muted italic mt-3">2 colunas — padrão para tablets e desktop estreito</p>
+          </div>
+
+          <!-- 3-column -->
+          <div class="border border-border rounded-xl p-5 bg-white">
+            <p class="text-xs font-mono text-muted mb-4">grid grid-cols-3 gap-4</p>
+            <div class="grid grid-cols-3 gap-4">
+              <div class="bg-gray-100 rounded-lg h-24 flex items-center justify-center text-sm text-muted">Blog Card</div>
+              <div class="bg-gray-100 rounded-lg h-24 flex items-center justify-center text-sm text-muted">Blog Card</div>
+              <div class="bg-gray-100 rounded-lg h-24 flex items-center justify-center text-sm text-muted">Blog Card</div>
+              <div class="bg-gray-100 rounded-lg h-24 flex items-center justify-center text-sm text-muted">Blog Card</div>
+              <div class="bg-gray-100 rounded-lg h-24 flex items-center justify-center text-sm text-muted">Blog Card</div>
+              <div class="bg-gray-100 rounded-lg h-24 flex items-center justify-center text-sm text-muted">Blog Card</div>
+            </div>
+            <p class="text-xs text-muted italic mt-3">3 colunas — padrão para desktop médio (≥ 1024px)</p>
+          </div>
+
+          <!-- 4-column -->
+          <div class="border border-border rounded-xl p-5 bg-white">
+            <p class="text-xs font-mono text-muted mb-4">grid grid-cols-4 gap-4</p>
+            <div class="grid grid-cols-4 gap-4">
+              <div class="bg-gray-100 rounded-lg h-24 flex items-center justify-center text-sm text-muted">KPI Card</div>
+              <div class="bg-gray-100 rounded-lg h-24 flex items-center justify-center text-sm text-muted">KPI Card</div>
+              <div class="bg-gray-100 rounded-lg h-24 flex items-center justify-center text-sm text-muted">KPI Card</div>
+              <div class="bg-gray-100 rounded-lg h-24 flex items-center justify-center text-sm text-muted">KPI Card</div>
+            </div>
+            <p class="text-xs text-muted italic mt-3">4 colunas — KPIs e métricas em desktop largo (≥ 1280px)</p>
+          </div>
+
+          <!-- Sidebar + content -->
+          <div class="border border-border rounded-xl p-5 bg-white">
+            <p class="text-xs font-mono text-muted mb-4">flex gap-4 — sidebar + conteúdo principal</p>
+            <div class="flex gap-4">
+              <div class="w-60 bg-dark rounded-lg h-48 flex items-center justify-center text-white/50 text-sm shrink-0">
+                Sidebar
+              </div>
+              <div class="flex-1 bg-gray-100 rounded-lg h-48 flex items-center justify-center text-sm text-muted">
+                Conteúdo Principal
+              </div>
+            </div>
+            <p class="text-xs text-muted italic mt-3">Sidebar fixa (240px) + área principal responsiva — padrão do design system</p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ─── Section Pattern ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Padrão de Seção</h3>
+
+        <div class="grid grid-cols-2 gap-6">
+
+          <!-- Left: Atividade Recente -->
+          <div class="border border-border rounded-xl p-5 bg-white">
+            <h2 class="font-display text-xl font-semibold text-primary">Atividade Recente</h2>
+            <div class="mt-6 space-y-3">
+              <div class="bg-gray-100 rounded-lg h-12 flex items-center px-4 text-sm text-muted">Item de lista</div>
+              <div class="bg-gray-100 rounded-lg h-12 flex items-center px-4 text-sm text-muted">Item de lista</div>
+              <div class="bg-gray-100 rounded-lg h-12 flex items-center px-4 text-sm text-muted">Item de lista</div>
+            </div>
+          </div>
+
+          <!-- Right: Conquistas -->
+          <div class="border border-border rounded-xl p-5 bg-white">
+            <h2 class="font-display text-xl font-semibold text-primary">Suas Conquistas</h2>
+            <div class="mt-6 grid grid-cols-3 gap-3">
+              <div class="bg-gray-100 rounded-lg h-16 flex items-center justify-center text-sm text-muted">Card</div>
+              <div class="bg-gray-100 rounded-lg h-16 flex items-center justify-center text-sm text-muted">Card</div>
+              <div class="bg-gray-100 rounded-lg h-16 flex items-center justify-center text-sm text-muted">Card</div>
+              <div class="bg-gray-100 rounded-lg h-16 flex items-center justify-center text-sm text-muted">Card</div>
+              <div class="bg-gray-100 rounded-lg h-16 flex items-center justify-center text-sm text-muted">Card</div>
+              <div class="bg-gray-100 rounded-lg h-16 flex items-center justify-center text-sm text-muted">Card</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+    <section id="animations"  class="pt-16 pb-8">
+
+      <!-- Section header -->
+      <div class="mb-10">
+        <div class="section-label">13 — Animations</div>
+        <h2 class="section-title">Animations</h2>
+        <p class="section-desc">Demonstrações interativas das animações e transições do Fluent</p>
+      </div>
+
+      <!-- ─── Easing Curves ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Curvas de Easing</h3>
+        <div class="grid grid-cols-3 gap-6">
+
+          <!-- ease-out-expo -->
+          <div class="bg-white rounded-xl border border-border p-6">
+            <div class="font-semibold text-primary">ease-out-expo</div>
+            <div class="font-mono text-xs text-muted mt-1">cubic-bezier(0.16, 1, 0.3, 1)</div>
+            <div
+              class="h-12 bg-gray-100 rounded-lg relative overflow-hidden mt-4 cursor-pointer"
+              onmouseenter="this.querySelector('.ease-ball').style.left='calc(100% - 44px)'"
+              onmouseleave="this.querySelector('.ease-ball').style.left='4px'"
+            >
+              <div
+                class="ease-ball w-10 h-10 rounded-full absolute top-1 bg-aulas"
+                style="left:4px; transition: left 0.8s cubic-bezier(0.16, 1, 0.3, 1);"
+              ></div>
+            </div>
+          </div>
+
+          <!-- ease-spring -->
+          <div class="bg-white rounded-xl border border-border p-6">
+            <div class="font-semibold text-primary">ease-spring</div>
+            <div class="font-mono text-xs text-muted mt-1">cubic-bezier(0.34, 1.56, 0.64, 1)</div>
+            <div
+              class="h-12 bg-gray-100 rounded-lg relative overflow-hidden mt-4 cursor-pointer"
+              onmouseenter="this.querySelector('.ease-ball').style.left='calc(100% - 44px)'"
+              onmouseleave="this.querySelector('.ease-ball').style.left='4px'"
+            >
+              <div
+                class="ease-ball w-10 h-10 rounded-full absolute top-1 bg-tarefas"
+                style="left:4px; transition: left 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);"
+              ></div>
+            </div>
+          </div>
+
+          <!-- ease-smooth -->
+          <div class="bg-white rounded-xl border border-border p-6">
+            <div class="font-semibold text-primary">ease-smooth</div>
+            <div class="font-mono text-xs text-muted mt-1">cubic-bezier(0.22, 0.61, 0.36, 1)</div>
+            <div
+              class="h-12 bg-gray-100 rounded-lg relative overflow-hidden mt-4 cursor-pointer"
+              onmouseenter="this.querySelector('.ease-ball').style.left='calc(100% - 44px)'"
+              onmouseleave="this.querySelector('.ease-ball').style.left='4px'"
+            >
+              <div
+                class="ease-ball w-10 h-10 rounded-full absolute top-1 bg-fora"
+                style="left:4px; transition: left 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);"
+              ></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ─── Hover Effects ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Efeitos de Hover</h3>
+        <div class="grid grid-cols-3 gap-6">
+
+          <!-- Lift -->
+          <div class="bg-white rounded-xl border border-border p-6 h-32 flex flex-col items-center justify-center cursor-pointer hover:-translate-y-2 transition-transform duration-300">
+            <div class="font-semibold text-primary mb-1">Lift</div>
+            <div class="text-xs text-muted">hover:-translate-y-2</div>
+          </div>
+
+          <!-- Scale -->
+          <div class="bg-white rounded-xl border border-border p-6 h-32 flex flex-col items-center justify-center cursor-pointer hover:scale-105 transition-transform duration-300">
+            <div class="font-semibold text-primary mb-1">Scale</div>
+            <div class="text-xs text-muted">hover:scale-105</div>
+          </div>
+
+          <!-- Glow -->
+          <div
+            class="bg-white rounded-xl border border-border p-6 h-32 flex flex-col items-center justify-center cursor-pointer transition-shadow duration-300"
+            onmouseenter="this.classList.add('glow-aulas'); this.style.boxShadow='0 8px 32px rgba(108,92,231,0.3)'"
+            onmouseleave="this.classList.remove('glow-aulas'); this.style.boxShadow=''"
+          >
+            <div class="font-semibold text-primary mb-1">Glow</div>
+            <div class="text-xs text-muted">box-shadow glow</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ─── Stagger Demo ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Stagger Animation</h3>
+        <div class="bg-white rounded-xl border border-border p-6">
+          <button
+            class="bg-aulas text-white rounded-md px-5 py-2.5 font-semibold btn-3d shadow-md hover:shadow-lg transition-shadow mb-6"
+            onclick="playStagger()"
+          >Play Stagger</button>
+          <div id="stagger-container" class="space-y-2">
+            <div class="stagger-item bg-aulas-bg rounded-lg p-3 text-sm opacity-0 translate-y-4 transition-all duration-300">Item 1</div>
+            <div class="stagger-item bg-aulas-bg rounded-lg p-3 text-sm opacity-0 translate-y-4 transition-all duration-300">Item 2</div>
+            <div class="stagger-item bg-aulas-bg rounded-lg p-3 text-sm opacity-0 translate-y-4 transition-all duration-300">Item 3</div>
+            <div class="stagger-item bg-aulas-bg rounded-lg p-3 text-sm opacity-0 translate-y-4 transition-all duration-300">Item 4</div>
+            <div class="stagger-item bg-aulas-bg rounded-lg p-3 text-sm opacity-0 translate-y-4 transition-all duration-300">Item 5</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── 3D Press ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Efeito 3D Press</h3>
+        <div class="bg-white rounded-xl border border-border p-6 flex flex-col items-start gap-4">
+          <button
+            class="px-8 py-4 text-lg font-bold bg-aulas text-white rounded-lg btn-3d shadow-md"
+            style="box-shadow: 0 6px 0 #4a3cb5, 0 8px 12px rgba(108,92,231,0.3);"
+          >Click me!</button>
+          <p class="text-sm text-secondary">Efeito 3D com box-shadow que comprime no :active</p>
+        </div>
+      </div>
+
+      <!-- ─── Page Transition ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Transição de Página</h3>
+        <div class="bg-white rounded-xl border border-border p-6">
+          <button
+            class="bg-aulas text-white rounded-md px-5 py-2.5 font-semibold btn-3d shadow-md hover:shadow-lg transition-shadow mb-6"
+            onclick="togglePageContent()"
+          >Trocar Conteúdo</button>
+          <div class="relative" style="min-height: 80px;">
+            <div id="page-content-a" class="bg-aulas-bg rounded-lg p-4 text-primary font-medium" style="transition: opacity 0.3s, transform 0.3s;">
+              Página 1 — Conteúdo original
+            </div>
+            <div id="page-content-b" class="bg-tarefas-bg rounded-lg p-4 text-primary font-medium" style="opacity:0; transform: translateY(20px); transition: opacity 0.3s, transform 0.3s; position:absolute; top:0; left:0; right:0;">
+              Página 2 — Novo conteúdo
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── Splash Preview ─── -->
+      <div class="mb-12">
+        <h3 class="font-display text-lg font-bold text-primary mb-6">Splash Screen Preview</h3>
+        <div class="flex flex-col items-start gap-4">
+          <div class="w-64 h-48 bg-dark rounded-xl flex flex-col items-center justify-center overflow-hidden relative">
+            <div
+              id="splash-logo"
+              class="text-5xl font-display font-extrabold bg-gradient-to-r from-aulas via-tarefas to-fora bg-clip-text text-transparent"
+              style="animation: splashBounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;"
+            >F</div>
+            <div
+              id="splash-tagline"
+              class="text-white/70 text-sm mt-3"
+              style="animation: fadeIn 0.5s ease 0.5s both;"
+            >Inglês que faz sentido</div>
+          </div>
+          <button
+            class="bg-dark text-white rounded-md px-4 py-2 text-sm font-semibold hover:opacity-80 transition-opacity"
+            onclick="replaySplash()"
+          >Replay</button>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script src="design-system.js"></script>
+</body>
+</html>
