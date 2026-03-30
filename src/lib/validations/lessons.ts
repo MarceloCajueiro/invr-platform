@@ -12,6 +12,8 @@ export const createLessonSchema = z.object({
   ]),
   videoUrl: z.string().url("URL inválida").optional().or(z.literal("")),
   coverImageUrl: z.string().optional(),
+  audioUrls: z.string().optional(), // JSON array
+  documentUrls: z.string().optional(), // JSON array
   durationMinutes: z.coerce.number().min(0).optional(),
   position: z.coerce.number().min(0).optional(),
 });

@@ -170,6 +170,8 @@ export const lessons = sqliteTable(
     }).notNull(),
     videoUrl: text("video_url"),
     coverImageUrl: text("cover_image_url"),
+    audioUrls: text("audio_urls"), // JSON: [{url, name, size}]
+    documentUrls: text("document_urls"), // JSON: [{url, name, size}]
     durationMinutes: integer("duration_minutes"),
     status: text("status", { enum: ["draft", "published"] })
       .notNull()
