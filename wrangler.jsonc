@@ -22,5 +22,9 @@
       "binding": "BUCKET",
       "bucket_name": "fluent-storage"
     }
-  ]
+  ],
+  "vars": {
+    "NEXT_PUBLIC_APP_URL": "https://fluent.marcelocajueiro.workers.dev",
+    "BETTER_AUTH_URL": "https://fluent.marcelocajueiro.workers.dev"
+  }
 }
