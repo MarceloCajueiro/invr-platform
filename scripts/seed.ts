@@ -142,18 +142,18 @@ sql(`INSERT INTO tasks (id, teacher_id, title, description, task_type, questions
 // Submissions (student completed quiz and fill-gaps)
 // ============================================================
 console.log("Creating submissions...");
-const quizAnswers = JSON.stringify([
-  { question_number: 1, answer: "b", correct: true },
-  { question_number: 2, answer: "b", correct: true },
-  { question_number: 3, answer: "b", correct: true },
-]);
+const quizAnswers = JSON.stringify({
+  "1": "b",
+  "2": "b",
+  "3": "b",
+});
 sql(`INSERT INTO submissions (id, student_id, task_id, answers, score, feedback, graded_by, status, created_at, updated_at) VALUES ('${submissionIds[0]}', '${studentId}', '${taskIds[0]}', '${quizAnswers.replace(/'/g, "''")}', 100, 'Perfeito! Todas as respostas corretas.', 'auto', 'graded', ${ts - 86400}, ${ts - 86400})`);
 
-const fillAnswers = JSON.stringify([
-  { question_number: 1, answer: "wake up", correct: true },
-  { question_number: 2, answer: "has", correct: true },
-  { question_number: 3, answer: "dont watch", correct: false },
-]);
+const fillAnswers = JSON.stringify({
+  "1": "wake up",
+  "2": "has",
+  "3": "dont watch",
+});
 sql(`INSERT INTO submissions (id, student_id, task_id, answers, score, feedback, graded_by, status, created_at, updated_at) VALUES ('${submissionIds[1]}', '${studentId}', '${taskIds[1]}', '${fillAnswers.replace(/'/g, "''")}', 67, NULL, 'auto', 'graded', ${ts - 43200}, ${ts - 43200})`);
 
 // ============================================================
