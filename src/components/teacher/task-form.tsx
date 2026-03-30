@@ -7,15 +7,19 @@ import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { QuestionEditor } from "@/components/teacher/question-editor";
+import { AiGeneratorPanel } from "@/components/teacher/ai-generator-panel";
 
 type TaskType = "quiz" | "listening" | "fill_gaps" | "writing";
+type Level = "beginner" | "intermediate" | "advanced";
+
+const AI_SUPPORTED_TYPES: TaskType[] = ["quiz", "fill_gaps", "writing"];
 
 interface TaskData {
   id: string;
   title: string;
   description: string | null;
   taskType: TaskType;
-  level: "beginner" | "intermediate" | "advanced";
+  level: Level;
   questions: string | null;
 }
 
@@ -42,6 +46,19 @@ export function TaskForm({ task, action }: TaskFormProps) {
   const [taskType, setTaskType] = useState<TaskType>(
     task?.taskType ?? "quiz",
   );
+  const [level, setLevel] = useState<Level>(task?.level ?? "beginner");
+  const [generatedQuestions, setGeneratedQuestions] = useState<string | null>(
+    null,
+  );
+  const [aiPrompt, setAiPrompt] = useState("");
+
+  const handleAiGenerated = (questions: string, prompt: string) => {
+    setGeneratedQuestions(questions);
+    setAiPrompt(prompt);
+  };
+
+  // Build a stable key for QuestionEditor that changes when AI generates new content
+  const editorKey = `${taskType}-${generatedQuestions ?? "manual"}`;
 
   return (
     <Card>
@@ -60,7 +77,12 @@ export function TaskForm({ task, action }: TaskFormProps) {
             name="taskType"
             options={typeOptions}
             defaultValue={task?.taskType ?? "quiz"}
-            onChange={(e) => setTaskType(e.target.value as TaskType)}
+            onChange={(e) => {
+              const newType = e.target.value as TaskType;
+              setTaskType(newType);
+              setGeneratedQuestions(null);
+              setAiPrompt("");
+            }}
           />
 
           <Select
@@ -68,6 +90,7 @@ export function TaskForm({ task, action }: TaskFormProps) {
             name="level"
             options={levelOptions}
             defaultValue={task?.level ?? "beginner"}
+            onChange={(e) => setLevel(e.target.value as Level)}
           />
 
           <Textarea
@@ -78,12 +101,27 @@ export function TaskForm({ task, action }: TaskFormProps) {
             defaultValue={task?.description ?? ""}
           />
 
+          {AI_SUPPORTED_TYPES.includes(taskType) && (
+            <AiGeneratorPanel
+              taskType={taskType}
+              level={level}
+              onGenerated={handleAiGenerated}
+            />
+          )}
+
           <QuestionEditor
-            key={taskType}
+            key={editorKey}
             taskType={taskType}
-            initialQuestions={task?.questions ?? undefined}
+            initialQuestions={generatedQuestions ?? task?.questions ?? undefined}
             name="questions"
           />
+
+          <input
+            type="hidden"
+            name="aiGenerated"
+            value={generatedQuestions ? "true" : "false"}
+          />
+          <input type="hidden" name="aiPrompt" value={aiPrompt} />
 
           <div className="flex justify-end pt-2">
             <Button type="submit">
