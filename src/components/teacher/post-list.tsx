@@ -48,7 +48,7 @@ export function PostList({ posts }: PostListProps) {
         title="Nenhum post encontrado"
         description="Crie seu primeiro post para compartilhar conteudo."
         action={
-          <Link href="/posts/new">
+          <Link href="/teacher/posts/new">
             <Button>Novo Post</Button>
           </Link>
         }
@@ -98,7 +98,7 @@ export function PostList({ posts }: PostListProps) {
                 </Button>
               </form>
 
-              <Link href={`/posts/${post.id}/edit`}>
+              <Link href={`/teacher/posts/${post.id}/edit`}>
                 <Button variant="secondary" size="sm">
                   <Pencil size={14} />
                   Editar

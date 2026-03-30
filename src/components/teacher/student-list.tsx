@@ -42,7 +42,7 @@ export function StudentList({ students }: StudentListProps) {
   return (
     <div className="space-y-3">
       {students.map((student) => (
-        <Link key={student.id} href={`/students/${student.id}`}>
+        <Link key={student.id} href={`/teacher/students/${student.id}`}>
           <Card hoverable className="p-4">
             <div className="flex items-center gap-4">
               {/* Avatar */}

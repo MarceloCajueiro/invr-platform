@@ -73,7 +73,7 @@ export function TaskList({ tasks }: TaskListProps) {
         title="Nenhuma tarefa encontrada"
         description="Crie sua primeira tarefa para seus alunos."
         action={
-          <Link href="/tasks/new">
+          <Link href="/teacher/tasks/new">
             <Button>Nova Tarefa</Button>
           </Link>
         }
@@ -122,7 +122,7 @@ export function TaskList({ tasks }: TaskListProps) {
                   </Button>
                 </form>
 
-                <Link href={`/tasks/${task.id}/edit`}>
+                <Link href={`/teacher/tasks/${task.id}/edit`}>
                   <Button variant="secondary" size="sm">
                     <Pencil size={14} />
                     Editar

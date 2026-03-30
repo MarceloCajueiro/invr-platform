@@ -30,7 +30,7 @@ export default function SignUpPage() {
             // Teacher profile creation is best-effort during sign-up;
             // it can be retried on first dashboard load if needed.
           }
-          router.push("/dashboard");
+          router.push("/teacher/dashboard");
         },
         onError: (ctx) => {
           setError(ctx.error.message || "Erro ao criar conta. Tente novamente.");

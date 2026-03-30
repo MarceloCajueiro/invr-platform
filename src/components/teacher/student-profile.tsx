@@ -65,7 +65,7 @@ export function StudentProfile({
     <div className="space-y-6">
       {/* Back link */}
       <Link
-        href="/students"
+        href="/teacher/students"
         className="inline-flex items-center gap-1 text-sm text-text-secondary hover:text-text-primary transition-colors"
       >
         <ArrowLeft size={14} />

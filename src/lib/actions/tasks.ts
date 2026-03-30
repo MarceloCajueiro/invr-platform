@@ -34,8 +34,8 @@ export async function createTask(formData: FormData) {
     status: "draft",
   });
 
-  revalidatePath("/tasks");
-  redirect("/tasks");
+  revalidatePath("/teacher/tasks");
+  redirect("/teacher/tasks");
 }
 
 export async function updateTask(id: string, formData: FormData) {
@@ -66,8 +66,8 @@ export async function updateTask(id: string, formData: FormData) {
     })
     .where(and(eq(tasks.id, id), eq(tasks.teacherId, teacher.id)));
 
-  revalidatePath("/tasks");
-  redirect("/tasks");
+  revalidatePath("/teacher/tasks");
+  redirect("/teacher/tasks");
 }
 
 export async function deleteTask(formData: FormData) {
@@ -81,7 +81,7 @@ export async function deleteTask(formData: FormData) {
     .delete(tasks)
     .where(and(eq(tasks.id, id), eq(tasks.teacherId, teacher.id)));
 
-  revalidatePath("/tasks");
+  revalidatePath("/teacher/tasks");
 }
 
 export async function toggleTaskStatus(formData: FormData) {
@@ -99,5 +99,5 @@ export async function toggleTaskStatus(formData: FormData) {
     })
     .where(and(eq(tasks.id, id), eq(tasks.teacherId, teacher.id)));
 
-  revalidatePath("/tasks");
+  revalidatePath("/teacher/tasks");
 }

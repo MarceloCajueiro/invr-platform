@@ -19,11 +19,11 @@ type MobileNavItem = {
 };
 
 const teacherMobileNav: MobileNavItem[] = [
-  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { label: "Aulas", href: "/lessons", icon: BookOpen },
-  { label: "Tarefas", href: "/tasks", icon: ClipboardList },
-  { label: "Turmas", href: "/turmas", icon: Users },
-  { label: "Alunos", href: "/students", icon: GraduationCap },
+  { label: "Dashboard", href: "/teacher/dashboard", icon: LayoutDashboard },
+  { label: "Aulas", href: "/teacher/lessons", icon: BookOpen },
+  { label: "Tarefas", href: "/teacher/tasks", icon: ClipboardList },
+  { label: "Turmas", href: "/teacher/turmas", icon: Users },
+  { label: "Alunos", href: "/teacher/students", icon: GraduationCap },
 ];
 
 const studentMobileNav: MobileNavItem[] = [

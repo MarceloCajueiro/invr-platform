@@ -24,7 +24,7 @@ const channels: ChannelCard[] = [
     bgClass: "bg-aulas/10",
     hoverClass: "hover:bg-aulas/20",
     iconColorClass: "text-aulas",
-    href: "/lessons/new",
+    href: "/teacher/lessons/new",
   },
   {
     label: "Tarefa",
@@ -33,7 +33,7 @@ const channels: ChannelCard[] = [
     bgClass: "bg-tarefas/10",
     hoverClass: "hover:bg-tarefas/20",
     iconColorClass: "text-tarefas",
-    href: "/tasks/new",
+    href: "/teacher/tasks/new",
   },
   {
     label: "Post",
@@ -42,7 +42,7 @@ const channels: ChannelCard[] = [
     bgClass: "bg-fora/10",
     hoverClass: "hover:bg-fora/20",
     iconColorClass: "text-fora",
-    href: "/posts/new",
+    href: "/teacher/posts/new",
   },
   {
     label: "Challenge",

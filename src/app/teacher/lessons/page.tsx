@@ -22,7 +22,7 @@ export default async function LessonsPage({ searchParams }: LessonsPageProps) {
         title="Aulas"
         description="Gerencie suas aulas e conteudos."
         action={
-          <Link href="/lessons/new">
+          <Link href="/teacher/lessons/new">
             <Button>
               <Plus size={16} />
               Nova Aula

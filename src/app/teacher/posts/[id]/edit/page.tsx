@@ -14,7 +14,7 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
   const { id } = await params;
 
   const post = await getPost(id, teacher.id);
-  if (!post) redirect("/posts");
+  if (!post) redirect("/teacher/posts");
 
   const updatePostWithId = updatePost.bind(null, post.id);
 

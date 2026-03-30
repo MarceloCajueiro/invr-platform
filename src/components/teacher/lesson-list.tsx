@@ -49,7 +49,7 @@ export function LessonList({ lessons }: LessonListProps) {
         title="Nenhuma aula encontrada"
         description="Crie sua primeira aula para comecar a ensinar."
         action={
-          <Link href="/lessons/new">
+          <Link href="/teacher/lessons/new">
             <Button>Nova Aula</Button>
           </Link>
         }
@@ -90,7 +90,7 @@ export function LessonList({ lessons }: LessonListProps) {
                 </Button>
               </form>
 
-              <Link href={`/lessons/${lesson.id}/edit`}>
+              <Link href={`/teacher/lessons/${lesson.id}/edit`}>
                 <Button variant="secondary" size="sm">
                   <Pencil size={14} />
                   Editar

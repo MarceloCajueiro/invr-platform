@@ -14,7 +14,7 @@ export default async function EditTaskPage({ params }: EditTaskPageProps) {
   const { id } = await params;
 
   const task = await getTask(id, teacher.id);
-  if (!task) redirect("/tasks");
+  if (!task) redirect("/teacher/tasks");
 
   const updateTaskWithId = updateTask.bind(null, task.id);
 

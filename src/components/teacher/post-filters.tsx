@@ -30,7 +30,7 @@ export function PostFilters() {
       } else {
         params.set(key, value);
       }
-      router.push(`/posts?${params.toString()}`);
+      router.push(`/teacher/posts?${params.toString()}`);
     },
     [router, searchParams],
   );

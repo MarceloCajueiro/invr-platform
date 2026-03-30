@@ -19,7 +19,7 @@ export default async function StudentLayout({
   }
 
   if (session.user.role !== "student") {
-    redirect("/dashboard");
+    redirect("/teacher/dashboard");
   }
 
   return (

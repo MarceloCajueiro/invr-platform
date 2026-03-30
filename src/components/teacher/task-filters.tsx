@@ -30,7 +30,7 @@ export function TaskFilters() {
       } else {
         params.set(key, value);
       }
-      router.push(`/tasks?${params.toString()}`);
+      router.push(`/teacher/tasks?${params.toString()}`);
     },
     [router, searchParams],
   );

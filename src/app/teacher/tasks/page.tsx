@@ -22,7 +22,7 @@ export default async function TasksPage({ searchParams }: TasksPageProps) {
         title="Tarefas"
         description="Gerencie suas tarefas e exercicios."
         action={
-          <Link href="/tasks/new">
+          <Link href="/teacher/tasks/new">
             <Button>
               <Plus size={16} />
               Nova Tarefa

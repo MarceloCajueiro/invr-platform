@@ -34,8 +34,8 @@ export async function createLesson(formData: FormData) {
     status: "draft",
   });
 
-  revalidatePath("/lessons");
-  redirect("/lessons");
+  revalidatePath("/teacher/lessons");
+  redirect("/teacher/lessons");
 }
 
 export async function updateLesson(id: string, formData: FormData) {
@@ -64,8 +64,8 @@ export async function updateLesson(id: string, formData: FormData) {
     })
     .where(and(eq(lessons.id, id), eq(lessons.teacherId, teacher.id)));
 
-  revalidatePath("/lessons");
-  redirect("/lessons");
+  revalidatePath("/teacher/lessons");
+  redirect("/teacher/lessons");
 }
 
 export async function deleteLesson(formData: FormData) {
@@ -79,7 +79,7 @@ export async function deleteLesson(formData: FormData) {
     .delete(lessons)
     .where(and(eq(lessons.id, id), eq(lessons.teacherId, teacher.id)));
 
-  revalidatePath("/lessons");
+  revalidatePath("/teacher/lessons");
 }
 
 export async function toggleLessonStatus(formData: FormData) {
@@ -97,5 +97,5 @@ export async function toggleLessonStatus(formData: FormData) {
     })
     .where(and(eq(lessons.id, id), eq(lessons.teacherId, teacher.id)));
 
-  revalidatePath("/lessons");
+  revalidatePath("/teacher/lessons");
 }

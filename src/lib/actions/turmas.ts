@@ -34,8 +34,8 @@ export async function createTurma(formData: FormData) {
     level: parsed.level || null,
   });
 
-  revalidatePath("/turmas");
-  redirect("/turmas");
+  revalidatePath("/teacher/turmas");
+  redirect("/teacher/turmas");
 }
 
 export async function updateTurma(id: string, formData: FormData) {
@@ -62,9 +62,9 @@ export async function updateTurma(id: string, formData: FormData) {
     })
     .where(and(eq(turmas.id, id), eq(turmas.teacherId, teacher.id)));
 
-  revalidatePath(`/turmas/${id}`);
-  revalidatePath("/turmas");
-  redirect(`/turmas/${id}`);
+  revalidatePath(`/teacher/turmas/${id}`);
+  revalidatePath("/teacher/turmas");
+  redirect(`/teacher/turmas/${id}`);
 }
 
 export async function deleteTurma(formData: FormData) {
@@ -78,8 +78,8 @@ export async function deleteTurma(formData: FormData) {
     .delete(turmas)
     .where(and(eq(turmas.id, id), eq(turmas.teacherId, teacher.id)));
 
-  revalidatePath("/turmas");
-  redirect("/turmas");
+  revalidatePath("/teacher/turmas");
+  redirect("/teacher/turmas");
 }
 
 export async function removeStudentFromTurma(formData: FormData) {
@@ -100,7 +100,7 @@ export async function removeStudentFromTurma(formData: FormData) {
       ),
     );
 
-  revalidatePath(`/turmas/${turmaId}`);
+  revalidatePath(`/teacher/turmas/${turmaId}`);
 }
 
 export async function linkLesson(formData: FormData) {
@@ -114,7 +114,7 @@ export async function linkLesson(formData: FormData) {
   const db = getDb();
   await db.insert(turmaLessons).values({ turmaId, lessonId });
 
-  revalidatePath(`/turmas/${turmaId}`);
+  revalidatePath(`/teacher/turmas/${turmaId}`);
 }
 
 export async function unlinkLesson(formData: FormData) {
@@ -135,7 +135,7 @@ export async function unlinkLesson(formData: FormData) {
       ),
     );
 
-  revalidatePath(`/turmas/${turmaId}`);
+  revalidatePath(`/teacher/turmas/${turmaId}`);
 }
 
 export async function linkTask(formData: FormData) {
@@ -149,7 +149,7 @@ export async function linkTask(formData: FormData) {
   const db = getDb();
   await db.insert(turmaTasks).values({ turmaId, taskId });
 
-  revalidatePath(`/turmas/${turmaId}`);
+  revalidatePath(`/teacher/turmas/${turmaId}`);
 }
 
 export async function unlinkTask(formData: FormData) {
@@ -167,7 +167,7 @@ export async function unlinkTask(formData: FormData) {
       and(eq(turmaTasks.turmaId, turmaId), eq(turmaTasks.taskId, taskId)),
     );
 
-  revalidatePath(`/turmas/${turmaId}`);
+  revalidatePath(`/teacher/turmas/${turmaId}`);
 }
 
 export async function updateTurmaSettings(id: string, formData: FormData) {
@@ -186,5 +186,5 @@ export async function updateTurmaSettings(id: string, formData: FormData) {
     })
     .where(and(eq(turmas.id, id), eq(turmas.teacherId, teacher.id)));
 
-  revalidatePath(`/turmas/${id}`);
+  revalidatePath(`/teacher/turmas/${id}`);
 }

@@ -22,7 +22,7 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
         title="Posts"
         description="Gerencie seus posts e conteudos do blog."
         action={
-          <Link href="/posts/new">
+          <Link href="/teacher/posts/new">
             <Button>
               <Plus size={16} />
               Novo Post

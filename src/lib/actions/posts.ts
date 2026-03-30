@@ -44,8 +44,8 @@ export async function createPost(formData: FormData) {
     status: "draft",
   });
 
-  revalidatePath("/posts");
-  redirect("/posts");
+  revalidatePath("/teacher/posts");
+  redirect("/teacher/posts");
 }
 
 export async function updatePost(id: string, formData: FormData) {
@@ -75,8 +75,8 @@ export async function updatePost(id: string, formData: FormData) {
     })
     .where(and(eq(posts.id, id), eq(posts.teacherId, teacher.id)));
 
-  revalidatePath("/posts");
-  redirect("/posts");
+  revalidatePath("/teacher/posts");
+  redirect("/teacher/posts");
 }
 
 export async function deletePost(formData: FormData) {
@@ -90,7 +90,7 @@ export async function deletePost(formData: FormData) {
     .delete(posts)
     .where(and(eq(posts.id, id), eq(posts.teacherId, teacher.id)));
 
-  revalidatePath("/posts");
+  revalidatePath("/teacher/posts");
 }
 
 export async function togglePostStatus(formData: FormData) {
@@ -108,5 +108,5 @@ export async function togglePostStatus(formData: FormData) {
     })
     .where(and(eq(posts.id, id), eq(posts.teacherId, teacher.id)));
 
-  revalidatePath("/posts");
+  revalidatePath("/teacher/posts");
 }

@@ -17,7 +17,7 @@ export default async function TurmasPage() {
         title="Turmas"
         description="Gerencie suas turmas e alunos."
         action={
-          <Link href="/turmas/new">
+          <Link href="/teacher/turmas/new">
             <Button>
               <Plus size={16} />
               Nova Turma
@@ -32,7 +32,7 @@ export default async function TurmasPage() {
           title="Nenhuma turma criada"
           description="Crie sua primeira turma para organizar seus alunos."
           action={
-            <Link href="/turmas/new">
+            <Link href="/teacher/turmas/new">
               <Button>Nova Turma</Button>
             </Link>
           }

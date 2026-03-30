@@ -44,7 +44,7 @@ export function TurmaCard({ turma }: TurmaCardProps) {
   };
 
   return (
-    <Link href={`/turmas/${turma.id}`}>
+    <Link href={`/teacher/turmas/${turma.id}`}>
       <Card hoverable className="overflow-hidden">
         <div
           className="h-[3px]"

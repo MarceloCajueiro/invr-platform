@@ -23,7 +23,7 @@ export default function SignInPage() {
       { email, password },
       {
         onSuccess: () => {
-          router.push("/dashboard");
+          router.push("/teacher/dashboard");
         },
         onError: (ctx) => {
           setError(ctx.error.message || "Erro ao fazer login. Tente novamente.");

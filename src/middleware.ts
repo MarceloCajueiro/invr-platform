@@ -14,7 +14,7 @@ export async function middleware(request: NextRequest) {
   // Allow public paths
   if (isPublicPath(pathname)) {
     if (sessionCookie && (pathname === "/sign-in" || pathname === "/sign-up")) {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
+      return NextResponse.redirect(new URL("/teacher/dashboard", request.url));
     }
     return NextResponse.next();
   }
@@ -33,7 +33,7 @@ export async function middleware(request: NextRequest) {
 
   // Root redirect
   if (pathname === "/") {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    return NextResponse.redirect(new URL("/teacher/dashboard", request.url));
   }
 
   return NextResponse.next();

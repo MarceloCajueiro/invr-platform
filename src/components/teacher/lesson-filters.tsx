@@ -31,7 +31,7 @@ export function LessonFilters() {
       } else {
         params.set(key, value);
       }
-      router.push(`/lessons?${params.toString()}`);
+      router.push(`/teacher/lessons?${params.toString()}`);
     },
     [router, searchParams],
   );

@@ -31,7 +31,7 @@ export default async function TurmaDetailPage({
   const { id } = await params;
 
   const turma = await getTurma(id, teacher.id);
-  if (!turma) redirect("/turmas");
+  if (!turma) redirect("/teacher/turmas");
 
   const [members, linkedLessons, linkedTasks, availableLessons, availableTasks] =
     await Promise.all([

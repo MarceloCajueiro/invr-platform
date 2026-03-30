@@ -14,7 +14,7 @@ export default async function EditLessonPage({ params }: EditLessonPageProps) {
   const { id } = await params;
 
   const lesson = await getLesson(id, teacher.id);
-  if (!lesson) redirect("/lessons");
+  if (!lesson) redirect("/teacher/lessons");
 
   const updateLessonWithId = updateLesson.bind(null, lesson.id);
 
