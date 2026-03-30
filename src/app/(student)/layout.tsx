@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { headers } from "next/headers";
+import { headers, cookies } from "next/headers";
 import { createAuth } from "@/lib/auth/server";
 import { Sidebar } from "@/components/shared/sidebar";
 import { MobileNav } from "@/components/shared/mobile-nav";
@@ -15,6 +15,8 @@ export default async function StudentLayout({
   });
 
   if (!session) {
+    const cookieStore = await cookies();
+    cookieStore.delete("better-auth.session_token");
     redirect("/sign-in");
   }
 

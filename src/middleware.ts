@@ -11,11 +11,8 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const sessionCookie = getSessionCookie(request);
 
-  // Allow public paths
+  // Allow public paths (no redirects — auth pages handle their own redirect via useSession)
   if (isPublicPath(pathname)) {
-    if (sessionCookie && (pathname === "/sign-in" || pathname === "/sign-up")) {
-      return NextResponse.redirect(new URL("/teacher/dashboard", request.url));
-    }
     return NextResponse.next();
   }
 

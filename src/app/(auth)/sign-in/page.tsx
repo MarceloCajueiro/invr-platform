@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, useEffect, type FormEvent } from "react";
 import { authClient } from "@/lib/auth/client";
 import { LogIn, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
@@ -8,11 +8,21 @@ import { useRouter } from "next/navigation";
 
 export default function SignInPage() {
   const router = useRouter();
+  const { data: session } = authClient.useSession();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (session?.user) {
+      const role = (session.user as { role?: string }).role;
+      const dest = role === "student" ? "/home" : "/teacher/dashboard";
+      router.replace(dest);
+    }
+  }, [session, router]);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
