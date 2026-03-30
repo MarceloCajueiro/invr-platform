@@ -43,25 +43,25 @@ test.describe.serial("Phase 0 — Auth & Layouts", () => {
   });
 
   test.describe("CT-01: Teacher cria conta com sucesso", () => {
-    test("deve criar conta e redirecionar para /dashboard", async ({ page }) => {
+    test("deve criar conta e redirecionar para /teacher/dashboard", async ({ page }) => {
       await signUp(page, TEST_TEACHER);
-      await page.waitForURL("**/dashboard", { timeout: 15000 });
-      await expect(page).toHaveURL(/\/dashboard/);
+      await page.waitForURL("**/teacher/dashboard", { timeout: 15000 });
+      await expect(page).toHaveURL(/\/teacher\/dashboard/);
     });
   });
 
   test.describe("CT-03: Teacher faz login com credenciais corretas", () => {
-    test("deve fazer login e redirecionar para /dashboard", async ({ page }) => {
+    test("deve fazer login e redirecionar para /teacher/dashboard", async ({ page }) => {
       await signIn(page, TEST_TEACHER.email, TEST_TEACHER.password);
-      await page.waitForURL("**/dashboard", { timeout: 10000 });
-      await expect(page).toHaveURL(/\/dashboard/);
+      await page.waitForURL("**/teacher/dashboard", { timeout: 10000 });
+      await expect(page).toHaveURL(/\/teacher\/dashboard/);
     });
   });
 
   test.describe("CT-10: Dashboard renderiza sidebar do professor", () => {
     test("deve mostrar sidebar com itens de navegação do professor", async ({ page }) => {
       await signIn(page, TEST_TEACHER.email, TEST_TEACHER.password);
-      await page.waitForURL("**/dashboard", { timeout: 10000 });
+      await page.waitForURL("**/teacher/dashboard", { timeout: 10000 });
 
       // Verificar logo
       await expect(page.getByText("Fluent").first()).toBeVisible();
@@ -82,7 +82,7 @@ test.describe.serial("Phase 0 — Auth & Layouts", () => {
   test.describe("CT-05: Teacher faz logout", () => {
     test("deve fazer logout e redirecionar para /sign-in", async ({ page }) => {
       await signIn(page, TEST_TEACHER.email, TEST_TEACHER.password);
-      await page.waitForURL("**/dashboard", { timeout: 10000 });
+      await page.waitForURL("**/teacher/dashboard", { timeout: 10000 });
 
       // Botão de logout tem aria-label="Sign out"
       await page.getByRole("button", { name: /sign out/i }).click();
@@ -102,9 +102,9 @@ test.describe.serial("Phase 0 — Auth & Layouts", () => {
   });
 
   test.describe("CT-06: Middleware redireciona não autenticado", () => {
-    test("deve redirecionar /dashboard para /sign-in", async ({ page }) => {
+    test("deve redirecionar /teacher/dashboard para /sign-in", async ({ page }) => {
       await page.context().clearCookies();
-      await page.goto("/dashboard");
+      await page.goto("/teacher/dashboard");
       await page.waitForURL("**/sign-in**", { timeout: 10000 });
       await expect(page).toHaveURL(/\/sign-in/);
     });
@@ -113,22 +113,22 @@ test.describe.serial("Phase 0 — Auth & Layouts", () => {
   test.describe("CT-07: Middleware redireciona autenticado em /sign-in", () => {
     test("deve redirecionar /sign-in para /dashboard quando autenticado", async ({ page }) => {
       await signIn(page, TEST_TEACHER.email, TEST_TEACHER.password);
-      await page.waitForURL("**/dashboard", { timeout: 10000 });
+      await page.waitForURL("**/teacher/dashboard", { timeout: 10000 });
 
       await page.goto("/sign-in");
-      await page.waitForURL("**/dashboard", { timeout: 10000 });
-      await expect(page).toHaveURL(/\/dashboard/);
+      await page.waitForURL("**/teacher/dashboard", { timeout: 10000 });
+      await expect(page).toHaveURL(/\/teacher\/dashboard/);
     });
   });
 
   test.describe("CT-08: Root redireciona para /dashboard", () => {
     test("deve redirecionar / para /dashboard quando autenticado", async ({ page }) => {
       await signIn(page, TEST_TEACHER.email, TEST_TEACHER.password);
-      await page.waitForURL("**/dashboard", { timeout: 10000 });
+      await page.waitForURL("**/teacher/dashboard", { timeout: 10000 });
 
       await page.goto("/");
-      await page.waitForURL("**/dashboard", { timeout: 10000 });
-      await expect(page).toHaveURL(/\/dashboard/);
+      await page.waitForURL("**/teacher/dashboard", { timeout: 10000 });
+      await expect(page).toHaveURL(/\/teacher\/dashboard/);
     });
   });
 });
