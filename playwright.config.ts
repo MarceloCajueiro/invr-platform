@@ -6,7 +6,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: 1,
-  reporter: "html",
+  reporter: "list",
   use: {
     baseURL: "http://localhost:3001",
     trace: "on-first-retry",
@@ -20,7 +20,30 @@ export default defineConfig({
   },
   projects: [
     {
-      name: "chromium",
+      name: "setup",
+      testMatch: /.*\.setup\.ts/,
+    },
+    {
+      name: "teacher",
+      testMatch: /teacher\.spec\.ts/,
+      use: {
+        browserName: "chromium",
+        storageState: "e2e/.auth/teacher.json",
+      },
+      dependencies: ["setup"],
+    },
+    {
+      name: "student",
+      testMatch: /student\.spec\.ts/,
+      use: {
+        browserName: "chromium",
+        storageState: "e2e/.auth/student.json",
+      },
+      dependencies: ["setup"],
+    },
+    {
+      name: "auth",
+      testMatch: /auth\.spec\.ts/,
       use: { browserName: "chromium" },
     },
   ],
