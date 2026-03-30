@@ -8,15 +8,58 @@ import { getDb } from "@/lib/db";
 import { lessons } from "@/lib/db/schema";
 import { createLessonSchema, updateLessonSchema } from "@/lib/validations/lessons";
 
+// ── Helpers ──────────────────────────────────────────────────────────────────
+
+/**
+ * Extract the first URL from a FileUpload JSON array, or return the raw
+ * string if it's already a plain URL.
+ */
+function extractSingleUrl(value: string | null): string | null {
+  if (!value) return null;
+  try {
+    const parsed = JSON.parse(value);
+    if (Array.isArray(parsed) && parsed.length > 0) {
+      return parsed[0].url ?? null;
+    }
+    return null;
+  } catch {
+    // Not JSON — treat as a plain URL string
+    return value || null;
+  }
+}
+
+/**
+ * Resolve the video URL from form data.
+ * Supports both "link" mode (plain URL) and "upload" mode (FileUpload JSON).
+ */
+function resolveVideoUrl(formData: FormData): string | null {
+  const source = formData.get("videoSource") as string | null;
+  if (source === "upload") {
+    return extractSingleUrl(formData.get("videoFile") as string | null);
+  }
+  // "link" mode or fallback
+  const url = formData.get("videoUrl") as string | null;
+  return url || null;
+}
+
+// ── Actions ──────────────────────────────────────────────────────────────────
+
 export async function createLesson(formData: FormData) {
   const { teacher } = await getTeacher();
+
+  const videoUrl = resolveVideoUrl(formData);
+  const coverImageUrl = extractSingleUrl(
+    formData.get("coverImageFile") as string | null
+  );
 
   const raw = {
     title: formData.get("title"),
     description: formData.get("description"),
     category: formData.get("category"),
-    videoUrl: formData.get("videoUrl"),
-    coverImageUrl: formData.get("coverImageUrl"),
+    videoUrl: videoUrl ?? undefined,
+    coverImageUrl: coverImageUrl ?? undefined,
+    audioUrls: (formData.get("audioUrls") as string) || undefined,
+    documentUrls: (formData.get("documentUrls") as string) || undefined,
     durationMinutes: formData.get("durationMinutes") || undefined,
   };
 
@@ -30,6 +73,8 @@ export async function createLesson(formData: FormData) {
     category: parsed.category,
     videoUrl: parsed.videoUrl || null,
     coverImageUrl: parsed.coverImageUrl || null,
+    audioUrls: parsed.audioUrls || null,
+    documentUrls: parsed.documentUrls || null,
     durationMinutes: parsed.durationMinutes || null,
     status: "draft",
   });
@@ -41,12 +86,19 @@ export async function createLesson(formData: FormData) {
 export async function updateLesson(id: string, formData: FormData) {
   const { teacher } = await getTeacher();
 
+  const videoUrl = resolveVideoUrl(formData);
+  const coverImageUrl = extractSingleUrl(
+    formData.get("coverImageFile") as string | null
+  );
+
   const raw = {
     title: formData.get("title"),
     description: formData.get("description"),
     category: formData.get("category"),
-    videoUrl: formData.get("videoUrl"),
-    coverImageUrl: formData.get("coverImageUrl"),
+    videoUrl: videoUrl ?? undefined,
+    coverImageUrl: coverImageUrl ?? undefined,
+    audioUrls: (formData.get("audioUrls") as string) || undefined,
+    documentUrls: (formData.get("documentUrls") as string) || undefined,
     durationMinutes: formData.get("durationMinutes") || undefined,
   };
 
@@ -59,6 +111,8 @@ export async function updateLesson(id: string, formData: FormData) {
       ...parsed,
       videoUrl: parsed.videoUrl || null,
       coverImageUrl: parsed.coverImageUrl || null,
+      audioUrls: parsed.audioUrls || null,
+      documentUrls: parsed.documentUrls || null,
       durationMinutes: parsed.durationMinutes || null,
       updatedAt: new Date(),
     })
@@ -72,7 +126,7 @@ export async function deleteLesson(formData: FormData) {
   const { teacher } = await getTeacher();
   const id = formData.get("id") as string;
 
-  if (!id) throw new Error("ID da aula é obrigatório");
+  if (!id) throw new Error("ID da aula e obrigatorio");
 
   const db = getDb();
   await db
@@ -86,7 +140,7 @@ export async function toggleLessonStatus(formData: FormData) {
   const { teacher } = await getTeacher();
   const id = formData.get("id") as string;
 
-  if (!id) throw new Error("ID da aula é obrigatório");
+  if (!id) throw new Error("ID da aula e obrigatorio");
 
   const db = getDb();
   await db
