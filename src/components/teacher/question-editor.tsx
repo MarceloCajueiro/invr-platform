@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2 } from "lucide-react";
+import { Loader2, Plus, Trash2, Volume2 } from "lucide-react";
 
 interface QuestionEditorProps {
   taskType: "quiz" | "listening" | "fill_gaps" | "writing";
@@ -300,6 +300,43 @@ function ListeningEditor({
   data: ListeningData;
   onChange: (d: ListeningData) => void;
 }) {
+  const [generatingAudio, setGeneratingAudio] = useState(false);
+  const [audioError, setAudioError] = useState<string | null>(null);
+
+  async function handleGenerateAudio() {
+    if (!data.text.trim()) return;
+
+    setGeneratingAudio(true);
+    setAudioError(null);
+
+    try {
+      const res = await fetch("/api/ai/tts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: data.text }),
+      });
+
+      const result = (await res.json()) as {
+        audioUrl?: string;
+        error?: string;
+      };
+
+      if (!res.ok) {
+        setAudioError(result.error || "Erro ao gerar áudio");
+        return;
+      }
+
+      if (result.audioUrl) {
+        onChange({ ...data, audioUrl: result.audioUrl });
+      }
+    } catch (e) {
+      console.error("TTS error:", e);
+      setAudioError("Erro de conexão ao gerar áudio");
+    } finally {
+      setGeneratingAudio(false);
+    }
+  }
+
   return (
     <div className="space-y-4">
       <Textarea
@@ -310,11 +347,47 @@ function ListeningEditor({
         rows={6}
       />
 
-      <div className="rounded-[var(--radius-sm)] bg-[#f8f9fb] border border-border p-4">
-        <p className="text-sm text-text-muted">
-          Áudio será gerado automaticamente por IA a partir do texto acima.
-        </p>
-      </div>
+      <Button
+        type="button"
+        variant="secondary"
+        size="sm"
+        onClick={handleGenerateAudio}
+        disabled={generatingAudio || !data.text.trim()}
+      >
+        {generatingAudio ? (
+          <>
+            <Loader2 size={14} className="animate-spin" />
+            Gerando áudio...
+          </>
+        ) : (
+          <>
+            <Volume2 size={14} />
+            Gerar Áudio
+          </>
+        )}
+      </Button>
+
+      {audioError && (
+        <p className="text-sm text-red-600">{audioError}</p>
+      )}
+
+      {data.audioUrl && (
+        <div className="rounded-[var(--radius-sm)] bg-[#f8f9fb] border border-border p-4 space-y-2">
+          <p className="text-xs font-medium text-text-secondary">
+            Prévia do áudio
+          </p>
+          <audio controls src={data.audioUrl} className="w-full" />
+        </div>
+      )}
+
+      {!data.audioUrl && !generatingAudio && (
+        <div className="rounded-[var(--radius-sm)] bg-[#f8f9fb] border border-border p-4">
+          <p className="text-sm text-text-muted">
+            Clique em &quot;Gerar Áudio&quot; para criar o áudio a partir do
+            texto acima.
+          </p>
+        </div>
+      )}
     </div>
   );
 }
