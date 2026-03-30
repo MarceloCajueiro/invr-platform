@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { submitAnswers } from "@/lib/actions/student-submissions";
+import { WritingFeedback } from "./writing-feedback";
 
 interface WritingPlayerProps {
   task: {
@@ -35,58 +36,67 @@ export function WritingPlayer({ task, existingSubmission }: WritingPlayerProps) 
   if (existingSubmission) {
     const isGraded = existingSubmission.status === "graded";
     const score = existingSubmission.score;
+    const hasStructuredFeedback =
+      isGraded &&
+      existingSubmission.feedback &&
+      existingSubmission.feedback.startsWith("{");
 
     return (
       <div className="space-y-6">
-        {/* Status header */}
-        <Card>
-          <CardContent>
-            <div className="text-center py-6 space-y-3">
-              {isGraded ? (
-                <>
-                  <CheckCircle2 size={40} className="mx-auto text-success" />
-                  <h2 className="text-xl font-bold font-display text-text-primary">
-                    Corrigido
-                  </h2>
-                  {score !== null && (
-                    <p
-                      className={cn(
-                        "text-5xl font-bold font-display",
-                        score >= 80
-                          ? "text-success"
-                          : score >= 60
-                            ? "text-warning"
-                            : "text-error",
-                      )}
-                    >
-                      {score}%
+        {hasStructuredFeedback ? (
+          // AI-graded: show structured correction feedback
+          <WritingFeedback feedback={existingSubmission.feedback!} />
+        ) : (
+          // Teacher-graded or awaiting grading
+          <Card>
+            <CardContent>
+              <div className="text-center py-6 space-y-3">
+                {isGraded ? (
+                  <>
+                    <CheckCircle2 size={40} className="mx-auto text-success" />
+                    <h2 className="text-xl font-bold font-display text-text-primary">
+                      Corrigido
+                    </h2>
+                    {score !== null && (
+                      <p
+                        className={cn(
+                          "text-5xl font-bold font-display",
+                          score >= 80
+                            ? "text-success"
+                            : score >= 60
+                              ? "text-warning"
+                              : "text-error",
+                        )}
+                      >
+                        {score}%
+                      </p>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <Clock size={40} className="mx-auto text-challenges" />
+                    <h2 className="text-xl font-bold font-display text-text-primary">
+                      Enviado para correção
+                    </h2>
+                    <p className="text-sm text-text-secondary">
+                      Aguarde a correção automática ou do professor.
                     </p>
-                  )}
-                </>
-              ) : (
-                <>
-                  <Clock size={40} className="mx-auto text-challenges" />
-                  <h2 className="text-xl font-bold font-display text-text-primary">
-                    Enviado para correção
-                  </h2>
-                  <p className="text-sm text-text-secondary">
-                    Seu professor irá avaliar sua redação em breve.
-                  </p>
-                </>
-              )}
-              {existingSubmission.feedback && (
-                <div className="mt-4 p-4 rounded-[var(--radius-sm)] bg-aulas-bg text-left">
-                  <p className="text-xs font-medium text-aulas mb-1">
-                    Feedback do professor
-                  </p>
-                  <p className="text-sm text-text-primary whitespace-pre-wrap">
-                    {existingSubmission.feedback}
-                  </p>
-                </div>
-              )}
-            </div>
-          </CardContent>
-        </Card>
+                  </>
+                )}
+                {existingSubmission.feedback && !hasStructuredFeedback && (
+                  <div className="mt-4 p-4 rounded-[var(--radius-sm)] bg-aulas-bg text-left">
+                    <p className="text-xs font-medium text-aulas mb-1">
+                      Feedback do professor
+                    </p>
+                    <p className="text-sm text-text-primary whitespace-pre-wrap">
+                      {existingSubmission.feedback}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Submitted text */}
         <Card>

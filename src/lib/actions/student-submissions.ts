@@ -6,6 +6,7 @@ import { getStudent } from "@/lib/auth/get-student";
 import { getDb } from "@/lib/db";
 import { tasks, submissions } from "@/lib/db/schema";
 import type { QuizQuestion, FillGapQuestion } from "@/lib/validations/tasks";
+import { correctWriting } from "@/lib/services/ai/groq";
 
 export async function submitAnswers(taskId: string, answers: string) {
   const { student } = await getStudent();
@@ -102,11 +103,27 @@ export async function submitAnswers(taskId: string, answers: string) {
     status = "graded";
     feedback = `Você acertou ${correct} de ${total} preenchimentos.`;
   } else if (task.taskType === "writing") {
-    // Writing awaits teacher/AI grading
-    score = null;
-    gradedBy = null;
-    status = "submitted";
-    feedback = null;
+    // Attempt AI grading via Groq; fall back to teacher grading on failure
+    try {
+      const writingPrompt = task.questions
+        ? JSON.parse(task.questions)
+        : null;
+      const promptText = writingPrompt?.prompt ?? task.description ?? "";
+      const level = task.level ?? "beginner";
+
+      const correction = await correctWriting(answers, promptText, level);
+
+      score = Math.round(correction.score * 10); // Convert 0-10 to 0-100
+      feedback = JSON.stringify(correction);
+      gradedBy = "ai";
+      status = "graded";
+    } catch {
+      // AI correction failed — leave for teacher manual grading
+      score = null;
+      gradedBy = null;
+      status = "submitted";
+      feedback = null;
+    }
   }
 
   await db.insert(submissions).values({
