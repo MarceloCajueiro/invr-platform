@@ -12,7 +12,7 @@ export async function sendEmail({ to, subject, html }: SendEmailOptions) {
   const resend = new Resend(env.RESEND_API_KEY);
 
   const { data, error } = await resend.emails.send({
-    from: "Fluent <noreply@fluent.app>",
+    from: "Fluent <noreply@inglesnavidareal.com.br>",
     to: [to],
     subject,
     html,

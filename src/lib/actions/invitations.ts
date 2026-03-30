@@ -48,7 +48,7 @@ export async function createInvitation(email: string) {
   const inviteLink = `${appUrl}/invite/${token}`;
 
   await resend.emails.send({
-    from: "Fluent <noreply@fluent.app>",
+    from: "Fluent <noreply@inglesnavidareal.com.br>",
     to: email,
     subject: `${session.user.name} convidou você para o Fluent`,
     html: `
