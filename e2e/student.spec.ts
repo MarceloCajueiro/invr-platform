@@ -22,22 +22,25 @@ test.describe.serial("Student Interface", () => {
   test.describe("CT-31: Listar aulas do aluno", () => {
     test("deve mostrar aulas publicadas do teacher", async ({ page }) => {
       await page.goto("/lessons");
-      await expect(page.getByText("Introduction to Present Simple")).toBeVisible();
+      // Note: CT-23 renames "Introduction to Present Simple" to "Edited Lesson Title"
+      // and CT-24 may toggle publish status. Check for lessons that remain stable.
       await expect(page.getByText("Ordering Food at a Restaurant")).toBeVisible();
       await expect(page.getByText("Daily Routine Vocabulary")).toBeVisible();
+      await expect(page.getByText("Listening Practice: The Weather")).toBeVisible();
       // Draft lesson should NOT appear
-      await expect(page.getByText("British vs American English")).not.toBeVisible();
+      await expect(page.getByText("British vs American English")).toHaveCount(0);
     });
   });
 
   test.describe("CT-32: Ver detalhe de aula", () => {
     test("deve abrir aula e mostrar conteúdo", async ({ page }) => {
       await page.goto("/lessons");
-      await page.getByText("Introduction to Present Simple").click();
+      // Use a stable lesson (not renamed by teacher tests)
+      await page.getByText("Ordering Food at a Restaurant").click();
       await page.waitForURL("**/lessons/**", { timeout: 10000 });
-      await expect(page.getByText("Introduction to Present Simple").first()).toBeVisible();
+      await expect(page.getByText("Ordering Food at a Restaurant").first()).toBeVisible();
       // Description should be rendered
-      await expect(page.getByText(/Present Simple tense/i).first()).toBeVisible();
+      await expect(page.getByText(/ordering food/i).first()).toBeVisible();
     });
   });
 
@@ -134,7 +137,9 @@ test.describe.serial("Student Interface", () => {
   test.describe("CT-41: Aula draft não aparece na lista", () => {
     test("deve ocultar aulas com status draft", async ({ page }) => {
       await page.goto("/lessons");
-      await expect(page.getByText("Introduction to Present Simple")).toBeVisible();
+      // At least one published lesson is visible
+      await expect(page.getByText("Ordering Food at a Restaurant")).toBeVisible();
+      // Draft lesson should not appear
       await expect(page.getByText("British vs American English")).toHaveCount(0);
     });
   });
