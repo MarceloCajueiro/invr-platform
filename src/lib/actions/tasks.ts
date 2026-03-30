@@ -22,6 +22,9 @@ export async function createTask(formData: FormData) {
 
   const parsed = createTaskSchema.parse(raw);
 
+  const aiGenerated = formData.get("aiGenerated") === "true";
+  const aiPrompt = (formData.get("aiPrompt") as string) || undefined;
+
   const db = getDb();
   await db.insert(tasks).values({
     teacherId: teacher.id,
@@ -32,6 +35,8 @@ export async function createTask(formData: FormData) {
     lessonId: parsed.lessonId || null,
     questions: parsed.questions || null,
     status: "draft",
+    aiGenerated: aiGenerated,
+    aiPrompt: aiPrompt || null,
   });
 
   revalidatePath("/teacher/tasks");
@@ -52,6 +57,9 @@ export async function updateTask(id: string, formData: FormData) {
 
   const parsed = updateTaskSchema.parse(raw);
 
+  const aiGenerated = formData.get("aiGenerated") === "true";
+  const aiPrompt = (formData.get("aiPrompt") as string) || undefined;
+
   const db = getDb();
   await db
     .update(tasks)
@@ -62,6 +70,8 @@ export async function updateTask(id: string, formData: FormData) {
       level: parsed.level,
       lessonId: parsed.lessonId || null,
       questions: parsed.questions || null,
+      aiGenerated: aiGenerated,
+      aiPrompt: aiPrompt || null,
       updatedAt: new Date(),
     })
     .where(and(eq(tasks.id, id), eq(tasks.teacherId, teacher.id)));
