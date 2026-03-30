@@ -196,19 +196,19 @@ export function FileUpload({
       const fileArray = Array.from(incoming);
 
       if (fileArray.length > remaining) {
-        newErrors.push(`Maximo de ${maxFiles} arquivo(s)`);
+        newErrors.push(`Máximo de ${maxFiles} arquivo(s)`);
       }
 
       const toProcess = fileArray.slice(0, Math.max(0, remaining));
 
       for (const file of toProcess) {
         if (!fileMatchesAccept(file, accept)) {
-          newErrors.push(`"${file.name}" - Tipo de arquivo nao aceito`);
+          newErrors.push(`"${file.name}" - Tipo de arquivo não aceito`);
           continue;
         }
         if (file.size > maxSize) {
           newErrors.push(
-            `"${file.name}" - Arquivo muito grande. Maximo: ${formatMaxSize(maxSize)}`
+            `"${file.name}" - Arquivo muito grande. Máximo: ${formatMaxSize(maxSize)}`
           );
           continue;
         }

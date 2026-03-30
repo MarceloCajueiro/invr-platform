@@ -31,9 +31,9 @@ interface LessonFormProps {
 // ── Constants ────────────────────────────────────────────────────────────────
 
 const categoryOptions = [
-  { value: "conversation", label: "Conversacao" },
-  { value: "grammar", label: "Gramatica" },
-  { value: "vocabulary", label: "Vocabulario" },
+  { value: "conversation", label: "Conversação" },
+  { value: "grammar", label: "Gramática" },
+  { value: "vocabulary", label: "Vocabulário" },
   { value: "listening", label: "Listening" },
   { value: "culture", label: "Cultura" },
 ];
@@ -110,9 +110,9 @@ export function LessonForm({ lesson, action }: LessonFormProps) {
       <Card>
         <CardContent className="pt-6 space-y-5">
           <Input
-            label="Titulo"
+            label="Título"
             name="title"
-            placeholder="Ex: Introducao a conversacao"
+            placeholder="Ex: Introdução a conversação"
             defaultValue={lesson?.title ?? ""}
             required
           />
@@ -125,9 +125,9 @@ export function LessonForm({ lesson, action }: LessonFormProps) {
           />
 
           <Textarea
-            label="Descricao"
+            label="Descrição"
             name="description"
-            placeholder="Descreva o conteudo da aula..."
+            placeholder="Descreva o conteúdo da aula..."
             rows={4}
             defaultValue={lesson?.description ?? ""}
           />
@@ -172,7 +172,7 @@ export function LessonForm({ lesson, action }: LessonFormProps) {
 
           {videoMode === "link" ? (
             <Input
-              label="URL do Video"
+              label="URL do Vídeo"
               name="videoUrl"
               type="url"
               placeholder="https://youtube.com/..."
@@ -189,8 +189,8 @@ export function LessonForm({ lesson, action }: LessonFormProps) {
               maxSize={500 * MB}
               maxFiles={1}
               folder="lessons/videos"
-              label="Upload de Video"
-              description="MP4, WebM, QuickTime. Maximo 500MB"
+              label="Upload de Vídeo"
+              description="MP4, WebM, QuickTime. Máximo 500MB"
               existingFiles={existingVideo}
             />
           )}
@@ -211,7 +211,7 @@ export function LessonForm({ lesson, action }: LessonFormProps) {
             maxFiles={1}
             folder="lessons/covers"
             label="Imagem de Capa"
-            description="JPG, PNG, WebP. Maximo 5MB"
+            description="JPG, PNG, WebP. Máximo 5MB"
             existingFiles={existingCover}
           />
         </CardContent>
@@ -231,7 +231,7 @@ export function LessonForm({ lesson, action }: LessonFormProps) {
             maxFiles={10}
             folder="lessons/audios"
             label="Audios da Aula"
-            description="MP3, WAV, OGG. Maximo 50MB por arquivo, ate 10 arquivos"
+            description="MP3, WAV, OGG. Máximo 50MB por arquivo, até 10 arquivos"
             existingFiles={existingAudios}
           />
         </CardContent>
@@ -251,7 +251,7 @@ export function LessonForm({ lesson, action }: LessonFormProps) {
             maxFiles={10}
             folder="lessons/documents"
             label="Materiais de Apoio"
-            description="PDF, DOC, PPT, XLS. Maximo 20MB por arquivo, ate 10 arquivos"
+            description="PDF, DOC, PPT, XLS. Máximo 20MB por arquivo, até 10 arquivos"
             existingFiles={existingDocs}
           />
         </CardContent>
@@ -261,7 +261,7 @@ export function LessonForm({ lesson, action }: LessonFormProps) {
       <Card>
         <CardContent className="pt-6">
           <Input
-            label="Duracao (minutos)"
+            label="Duração (minutos)"
             name="durationMinutes"
             type="number"
             min={0}
@@ -274,7 +274,7 @@ export function LessonForm({ lesson, action }: LessonFormProps) {
       {/* ── Submit ────────────────────────────────────────────────────── */}
       <div className="flex justify-end">
         <Button type="submit">
-          {isEdit ? "Salvar Alteracoes" : "Criar Aula"}
+          {isEdit ? "Salvar Alterações" : "Criar Aula"}
         </Button>
       </div>
     </form>
