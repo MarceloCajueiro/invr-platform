@@ -14,21 +14,25 @@
   --color-aulas: #6c5ce7;
   --color-aulas-light: #a29bfe;
   --color-aulas-bg: #f0eeff;
+  --color-aulas-glow: rgba(108, 92, 231, 0.3);
 
   /* ── Colors: Channel Tarefas ── */
   --color-tarefas: #00b894;
   --color-tarefas-light: #55efc4;
   --color-tarefas-bg: #eafff7;
+  --color-tarefas-glow: rgba(0, 184, 148, 0.3);
 
   /* ── Colors: Channel Fora ── */
   --color-fora: #e17055;
   --color-fora-light: #fab1a0;
   --color-fora-bg: #fff3f0;
+  --color-fora-glow: rgba(225, 112, 85, 0.3);
 
   /* ── Colors: Channel Challenges ── */
   --color-challenges: #fdcb6e;
   --color-challenges-light: #ffeaa7;
   --color-challenges-bg: #fffcf0;
+  --color-challenges-glow: rgba(253, 203, 110, 0.3);
 
   /* ── Colors: Semantic ── */
   --color-success: #00b894;
@@ -147,4 +151,53 @@ body::after {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 256px 256px;
+}
+
+/* ── Scrollbar ── */
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+/* ── 3D Button Effect ── */
+
+.btn-3d {
+  transition: transform 0.1s cubic-bezier(0.22, 0.61, 0.36, 1),
+    box-shadow 0.1s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.btn-3d:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2) !important;
+}
+
+/* ── Button Glow Hover ── */
+
+.glow-aulas:hover:not(:disabled) {
+  box-shadow: 0 8px 32px var(--color-aulas-glow), 0 4px 0 #4a3fa5;
+}
+
+.glow-tarefas:hover:not(:disabled) {
+  box-shadow: 0 8px 32px var(--color-tarefas-glow), 0 4px 0 #007d63;
+}
+
+.glow-fora:hover:not(:disabled) {
+  box-shadow: 0 8px 32px var(--color-fora-glow), 0 4px 0 #b34d37;
+}
+
+.glow-challenges:hover:not(:disabled) {
+  box-shadow: 0 8px 32px var(--color-challenges-glow), 0 4px 0 #c9981f;
 }

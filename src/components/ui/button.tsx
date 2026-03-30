@@ -3,16 +3,24 @@ import { cn } from "@/lib/utils";
 
 const variantStyles = {
   primary:
-    "bg-aulas text-white hover:brightness-110 active:translate-y-[2px] transition-all",
+    "bg-aulas text-white btn-3d glow-aulas transition-all",
   secondary:
-    "border border-aulas text-aulas hover:bg-aulas-bg transition-colors",
-  danger: "bg-error text-white hover:brightness-110 transition-all",
-  ghost: "text-text-secondary hover:bg-bg-light transition-colors",
+    "border-2 border-aulas text-aulas hover:bg-aulas-bg transition-colors",
+  danger:
+    "bg-fora text-white hover:opacity-90 transition-all",
+  ghost:
+    "text-text-secondary hover:bg-gray-100 transition-colors",
 } as const;
+
+/** 3D box-shadow per variant (darker shade beneath the button) */
+const variantShadow: Record<string, string> = {
+  primary: "0 4px 0 #4a3fa5",
+  danger: "0 4px 0 #b34d37",
+};
 
 const sizeStyles = {
   sm: "px-3 py-1.5 text-sm",
-  md: "px-4 py-2.5 text-sm",
+  md: "px-5 py-2.5 text-sm",
   lg: "px-6 py-3 text-base",
 } as const;
 
@@ -35,43 +43,43 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       disabled,
       className,
       children,
+      style,
       ...rest
     },
     ref,
   ) => {
+    const shadow = variantShadow[variant];
+
     return (
       <button
         ref={ref}
         disabled={disabled || loading}
         className={cn(
-          "rounded-[var(--radius-sm)] font-medium flex items-center justify-center gap-2",
+          "rounded-md font-semibold flex items-center justify-center gap-2",
           variantStyles[variant],
           sizeStyles[size],
           (disabled || loading) && "opacity-50 cursor-not-allowed",
           className,
         )}
+        style={{
+          ...(shadow ? { boxShadow: shadow } : {}),
+          ...style,
+        }}
         {...rest}
       >
         {loading && (
           <svg
             className="animate-spin h-4 w-4"
             xmlns="http://www.w3.org/2000/svg"
-            fill="none"
+            width="16"
+            height="16"
             viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
           >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            />
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-            />
+            <path d="M21 12a9 9 0 1 1-6.219-8.56" />
           </svg>
         )}
         {children}

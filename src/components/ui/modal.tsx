@@ -35,7 +35,12 @@ export function Modal({ open, onClose, title, children, className }: ModalProps)
 
   return (
     <div
-      className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center"
+      className="fixed inset-0 z-50 flex items-center justify-center"
+      style={{
+        background: "rgba(26, 26, 46, 0.6)",
+        backdropFilter: "blur(4px)",
+        WebkitBackdropFilter: "blur(4px)",
+      }}
       onClick={onClose}
     >
       <div
