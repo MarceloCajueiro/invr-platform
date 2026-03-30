@@ -51,9 +51,17 @@ console.log("Seeding Fluent database...\n");
 // ============================================================
 // Teacher User + Profile
 // ============================================================
-console.log("Creating teacher...");
-// Password hash for "senha12345" (bcrypt)
-const passwordHash = "$2b$10$K4GByBQGRF9FmlIHwCDYruPXQENuzrVqvb3e3qjFfzVJrKADCMUri";
+// better-auth uses scrypt, not bcrypt. Generate hash at seed time.
+let passwordHash: string;
+
+async function generateHash() {
+  const { hashPassword } = await import("better-auth/crypto");
+  passwordHash = await hashPassword("senha12345");
+}
+
+async function main() {
+  await generateHash();
+  console.log("Creating teacher...");
 
 sql(`INSERT INTO user (id, name, email, emailVerified, role, createdAt, updatedAt) VALUES ('${teacherUserId}', 'Franciely Silva', 'fran@fluent.app', 0, 'teacher', ${ts}, ${ts})`);
 sql(`INSERT INTO account (id, accountId, providerId, userId, password, createdAt, updatedAt) VALUES ('${uuid()}', '${teacherUserId}', 'credential', '${teacherUserId}', '${passwordHash}', ${ts}, ${ts})`);
@@ -188,3 +196,6 @@ console.log("  Teacher: fran@fluent.app / senha12345");
 console.log("  Student: marcelo@fluent.app / senha12345");
 console.log("\nRun: npm run dev -- --port 3001");
 console.log("Open: http://localhost:3001/sign-in\n");
+}
+
+main().catch(console.error);
