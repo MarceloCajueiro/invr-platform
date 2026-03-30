@@ -23,9 +23,9 @@ interface PostListProps {
 
 const categoryLabels: Record<Post["category"], string> = {
   tips: "Dicas",
-  grammar: "Gramatica",
+  grammar: "Gramática",
   culture: "Cultura",
-  vocabulary: "Vocabulario",
+  vocabulary: "Vocabulário",
 };
 
 const categoryBadgeVariant: Record<Post["category"], BadgeVariant> = {
@@ -46,7 +46,7 @@ export function PostList({ posts }: PostListProps) {
       <EmptyState
         icon={FileText}
         title="Nenhum post encontrado"
-        description="Crie seu primeiro post para compartilhar conteudo."
+        description="Crie seu primeiro post para compartilhar conteúdo."
         action={
           <Link href="/teacher/posts/new">
             <Button>Novo Post</Button>
@@ -82,7 +82,7 @@ export function PostList({ posts }: PostListProps) {
               <div className="flex items-center gap-3 text-xs text-text-muted">
                 <span className="flex items-center gap-1">
                   <Eye size={12} />
-                  {post.viewCount} visualizacoes
+                  {post.viewCount} visualizações
                 </span>
                 <span>
                   {post.createdAt.toLocaleDateString("pt-BR")}

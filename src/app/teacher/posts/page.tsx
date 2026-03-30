@@ -20,7 +20,7 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
     <div className="animate-fade-in">
       <PageHeader
         title="Posts"
-        description="Gerencie seus posts e conteudos do blog."
+        description="Gerencie seus posts e conteúdos do blog."
         action={
           <Link href="/teacher/posts/new">
             <Button>

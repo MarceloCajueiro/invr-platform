@@ -12,9 +12,9 @@ const statusOptions = [
 
 const categoryOptions = [
   { value: "all", label: "Todas as categorias" },
-  { value: "conversation", label: "Conversacao" },
-  { value: "grammar", label: "Gramatica" },
-  { value: "vocabulary", label: "Vocabulario" },
+  { value: "conversation", label: "Conversação" },
+  { value: "grammar", label: "Gramática" },
+  { value: "vocabulary", label: "Vocabulário" },
   { value: "listening", label: "Listening" },
   { value: "culture", label: "Cultura" },
 ];

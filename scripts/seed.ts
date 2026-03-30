@@ -161,9 +161,9 @@ sql(`INSERT INTO submissions (id, student_id, task_id, answers, score, feedback,
 // ============================================================
 console.log("Creating posts...");
 const postsData = [
-  { title: "5 Dicas para Melhorar seu Listening", slug: "5-dicas-listening", category: "tips", content: "# 5 Dicas para Melhorar seu Listening\n\n## 1. Ouca podcasts em ingles\nComece com podcasts para aprendizes como **6 Minute English** da BBC.\n\n## 2. Assista series com legendas em ingles\nNao use legendas em portugues! Comece com legendas em ingles.\n\n## 3. Repita frases em voz alta\nShadowing e uma tecnica poderosa para melhorar pronuncia e compreensao.\n\n## 4. Ouca a mesma coisa varias vezes\nRepeticao e chave. Ouca o mesmo episodio 2-3 vezes.\n\n## 5. Anote palavras novas\nMantenha um caderno de vocabulario novo.", featured: true, views: 42 },
+  { title: "5 Dicas para Melhorar seu Listening", slug: "5-dicas-listening", category: "tips", content: "# 5 Dicas para Melhorar seu Listening\n\n## 1. Ouça podcasts em inglês\nComece com podcasts para aprendizes como **6 Minute English** da BBC.\n\n## 2. Assista séries com legendas em inglês\nNão use legendas em português! Comece com legendas em inglês.\n\n## 3. Repita frases em voz alta\nShadowing é uma técnica poderosa para melhorar pronúncia e compreensão.\n\n## 4. Ouça a mesma coisa várias vezes\nRepetição é chave. Ouça o mesmo episódio 2-3 vezes.\n\n## 5. Anote palavras novas\nMantenha um caderno de vocabulário novo.", featured: true, views: 42 },
   { title: "Verbos Irregulares Mais Comuns", slug: "verbos-irregulares-comuns", category: "grammar", content: "# Verbos Irregulares Mais Comuns\n\n| Base | Past | Past Participle |\n|------|------|---|\n| be | was/were | been |\n| go | went | gone |\n| have | had | had |\n| do | did | done |\n| say | said | said |", featured: false, views: 28 },
-  { title: "Filmes para Praticar Ingles", slug: "filmes-praticar-ingles", category: "culture", content: "# Filmes para Praticar Ingles\n\n## Para Iniciantes\n- **Toy Story** - vocabulario simples, dialogos claros\n- **Finding Nemo** - otimo para pronuncia\n\n## Para Intermediarios\n- **The Social Network** - ingles moderno\n- **The Intern** - vocabulario profissional", featured: false, views: 15 },
+  { title: "Filmes para Praticar Inglês", slug: "filmes-praticar-ingles", category: "culture", content: "# Filmes para Praticar Inglês\n\n## Para Iniciantes\n- **Toy Story** - vocabulário simples, diálogos claros\n- **Finding Nemo** - ótimo para pronúncia\n\n## Para Intermediários\n- **The Social Network** - inglês moderno\n- **The Intern** - vocabulário profissional", featured: false, views: 15 },
 ];
 
 postsData.forEach((p, i) => {
@@ -174,7 +174,7 @@ postsData.forEach((p, i) => {
 // Turma
 // ============================================================
 console.log("Creating turma...");
-sql(`INSERT INTO turmas (id, teacher_id, name, description, color, level, invite_code, notify_new_lesson, notify_new_task, created_at, updated_at) VALUES ('${turmaId}', '${teacherId}', 'Turma Iniciante 2026', 'Turma para alunos iniciantes, aulas as tercas e quintas.', '#6c5ce7', 'beginner', 'FLU001', 1, 1, ${ts}, ${ts})`);
+sql(`INSERT INTO turmas (id, teacher_id, name, description, color, level, invite_code, notify_new_lesson, notify_new_task, created_at, updated_at) VALUES ('${turmaId}', '${teacherId}', 'Turma Iniciante 2026', 'Turma para alunos iniciantes, aulas às terças e quintas.', '#6c5ce7', 'beginner', 'FLU001', 1, 1, ${ts}, ${ts})`);
 
 // Link student to turma
 sql(`INSERT INTO turma_students (id, turma_id, student_id, created_at) VALUES ('${uuid()}', '${turmaId}', '${studentId}', ${ts})`);

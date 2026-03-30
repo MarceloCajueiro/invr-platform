@@ -120,7 +120,7 @@ export function StudentProfile({
               <p className="font-semibold text-text-primary">
                 {formatDate(student.lastActivityAt)}
               </p>
-              <p className="text-xs text-text-muted">Ultima atividade</p>
+              <p className="text-xs text-text-muted">Última atividade</p>
             </div>
           </div>
         </div>
@@ -132,14 +132,14 @@ export function StudentProfile({
           <div className="flex items-center gap-2">
             <ClipboardCheck size={16} className="text-tarefas" />
             <h3 className="text-sm font-semibold text-text-primary">
-              Submissoes recentes
+              Submissões recentes
             </h3>
           </div>
         </CardHeader>
         <CardContent>
           {submissions.length === 0 ? (
             <p className="text-sm text-text-muted py-4 text-center">
-              Nenhuma submissao encontrada.
+              Nenhuma submissão encontrada.
             </p>
           ) : (
             <div className="space-y-3">
@@ -232,7 +232,7 @@ export function StudentProfile({
         <CardContent>
           {turmas.length === 0 ? (
             <p className="text-sm text-text-muted py-4 text-center">
-              Aluno nao esta em nenhuma turma.
+              Aluno não está em nenhuma turma.
             </p>
           ) : (
             <div className="flex flex-wrap gap-2">

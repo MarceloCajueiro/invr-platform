@@ -13,9 +13,9 @@ const statusOptions = [
 const categoryOptions = [
   { value: "all", label: "Todas as categorias" },
   { value: "tips", label: "Dicas" },
-  { value: "grammar", label: "Gramatica" },
+  { value: "grammar", label: "Gramática" },
   { value: "culture", label: "Cultura" },
-  { value: "vocabulary", label: "Vocabulario" },
+  { value: "vocabulary", label: "Vocabulário" },
 ];
 
 export function PostFilters() {

@@ -34,7 +34,7 @@ export function StudentList({ students }: StudentListProps) {
       <EmptyState
         icon={GraduationCap}
         title="Nenhum aluno"
-        description="Convide alunos para comecar a acompanhar o progresso deles."
+        description="Convide alunos para começar a acompanhar o progresso deles."
       />
     );
   }

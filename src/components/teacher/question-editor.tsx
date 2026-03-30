@@ -116,7 +116,7 @@ function QuizEditor({
 
           <div className="space-y-2">
             <span className="block text-xs font-medium text-text-primary">
-              Opcoes (selecione a correta)
+              Opções (selecione a correta)
             </span>
             {q.options.map((opt, oIndex) => (
               <div key={oIndex} className="flex items-center gap-2">
@@ -133,7 +133,7 @@ function QuizEditor({
                 <Input
                   value={opt.text}
                   onChange={(e) => updateOption(qIndex, oIndex, e.target.value)}
-                  placeholder={`Opcao ${opt.letter}`}
+                  placeholder={`Opção ${opt.letter}`}
                   className="flex-1"
                 />
               </div>
@@ -141,7 +141,7 @@ function QuizEditor({
           </div>
 
           <Input
-            label="Explicacao (opcional)"
+            label="Explicação (opcional)"
             value={q.explanation}
             onChange={(e) =>
               updateQuestion(qIndex, "explanation", e.target.value)
@@ -221,7 +221,7 @@ function FillGapsEditor({
           </div>
 
           <Input
-            label="Frase com lacuna (use ___ para o espaco)"
+            label="Frase com lacuna (use ___ para o espaço)"
             value={q.text}
             onChange={(e) => updateItem(qIndex, "text", e.target.value)}
             placeholder="Ex: She ___ to the store yesterday."
@@ -235,7 +235,7 @@ function FillGapsEditor({
           />
 
           <Input
-            label="Explicacao (opcional)"
+            label="Explicação (opcional)"
             value={q.explanation}
             onChange={(e) => updateItem(qIndex, "explanation", e.target.value)}
             placeholder="Explique a resposta..."
@@ -276,7 +276,7 @@ function WritingEditor({
       />
 
       <Textarea
-        label="Instrucoes (opcional)"
+        label="Instruções (opcional)"
         value={data.instructions}
         onChange={(e) => onChange({ ...data, instructions: e.target.value })}
         placeholder="Ex: Use at least 5 different verbs in the simple present tense."
@@ -303,7 +303,7 @@ function ListeningEditor({
   return (
     <div className="space-y-4">
       <Textarea
-        label="Texto para leitura/audio"
+        label="Texto para leitura/áudio"
         value={data.text}
         onChange={(e) => onChange({ ...data, text: e.target.value })}
         placeholder="Ex: Hello, my name is John. I live in New York..."
@@ -312,7 +312,7 @@ function ListeningEditor({
 
       <div className="rounded-[var(--radius-sm)] bg-[#f8f9fb] border border-border p-4">
         <p className="text-sm text-text-muted">
-          Audio sera gerado automaticamente por IA a partir do texto acima.
+          Áudio será gerado automaticamente por IA a partir do texto acima.
         </p>
       </div>
     </div>
@@ -392,8 +392,8 @@ export function QuestionEditor({
       <h3 className="text-sm font-semibold text-text-primary">
         {taskType === "quiz" && "Perguntas do Quiz"}
         {taskType === "fill_gaps" && "Preencher Lacunas"}
-        {taskType === "writing" && "Exercicio de Escrita"}
-        {taskType === "listening" && "Exercicio de Listening"}
+        {taskType === "writing" && "Exercício de Escrita"}
+        {taskType === "listening" && "Exercício de Listening"}
       </h3>
 
       {taskType === "quiz" && (

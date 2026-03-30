@@ -45,8 +45,8 @@ const typeBadgeVariant: Record<Task["taskType"], BadgeVariant> = {
 
 const levelLabels: Record<Task["level"], string> = {
   beginner: "Iniciante",
-  intermediate: "Intermediario",
-  advanced: "Avancado",
+  intermediate: "Intermediário",
+  advanced: "Avançado",
 };
 
 const statusLabels: Record<Task["status"], string> = {
@@ -109,7 +109,7 @@ export function TaskList({ tasks }: TaskListProps) {
                 <div className="flex items-center gap-1 text-xs text-text-muted">
                   <span>
                     {questionCount}{" "}
-                    {questionCount === 1 ? "questao" : "questoes"}
+                    {questionCount === 1 ? "questão" : "questões"}
                   </span>
                 </div>
               </div>

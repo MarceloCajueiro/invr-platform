@@ -20,7 +20,7 @@ export default async function LessonsPage({ searchParams }: LessonsPageProps) {
     <div className="animate-fade-in">
       <PageHeader
         title="Aulas"
-        description="Gerencie suas aulas e conteudos."
+        description="Gerencie suas aulas e conteúdos."
         action={
           <Link href="/teacher/lessons/new">
             <Button>

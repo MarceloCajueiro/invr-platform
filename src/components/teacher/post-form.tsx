@@ -24,9 +24,9 @@ interface PostFormProps {
 
 const categoryOptions = [
   { value: "tips", label: "Dicas" },
-  { value: "grammar", label: "Gramatica" },
+  { value: "grammar", label: "Gramática" },
   { value: "culture", label: "Cultura" },
-  { value: "vocabulary", label: "Vocabulario" },
+  { value: "vocabulary", label: "Vocabulário" },
 ];
 
 function generateSlug(title: string): string {
@@ -49,9 +49,9 @@ export function PostForm({ post, action }: PostFormProps) {
       <CardContent className="pt-6">
         <form action={action} className="space-y-5">
           <Input
-            label="Titulo"
+            label="Título"
             name="title"
-            placeholder="Ex: 10 dicas para melhorar seu ingles"
+            placeholder="Ex: 10 dicas para melhorar seu inglês"
             defaultValue={post?.title ?? ""}
             required
             onChange={(e) => {
@@ -118,7 +118,7 @@ export function PostForm({ post, action }: PostFormProps) {
           <div className="space-y-1.5">
             <div className="flex items-center justify-between">
               <label className="block text-xs font-medium text-text-primary">
-                Conteudo
+                Conteúdo
               </label>
               <Button
                 type="button"
@@ -136,7 +136,7 @@ export function PostForm({ post, action }: PostFormProps) {
                   <ReactMarkdown>{content}</ReactMarkdown>
                 ) : (
                   <p className="text-text-muted italic">
-                    Nenhum conteudo para visualizar.
+                    Nenhum conteúdo para visualizar.
                   </p>
                 )}
               </div>
@@ -146,7 +146,7 @@ export function PostForm({ post, action }: PostFormProps) {
                 rows={12}
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
-                placeholder="Escreva o conteudo do post em Markdown..."
+                placeholder="Escreva o conteúdo do post em Markdown..."
                 className="w-full px-3 py-2.5 rounded-[var(--radius-sm)] bg-[#f8f9fb] border border-border text-text-primary placeholder:text-text-muted focus:outline-none focus:border-aulas transition-colors resize-y"
               />
             )}
@@ -156,7 +156,7 @@ export function PostForm({ post, action }: PostFormProps) {
 
           <div className="flex justify-end pt-2">
             <Button type="submit">
-              {isEdit ? "Salvar Alteracoes" : "Criar Post"}
+              {isEdit ? "Salvar Alterações" : "Criar Post"}
             </Button>
           </div>
         </form>

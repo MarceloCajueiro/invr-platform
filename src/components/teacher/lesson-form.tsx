@@ -23,9 +23,9 @@ interface LessonFormProps {
 }
 
 const categoryOptions = [
-  { value: "conversation", label: "Conversacao" },
-  { value: "grammar", label: "Gramatica" },
-  { value: "vocabulary", label: "Vocabulario" },
+  { value: "conversation", label: "Conversação" },
+  { value: "grammar", label: "Gramática" },
+  { value: "vocabulary", label: "Vocabulário" },
   { value: "listening", label: "Listening" },
   { value: "culture", label: "Cultura" },
 ];
@@ -38,9 +38,9 @@ export function LessonForm({ lesson, action }: LessonFormProps) {
       <CardContent className="pt-6">
         <form action={action} className="space-y-5">
           <Input
-            label="Titulo"
+            label="Título"
             name="title"
-            placeholder="Ex: Introducao a conversacao"
+            placeholder="Ex: Introdução a conversação"
             defaultValue={lesson?.title ?? ""}
             required
           />
@@ -53,15 +53,15 @@ export function LessonForm({ lesson, action }: LessonFormProps) {
           />
 
           <Textarea
-            label="Descricao"
+            label="Descrição"
             name="description"
-            placeholder="Descreva o conteudo da aula..."
+            placeholder="Descreva o conteúdo da aula..."
             rows={6}
             defaultValue={lesson?.description ?? ""}
           />
 
           <Input
-            label="URL do Video"
+            label="URL do Vídeo"
             name="videoUrl"
             type="url"
             placeholder="https://youtube.com/..."
@@ -69,7 +69,7 @@ export function LessonForm({ lesson, action }: LessonFormProps) {
           />
 
           <Input
-            label="Duracao (minutos)"
+            label="Duração (minutos)"
             name="durationMinutes"
             type="number"
             min={0}
@@ -87,7 +87,7 @@ export function LessonForm({ lesson, action }: LessonFormProps) {
 
           <div className="flex justify-end pt-2">
             <Button type="submit">
-              {isEdit ? "Salvar Alteracoes" : "Criar Aula"}
+              {isEdit ? "Salvar Alterações" : "Criar Aula"}
             </Button>
           </div>
         </form>

@@ -33,8 +33,8 @@ const typeOptions = [
 
 const levelOptions = [
   { value: "beginner", label: "Iniciante" },
-  { value: "intermediate", label: "Intermediario" },
-  { value: "advanced", label: "Avancado" },
+  { value: "intermediate", label: "Intermediário" },
+  { value: "advanced", label: "Avançado" },
 ];
 
 export function TaskForm({ task, action }: TaskFormProps) {
@@ -48,7 +48,7 @@ export function TaskForm({ task, action }: TaskFormProps) {
       <CardContent className="pt-6">
         <form action={action} className="space-y-5">
           <Input
-            label="Titulo"
+            label="Título"
             name="title"
             placeholder="Ex: Quiz sobre Present Perfect"
             defaultValue={task?.title ?? ""}
@@ -64,14 +64,14 @@ export function TaskForm({ task, action }: TaskFormProps) {
           />
 
           <Select
-            label="Nivel"
+            label="Nível"
             name="level"
             options={levelOptions}
             defaultValue={task?.level ?? "beginner"}
           />
 
           <Textarea
-            label="Descricao"
+            label="Descrição"
             name="description"
             placeholder="Descreva a tarefa..."
             rows={4}
@@ -87,7 +87,7 @@ export function TaskForm({ task, action }: TaskFormProps) {
 
           <div className="flex justify-end pt-2">
             <Button type="submit">
-              {isEdit ? "Salvar Alteracoes" : "Criar Tarefa"}
+              {isEdit ? "Salvar Alterações" : "Criar Tarefa"}
             </Button>
           </div>
         </form>

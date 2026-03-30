@@ -21,9 +21,9 @@ interface LessonListProps {
 }
 
 const categoryLabels: Record<Lesson["category"], string> = {
-  conversation: "Conversacao",
-  grammar: "Gramatica",
-  vocabulary: "Vocabulario",
+  conversation: "Conversação",
+  grammar: "Gramática",
+  vocabulary: "Vocabulário",
   listening: "Listening",
   culture: "Cultura",
 };
@@ -47,7 +47,7 @@ export function LessonList({ lessons }: LessonListProps) {
       <EmptyState
         icon={BookOpen}
         title="Nenhuma aula encontrada"
-        description="Crie sua primeira aula para comecar a ensinar."
+        description="Crie sua primeira aula para começar a ensinar."
         action={
           <Link href="/teacher/lessons/new">
             <Button>Nova Aula</Button>
