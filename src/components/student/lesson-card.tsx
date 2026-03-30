@@ -1,0 +1,111 @@
+import Link from "next/link";
+import { Clock, PlayCircle } from "lucide-react";
+import { Badge, type BadgeVariant } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+
+const categoryLabels: Record<string, string> = {
+  conversation: "Conversação",
+  grammar: "Gramática",
+  vocabulary: "Vocabulário",
+  listening: "Listening",
+  culture: "Cultura",
+};
+
+const categoryBadgeVariant: Record<string, BadgeVariant> = {
+  conversation: "aulas",
+  grammar: "tarefas",
+  vocabulary: "fora",
+  listening: "challenges",
+  culture: "default",
+};
+
+const categoryPlaceholderColors: Record<string, string> = {
+  conversation: "bg-aulas-bg",
+  grammar: "bg-tarefas-bg",
+  vocabulary: "bg-fora-bg",
+  listening: "bg-challenges-bg",
+  culture: "bg-gray-100",
+};
+
+interface LessonCardProps {
+  lesson: {
+    id: string;
+    title: string;
+    category: string;
+    coverImageUrl?: string | null;
+    durationMinutes?: number | null;
+  };
+  progress?: number;
+  index?: number;
+}
+
+export function LessonCard({ lesson, progress = 0, index = 0 }: LessonCardProps) {
+  return (
+    <Link href={`/lessons/${lesson.id}`}>
+      <Card
+        hoverable
+        className="animate-slide-up overflow-hidden"
+        style={{ animationDelay: `${index * 60}ms`, animationFillMode: "both" }}
+      >
+        <div className="flex">
+          {/* Thumbnail */}
+          <div className="relative w-40 min-h-24 shrink-0">
+            {lesson.coverImageUrl ? (
+              <img
+                src={lesson.coverImageUrl}
+                alt={lesson.title}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div
+                className={cn(
+                  "w-full h-full flex items-center justify-center",
+                  categoryPlaceholderColors[lesson.category] || "bg-gray-100",
+                )}
+              >
+                <PlayCircle
+                  size={32}
+                  className="text-text-muted opacity-50"
+                />
+              </div>
+            )}
+            {progress >= 90 && (
+              <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+                <span className="text-white text-xs font-medium bg-success px-2 py-0.5 rounded-full">
+                  Assistida
+                </span>
+              </div>
+            )}
+          </div>
+
+          {/* Content */}
+          <div className="flex-1 min-w-0 p-4 flex flex-col justify-center gap-1.5">
+            <Badge variant={categoryBadgeVariant[lesson.category] || "default"}>
+              {categoryLabels[lesson.category] || lesson.category}
+            </Badge>
+            <h3 className="font-medium text-text-primary truncate">
+              {lesson.title}
+            </h3>
+            {lesson.durationMinutes && (
+              <div className="flex items-center gap-1 text-xs text-text-muted">
+                <Clock size={12} />
+                <span>{lesson.durationMinutes} min</span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Progress bar */}
+        {progress > 0 && (
+          <div className="h-1 bg-border">
+            <div
+              className="h-full bg-aulas rounded-full transition-all duration-500"
+              style={{ width: `${Math.min(progress, 100)}%` }}
+            />
+          </div>
+        )}
+      </Card>
+    </Link>
+  );
+}
