@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { authClient } from "@/lib/auth/client";
 import { UserPlus, Eye, EyeOff } from "lucide-react";
+import { translateAuthError } from "@/lib/auth/errors";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -33,7 +34,7 @@ export default function SignUpPage() {
           router.push("/teacher/dashboard");
         },
         onError: (ctx) => {
-          setError(ctx.error.message || "Erro ao criar conta. Tente novamente.");
+          setError(translateAuthError(ctx.error.message, "Erro ao criar conta. Tente novamente."));
           setLoading(false);
         },
       },

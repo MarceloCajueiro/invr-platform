@@ -3,6 +3,7 @@
 import { useState, useEffect, type FormEvent } from "react";
 import { authClient } from "@/lib/auth/client";
 import { LogIn, Eye, EyeOff } from "lucide-react";
+import { translateAuthError } from "@/lib/auth/errors";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -36,7 +37,7 @@ export default function SignInPage() {
           router.push("/teacher/dashboard");
         },
         onError: (ctx) => {
-          setError(ctx.error.message || "Erro ao fazer login. Tente novamente.");
+          setError(translateAuthError(ctx.error.message, "Erro ao fazer login. Tente novamente."));
           setLoading(false);
         },
       },
@@ -50,7 +51,7 @@ export default function SignInPage() {
           className="text-3xl font-extrabold text-text-primary tracking-tight"
           style={{ fontFamily: "'Bricolage Grotesque Variable', serif" }}
         >
-          Welcome back
+          Bem-vindo de volta
         </h1>
         <p className="mt-2 text-text-secondary">
           Entre na sua conta para continuar
