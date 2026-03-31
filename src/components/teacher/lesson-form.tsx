@@ -272,7 +272,7 @@ export function LessonForm({ lesson, action }: LessonFormProps) {
       </Card>
 
       {/* ── Submit ────────────────────────────────────────────────────── */}
-      <div className="flex justify-end">
+      <div className="flex justify-end pt-4">
         <Button type="submit">
           {isEdit ? "Salvar Alterações" : "Criar Aula"}
         </Button>

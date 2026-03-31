@@ -7,7 +7,7 @@ export default async function NewLessonPage() {
   await getTeacher();
 
   return (
-    <div className="animate-fade-in max-w-2xl">
+    <div className="animate-fade-in max-w-2xl pb-8">
       <PageHeader title="Nova Aula" description="Preencha os dados da nova aula." />
       <LessonForm action={createLesson} />
     </div>

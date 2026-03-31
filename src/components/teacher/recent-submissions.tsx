@@ -70,7 +70,7 @@ export function RecentSubmissions({ submissions }: RecentSubmissionsProps) {
                   return (
                     <tr
                       key={sub.id}
-                      className="border-b border-border last:border-b-0 hover:bg-bg-light/50 transition-colors"
+                      className="border-b border-border last:border-b-0 hover:bg-bg-light transition-colors"
                     >
                       <td className="px-6 py-3 text-text-primary font-medium">
                         {sub.studentName}

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { deletePost, togglePostStatus } from "@/lib/actions/posts";
+import { DeleteButton } from "@/components/teacher/delete-button";
 import type { BadgeVariant } from "@/components/ui/badge";
 
 interface Post {
@@ -105,12 +106,7 @@ export function PostList({ posts }: PostListProps) {
                 </Button>
               </Link>
 
-              <form action={deletePost}>
-                <input type="hidden" name="id" value={post.id} />
-                <Button variant="danger" size="sm" type="submit">
-                  Excluir
-                </Button>
-              </form>
+              <DeleteButton action={deletePost} id={post.id} />
             </div>
           </div>
         </Card>

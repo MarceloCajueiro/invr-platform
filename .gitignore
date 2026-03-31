@@ -49,3 +49,6 @@ e2e/.auth/
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# worktrees
+.worktrees/

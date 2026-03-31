@@ -20,7 +20,7 @@ const taskTypeConfig: Record<
   listening: { icon: Headphones, label: "Listening", color: "text-challenges" },
   fill_gaps: {
     icon: PenLine,
-    label: "Preencher Lacunas",
+    label: "Lacunas",
     color: "text-tarefas",
   },
   writing: { icon: FileEdit, label: "Redação", color: "text-fora" },

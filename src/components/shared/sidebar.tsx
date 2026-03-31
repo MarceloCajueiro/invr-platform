@@ -96,8 +96,8 @@ export function Sidebar({ role, userName }: SidebarProps) {
       </nav>
 
       {/* User / Sign Out */}
-      <div className="border-t border-white/10 px-4 py-4 flex items-center justify-between">
-        <span className="text-sm text-white/80 truncate max-w-[140px]">
+      <div className="border-t border-white/10 px-6 py-4 flex items-center gap-3">
+        <span className="text-sm text-white/80 truncate flex-1 min-w-0">
           {userName}
         </span>
         <button

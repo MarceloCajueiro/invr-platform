@@ -19,7 +19,7 @@ export default async function EditTaskPage({ params }: EditTaskPageProps) {
   const updateTaskWithId = updateTask.bind(null, task.id);
 
   return (
-    <div className="animate-fade-in max-w-2xl">
+    <div className="animate-fade-in max-w-2xl pb-8">
       <PageHeader
         title="Editar Tarefa"
         description={`Editando: ${task.title}`}

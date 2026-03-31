@@ -154,7 +154,7 @@ export function PostForm({ post, action }: PostFormProps) {
             {preview && <input type="hidden" name="content" value={content} />}
           </div>
 
-          <div className="flex justify-end pt-2">
+          <div className="flex justify-end pt-4">
             <Button type="submit">
               {isEdit ? "Salvar Alterações" : "Criar Post"}
             </Button>

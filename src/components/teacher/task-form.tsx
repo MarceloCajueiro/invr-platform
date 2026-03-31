@@ -124,7 +124,7 @@ export function TaskForm({ task, action }: TaskFormProps) {
           />
           <input type="hidden" name="aiPrompt" value={aiPrompt} />
 
-          <div className="flex justify-end pt-2">
+          <div className="flex justify-end pt-4">
             <Button type="submit">
               {isEdit ? "Salvar Alterações" : "Criar Tarefa"}
             </Button>

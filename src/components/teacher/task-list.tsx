@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { deleteTask, toggleTaskStatus } from "@/lib/actions/tasks";
+import { DeleteButton } from "@/components/teacher/delete-button";
 import type { BadgeVariant } from "@/components/ui/badge";
 import type { LucideIcon } from "lucide-react";
 
@@ -129,12 +130,7 @@ export function TaskList({ tasks }: TaskListProps) {
                   </Button>
                 </Link>
 
-                <form action={deleteTask}>
-                  <input type="hidden" name="id" value={task.id} />
-                  <Button variant="danger" size="sm" type="submit">
-                    Excluir
-                  </Button>
-                </form>
+                <DeleteButton action={deleteTask} id={task.id} />
               </div>
             </div>
           </Card>

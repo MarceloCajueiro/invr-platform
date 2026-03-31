@@ -1,24 +1,25 @@
 const errorTranslations: Record<string, string> = {
-  "User already exists.": "Este e-mail já está cadastrado.",
-  "User already exists. Use another email.":
+  "user already exists.": "Este e-mail já está cadastrado.",
+  "user already exists. use another email.":
     "Este e-mail já está cadastrado. Use outro e-mail.",
-  "Invalid email or password": "E-mail ou senha inválidos.",
-  "Invalid email": "E-mail inválido.",
-  "Invalid password": "Senha inválida.",
-  "Password too short": "A senha é muito curta.",
-  "Password too long": "A senha é muito longa.",
-  "User not found": "Usuário não encontrado.",
-  "Invalid token": "Token inválido.",
-  "Token expired": "Token expirado.",
-  "Email not verified": "E-mail não verificado.",
-  "Session expired. Re-authenticate to perform this action.":
+  "invalid email or password": "E-mail ou senha inválidos.",
+  "invalid email or password.": "E-mail ou senha inválidos.",
+  "invalid email": "E-mail inválido.",
+  "invalid password": "Senha inválida.",
+  "password too short": "A senha é muito curta.",
+  "password too long": "A senha é muito longa.",
+  "user not found": "Usuário não encontrado.",
+  "invalid token": "Token inválido.",
+  "token expired": "Token expirado.",
+  "email not verified": "E-mail não verificado.",
+  "session expired. re-authenticate to perform this action.":
     "Sessão expirada. Faça login novamente.",
-  "Invalid origin": "Origem inválida.",
-  "Failed to create user": "Erro ao criar usuário.",
-  "Failed to create session": "Erro ao criar sessão.",
-  "Credential account not found": "Conta não encontrada.",
-  "Validation Error": "Erro de validação.",
-  "Field is required": "Campo obrigatório.",
+  "invalid origin": "Origem inválida.",
+  "failed to create user": "Erro ao criar usuário.",
+  "failed to create session": "Erro ao criar sessão.",
+  "credential account not found": "Conta não encontrada.",
+  "validation error": "Erro de validação.",
+  "field is required": "Campo obrigatório.",
 };
 
 export function translateAuthError(
@@ -26,5 +27,6 @@ export function translateAuthError(
   fallback: string,
 ): string {
   if (!message) return fallback;
-  return errorTranslations[message] ?? fallback;
+  const normalized = message.toLowerCase().trim();
+  return errorTranslations[normalized] ?? fallback;
 }
