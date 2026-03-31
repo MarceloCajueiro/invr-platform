@@ -94,7 +94,7 @@ export function TurmaForm({ turma, action }: TurmaFormProps) {
             </div>
           </div>
 
-          <div className="flex justify-end pt-2">
+          <div className="flex justify-end pt-4">
             <Button type="submit">
               {isEdit ? "Salvar Alterações" : "Criar Turma"}
             </Button>

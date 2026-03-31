@@ -7,7 +7,7 @@ export default async function NewPostPage() {
   await getTeacher();
 
   return (
-    <div className="animate-fade-in max-w-2xl">
+    <div className="animate-fade-in max-w-2xl pb-8">
       <PageHeader title="Novo Post" description="Preencha os dados do novo post." />
       <PostForm action={createPost} />
     </div>

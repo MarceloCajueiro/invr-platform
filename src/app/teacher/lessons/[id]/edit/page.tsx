@@ -19,7 +19,7 @@ export default async function EditLessonPage({ params }: EditLessonPageProps) {
   const updateLessonWithId = updateLesson.bind(null, lesson.id);
 
   return (
-    <div className="animate-fade-in max-w-2xl">
+    <div className="animate-fade-in max-w-2xl pb-8">
       <PageHeader
         title="Editar Aula"
         description={`Editando: ${lesson.title}`}

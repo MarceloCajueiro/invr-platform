@@ -19,7 +19,7 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
   const updatePostWithId = updatePost.bind(null, post.id);
 
   return (
-    <div className="animate-fade-in max-w-2xl">
+    <div className="animate-fade-in max-w-2xl pb-8">
       <PageHeader
         title="Editar Post"
         description={`Editando: ${post.title}`}
