@@ -102,55 +102,35 @@ function uploadFileToR2(
 ): { promise: Promise<FileItem>; xhr: XMLHttpRequest } {
   const xhr = new XMLHttpRequest();
 
-  const promise = new Promise<FileItem>(async (resolve, reject) => {
-    try {
-      const presignRes = await fetch("/api/upload/presign", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          fileName: file.name,
-          contentType: file.type,
-          folder,
-        }),
-      });
+  const promise = new Promise<FileItem>((resolve, reject) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("folder", folder);
 
-      if (!presignRes.ok) {
-        reject(new Error("Falha ao gerar URL de upload"));
-        return;
+    xhr.open("POST", "/api/upload");
+
+    xhr.upload.onprogress = (e) => {
+      if (e.lengthComputable) {
+        onProgress(Math.round((e.loaded / e.total) * 100));
       }
+    };
 
-      const { uploadUrl, key } = (await presignRes.json()) as {
-        uploadUrl: string;
-        key: string;
-      };
-
-      xhr.open("PUT", uploadUrl);
-      xhr.setRequestHeader("Content-Type", file.type);
-
-      xhr.upload.onprogress = (e) => {
-        if (e.lengthComputable) {
-          onProgress(Math.round((e.loaded / e.total) * 100));
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        try {
+          const result = JSON.parse(xhr.responseText) as FileItem;
+          resolve(result);
+        } catch {
+          reject(new Error("Resposta inválida do servidor"));
         }
-      };
+      } else {
+        reject(new Error(`Upload falhou: ${xhr.status}`));
+      }
+    };
 
-      xhr.onload = () => {
-        if (xhr.status >= 200 && xhr.status < 300) {
-          resolve({
-            url: `/api/files/${key}`,
-            name: file.name,
-            size: file.size,
-          });
-        } else {
-          reject(new Error(`Upload falhou: ${xhr.status}`));
-        }
-      };
-
-      xhr.onerror = () => reject(new Error("Erro de rede no upload"));
-      xhr.onabort = () => reject(new Error("Upload cancelado"));
-      xhr.send(file);
-    } catch (err) {
-      reject(err);
-    }
+    xhr.onerror = () => reject(new Error("Erro de rede no upload"));
+    xhr.onabort = () => reject(new Error("Upload cancelado"));
+    xhr.send(formData);
   });
 
   return { promise, xhr };
@@ -475,9 +455,11 @@ export function FileUpload({
                   <span className="text-sm text-text-primary truncate block">
                     {f.name}
                   </span>
-                  <span className="text-xs text-text-muted">
-                    {formatBytes(f.size)}
-                  </span>
+                  {f.size > 0 && (
+                    <span className="text-xs text-text-muted">
+                      {formatBytes(f.size)}
+                    </span>
+                  )}
                 </div>
                 <CheckCircle size={14} className="text-tarefas shrink-0" />
                 <button

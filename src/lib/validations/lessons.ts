@@ -10,7 +10,7 @@ export const createLessonSchema = z.object({
     "listening",
     "culture",
   ]),
-  videoUrl: z.string().url("URL inválida").optional().or(z.literal("")),
+  videoUrl: z.string().optional(),
   coverImageUrl: z.string().optional(),
   audioUrls: z.string().optional(), // JSON array
   documentUrls: z.string().optional(), // JSON array
