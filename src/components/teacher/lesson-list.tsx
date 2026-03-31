@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { deleteLesson, toggleLessonStatus } from "@/lib/actions/lessons";
+import { DeleteButton } from "@/components/teacher/delete-button";
 import type { BadgeVariant } from "@/components/ui/badge";
 
 interface Lesson {
@@ -97,12 +98,7 @@ export function LessonList({ lessons }: LessonListProps) {
                 </Button>
               </Link>
 
-              <form action={deleteLesson}>
-                <input type="hidden" name="id" value={lesson.id} />
-                <Button variant="danger" size="sm" type="submit">
-                  Excluir
-                </Button>
-              </form>
+              <DeleteButton action={deleteLesson} id={lesson.id} />
             </div>
           </div>
         </Card>
