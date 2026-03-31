@@ -4,12 +4,20 @@ import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Loader2, Plus, Trash2, Volume2 } from "lucide-react";
+import { Loader2, Play, Plus, Trash2, Volume2 } from "lucide-react";
+
+const TTS_VOICES = [
+  { id: "Kore", label: "Kore", gender: "Feminina", preview: "/audio/voices/kore.wav" },
+  { id: "Aoede", label: "Aoede", gender: "Feminina", preview: "/audio/voices/aoede.wav" },
+  { id: "Charon", label: "Charon", gender: "Masculino", preview: "/audio/voices/charon.wav" },
+  { id: "Puck", label: "Puck", gender: "Masculino", preview: "/audio/voices/puck.wav" },
+] as const;
 
 interface QuestionEditorProps {
   taskType: "quiz" | "listening" | "fill_gaps" | "writing";
   initialQuestions?: string;
   name: string;
+  level?: "beginner" | "intermediate" | "advanced";
 }
 
 // --- Quiz types & editor ---
@@ -291,17 +299,53 @@ function WritingEditor({
 interface ListeningData {
   text: string;
   audioUrl: string;
+  voice?: string;
+}
+
+function VoicePreviewButton({ src }: { src: string }) {
+  const [playing, setPlaying] = useState(false);
+  const audioRef = useState<HTMLAudioElement | null>(null);
+
+  function handlePlay(e: React.MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (audioRef[0]) {
+      audioRef[0].pause();
+      audioRef[0].currentTime = 0;
+    }
+    const audio = new Audio(src);
+    audioRef[0] = audio;
+    setPlaying(true);
+    audio.onended = () => setPlaying(false);
+    audio.play();
+  }
+
+  return (
+    <span
+      role="button"
+      tabIndex={0}
+      onClick={handlePlay}
+      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") handlePlay(e as unknown as React.MouseEvent); }}
+      className="ml-auto shrink-0 text-text-muted hover:text-primary transition-colors cursor-pointer"
+      title="Ouvir prévia"
+    >
+      {playing ? <Volume2 size={14} className="text-primary" /> : <Play size={14} />}
+    </span>
+  );
 }
 
 function ListeningEditor({
   data,
   onChange,
+  level,
 }: {
   data: ListeningData;
   onChange: (d: ListeningData) => void;
+  level?: "beginner" | "intermediate" | "advanced";
 }) {
   const [generatingAudio, setGeneratingAudio] = useState(false);
   const [audioError, setAudioError] = useState<string | null>(null);
+  const selectedVoice = data.voice || "Kore";
 
   async function handleGenerateAudio() {
     if (!data.text.trim()) return;
@@ -313,7 +357,11 @@ function ListeningEditor({
       const res = await fetch("/api/ai/tts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: data.text }),
+        body: JSON.stringify({
+          text: data.text,
+          voice: selectedVoice,
+          level: level ?? "intermediate",
+        }),
       });
 
       const result = (await res.json()) as {
@@ -347,6 +395,29 @@ function ListeningEditor({
         rows={6}
       />
 
+      {/* Voice selector */}
+      <div className="space-y-2">
+        <label className="text-sm font-medium text-text-primary">Voz</label>
+        <div className="grid grid-cols-2 gap-2">
+          {TTS_VOICES.map((v) => (
+            <button
+              key={v.id}
+              type="button"
+              onClick={() => onChange({ ...data, voice: v.id, audioUrl: "" })}
+              className={`flex items-center gap-2 rounded-[var(--radius-sm)] border px-3 py-2 text-sm transition-colors ${
+                selectedVoice === v.id
+                  ? "border-primary bg-primary/5 text-primary font-medium"
+                  : "border-border bg-white text-text-secondary hover:border-primary/40"
+              }`}
+            >
+              <span>{v.label}</span>
+              <span className="text-xs text-text-muted">({v.gender})</span>
+              <VoicePreviewButton src={v.preview} />
+            </button>
+          ))}
+        </div>
+      </div>
+
       <Button
         type="button"
         variant="secondary"
@@ -374,7 +445,7 @@ function ListeningEditor({
       {data.audioUrl && (
         <div className="rounded-[var(--radius-sm)] bg-[#f8f9fb] border border-border p-4 space-y-2">
           <p className="text-xs font-medium text-text-secondary">
-            Prévia do áudio
+            Prévia do áudio gerado
           </p>
           <audio controls src={data.audioUrl} className="w-full" />
         </div>
@@ -383,8 +454,8 @@ function ListeningEditor({
       {!data.audioUrl && !generatingAudio && (
         <div className="rounded-[var(--radius-sm)] bg-[#f8f9fb] border border-border p-4">
           <p className="text-sm text-text-muted">
-            Clique em &quot;Gerar Áudio&quot; para criar o áudio a partir do
-            texto acima.
+            Selecione uma voz e clique em &quot;Gerar Áudio&quot; para criar o
+            áudio a partir do texto acima.
           </p>
         </div>
       )}
@@ -398,6 +469,7 @@ export function QuestionEditor({
   taskType,
   initialQuestions,
   name,
+  level,
 }: QuestionEditorProps) {
   const [quizQuestions, setQuizQuestions] = useState<QuizQuestion[]>(() => {
     if (initialQuestions && taskType === "quiz") {
@@ -439,7 +511,7 @@ export function QuestionEditor({
       try {
         return JSON.parse(initialQuestions);
       } catch {
-        return { text: "", audioUrl: "" };
+        return { text: "", audioUrl: "", voice: "Kore" };
       }
     }
     return { text: "", audioUrl: "" };
@@ -482,7 +554,7 @@ export function QuestionEditor({
         <WritingEditor data={writingData} onChange={setWritingData} />
       )}
       {taskType === "listening" && (
-        <ListeningEditor data={listeningData} onChange={setListeningData} />
+        <ListeningEditor data={listeningData} onChange={setListeningData} level={level} />
       )}
 
       <input type="hidden" name={name} value={getJsonValue()} />

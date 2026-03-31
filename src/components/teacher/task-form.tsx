@@ -114,6 +114,7 @@ export function TaskForm({ task, action }: TaskFormProps) {
             taskType={taskType}
             initialQuestions={generatedQuestions ?? task?.questions ?? undefined}
             name="questions"
+            level={level}
           />
 
           <input

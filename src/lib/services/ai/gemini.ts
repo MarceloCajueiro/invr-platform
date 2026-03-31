@@ -8,18 +8,22 @@ async function getGeminiClient() {
 
 export async function generateTTS(
   text: string,
+  voice: string = "Kore",
+  prompt?: string,
 ): Promise<{ data: string; mimeType: string }> {
   const ai = await getGeminiClient();
 
+  const instruction = prompt ?? `Read this text aloud clearly: ${text}`;
+
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash-preview-tts",
-    contents: `Read this text aloud clearly: ${text}`,
+    contents: instruction,
     config: {
       responseModalities: ["AUDIO"],
       speechConfig: {
         voiceConfig: {
           prebuiltVoiceConfig: {
-            voiceName: "Kore",
+            voiceName: voice,
           },
         },
       },
