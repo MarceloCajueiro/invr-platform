@@ -13,6 +13,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { signOut } from "@/lib/auth/client";
+import { NavLinkPending } from "@/components/shared/nav-progress";
 
 type NavItem = {
   label: string;
@@ -69,6 +70,7 @@ export function Sidebar({ role, userName }: SidebarProps) {
             <Link
               key={item.href}
               href={item.href}
+              prefetch={false}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-[var(--radius-sm)] text-sm transition-colors relative ${
                 isActive
                   ? "bg-white/10 text-white"
@@ -87,6 +89,7 @@ export function Sidebar({ role, userName }: SidebarProps) {
               )}
               <Icon size={18} />
               {item.label}
+              <NavLinkPending />
             </Link>
           );
         })}

@@ -201,3 +201,112 @@ body::after {
 .glow-challenges:hover:not(:disabled) {
   box-shadow: 0 8px 32px var(--color-challenges-glow), 0 4px 0 #c9981f;
 }
+
+/* ── Nav Link Pending Indicator ── */
+
+.nav-link-pending {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-left: auto;
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  opacity: 0;
+  flex-shrink: 0;
+}
+
+.nav-link-pending.is-pending {
+  animation:
+    nav-pending-fade-in 200ms 100ms ease forwards,
+    nav-pending-spin 0.6s 100ms linear infinite;
+}
+
+/* Mobile bottom nav: smaller spinner */
+.nav-link-pending-mobile {
+  display: block;
+  width: 3px;
+  height: 3px;
+  margin-top: 1px;
+  border-radius: 9999px;
+  background: currentColor;
+  opacity: 0;
+}
+
+.nav-link-pending-mobile.is-pending {
+  animation:
+    nav-pending-fade-in 200ms 100ms ease forwards,
+    nav-pending-pulse 1s 100ms ease-in-out infinite;
+}
+
+@keyframes nav-pending-fade-in {
+  to {
+    opacity: 0.7;
+  }
+}
+
+@keyframes nav-pending-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes nav-pending-pulse {
+  50% {
+    opacity: 0.2;
+  }
+}
+
+/* ── Top Navigation Progress Bar ── */
+
+.nav-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.nav-progress-bar.is-active {
+  opacity: 1;
+  animation: nav-progress-fade-in 100ms 100ms ease forwards;
+}
+
+.nav-progress-bar-inner {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--color-aulas), var(--color-aulas-light));
+  border-radius: 0 2px 2px 0;
+  transition: width 0.3s ease;
+}
+
+.nav-progress-bar.is-active .nav-progress-bar-inner {
+  animation: nav-progress-grow 8s cubic-bezier(0.1, 0.5, 0.2, 1) forwards;
+}
+
+@keyframes nav-progress-fade-in {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes nav-progress-grow {
+  0% {
+    width: 0%;
+  }
+  10% {
+    width: 30%;
+  }
+  50% {
+    width: 60%;
+  }
+  80% {
+    width: 80%;
+  }
+  100% {
+    width: 95%;
+  }
+}

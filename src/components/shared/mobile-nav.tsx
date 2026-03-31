@@ -12,6 +12,7 @@ import {
   FileText,
   User,
 } from "lucide-react";
+import { NavLinkPendingMobile } from "@/components/shared/nav-progress";
 
 type MobileNavItem = {
   label: string;
@@ -53,12 +54,14 @@ export function MobileNav({ role }: MobileNavProps) {
           <Link
             key={item.href}
             href={item.href}
+            prefetch={false}
             className={`flex flex-col items-center gap-0.5 ${
               isActive ? "text-aulas" : "text-text-muted"
             }`}
           >
             <Icon size={20} />
             <span className="text-[10px]">{item.label}</span>
+            <NavLinkPendingMobile />
           </Link>
         );
       })}
