@@ -14,8 +14,19 @@ npm run db:migrate:local     # Apply migrations to local D1
 npm run db:seed              # Seed sample data (teacher + student + content)
 npx tsc --noEmit             # Type check
 npx playwright test          # E2E tests (kills dev server first if stale DB)
-npm run deploy               # Build + deploy to Cloudflare Workers
+npm run deploy               # Build + deploy to Cloudflare Workers (manual)
 ```
+
+## Deploy
+
+**Production URL:** `https://fluent.marcelocajueiro.workers.dev`
+**GitHub repo:** `https://github.com/MarceloCajueiro/invr-platform`
+
+Deploy automático via GitHub Actions (`.github/workflows/deploy.yml`) a cada push em `main`:
+1. `npm ci`
+2. `opennextjs-cloudflare build && opennextjs-cloudflare deploy`
+
+Requer secret `CLOUDFLARE_API_TOKEN` no repositório GitHub (Workers:Edit permission).
 
 **Seed credentials:** `fran@fluent.app` / `marcelo@fluent.app` — password: `senha12345`
 
