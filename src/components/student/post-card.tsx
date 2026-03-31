@@ -37,7 +37,7 @@ function getExcerpt(content: string | null): string {
   const plain = content
     .replace(/^\|.*\|$/gm, "")           // remove table rows
     .replace(/^[-|:\s]+$/gm, "")          // remove table separators
-    .replace(/[#*_~`>\[\]()!|]/g, "")     // strip markdown chars including pipes
+    .replace(/[#*_~`>\[\]|]/g, "")         // strip markdown chars including pipes
     .replace(/\n+/g, " ")                 // collapse newlines to spaces
     .replace(/\s+/g, " ")                 // collapse multiple spaces
     .trim();
