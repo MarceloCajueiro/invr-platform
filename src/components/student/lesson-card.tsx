@@ -21,11 +21,11 @@ const categoryBadgeVariant: Record<string, BadgeVariant> = {
 };
 
 const categoryPlaceholderColors: Record<string, string> = {
-  conversation: "bg-aulas-bg",
-  grammar: "bg-tarefas-bg",
-  vocabulary: "bg-fora-bg",
-  listening: "bg-challenges-bg",
-  culture: "bg-gray-100",
+  conversation: "bg-gradient-to-br from-aulas-light to-aulas-bg",
+  grammar: "bg-gradient-to-br from-tarefas-light to-tarefas-bg",
+  vocabulary: "bg-gradient-to-br from-fora-light to-fora-bg",
+  listening: "bg-gradient-to-br from-challenges-light to-challenges-bg",
+  culture: "bg-gradient-to-br from-gray-200 to-gray-100",
 };
 
 interface LessonCardProps {
@@ -84,7 +84,7 @@ export function LessonCard({ lesson, progress = 0, index = 0 }: LessonCardProps)
             <Badge variant={categoryBadgeVariant[lesson.category] || "default"}>
               {categoryLabels[lesson.category] || lesson.category}
             </Badge>
-            <h3 className="font-medium text-text-primary truncate">
+            <h3 className="font-medium text-text-primary line-clamp-2">
               {lesson.title}
             </h3>
             {lesson.durationMinutes && (
