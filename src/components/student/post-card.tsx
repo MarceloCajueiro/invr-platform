@@ -34,7 +34,13 @@ const categoryBadgeVariant: Record<
 
 function getExcerpt(content: string | null): string {
   if (!content) return "";
-  const plain = content.replace(/[#*_~`>\[\]()!-]/g, "").trim();
+  const plain = content
+    .replace(/^\|.*\|$/gm, "")           // remove table rows
+    .replace(/^[-|:\s]+$/gm, "")          // remove table separators
+    .replace(/[#*_~`>\[\]()!|]/g, "")     // strip markdown chars including pipes
+    .replace(/\n+/g, " ")                 // collapse newlines to spaces
+    .replace(/\s+/g, " ")                 // collapse multiple spaces
+    .trim();
   return plain.length > 120 ? `${plain.slice(0, 120)}...` : plain;
 }
 
