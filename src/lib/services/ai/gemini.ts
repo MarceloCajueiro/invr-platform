@@ -12,7 +12,7 @@ export async function generateTTS(
   const ai = await getGeminiClient();
 
   const response = await ai.models.generateContent({
-    model: "gemini-2.0-flash",
+    model: "gemini-2.5-flash-preview-tts",
     contents: `Read this text aloud clearly: ${text}`,
     config: {
       responseModalities: ["AUDIO"],
