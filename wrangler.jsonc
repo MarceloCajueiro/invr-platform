@@ -26,5 +26,11 @@
   "vars": {
     "NEXT_PUBLIC_APP_URL": "https://fluent.marcelocajueiro.workers.dev",
     "BETTER_AUTH_URL": "https://fluent.marcelocajueiro.workers.dev"
+  },
+  "observability": {
+    "logs": {
+      "enabled": false,
+      "invocation_logs": true
+    }
   }
 }
