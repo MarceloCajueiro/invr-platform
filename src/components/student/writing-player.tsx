@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import Link from "next/link";
 import { Send, CheckCircle2, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -127,9 +128,9 @@ export function WritingPlayer({ task, existingSubmission }: WritingPlayerProps) 
               <p className="text-sm text-text-secondary">
                 Seu professor receberá sua redação e fará a correção.
               </p>
-              <a href="/tasks" className="text-sm text-aulas hover:underline">
+              <Link href="/tasks" className="text-sm text-aulas hover:underline">
                 Voltar para tarefas
-              </a>
+              </Link>
             </div>
           </CardContent>
         </Card>

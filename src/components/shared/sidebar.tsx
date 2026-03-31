@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard,
@@ -65,7 +66,7 @@ export function Sidebar({ role, userName }: SidebarProps) {
           const Icon = item.icon;
 
           return (
-            <a
+            <Link
               key={item.href}
               href={item.href}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-[var(--radius-sm)] text-sm transition-colors relative ${
@@ -86,7 +87,7 @@ export function Sidebar({ role, userName }: SidebarProps) {
               )}
               <Icon size={18} />
               {item.label}
-            </a>
+            </Link>
           );
         })}
       </nav>

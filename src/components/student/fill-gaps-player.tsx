@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import Link from "next/link";
 import { CheckCircle2, XCircle, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -103,9 +104,9 @@ export function FillGapsPlayer({
       <div className="space-y-6">
         <ScoreHeader score={result.score} feedback={result.feedback} />
         <div className="text-center">
-          <a href="/tasks" className="text-sm text-aulas hover:underline">
+          <Link href="/tasks" className="text-sm text-aulas hover:underline">
             Voltar para tarefas
-          </a>
+          </Link>
         </div>
       </div>
     );

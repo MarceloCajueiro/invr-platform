@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useTransition } from "react";
 import {
   CheckCircle2,
@@ -163,9 +164,9 @@ export function ListeningPlayer({
         <div className="space-y-6">
           <ScoreHeader score={result.score} feedback={result.feedback} />
           <div className="text-center">
-            <a href="/tasks" className="text-sm text-aulas hover:underline">
+            <Link href="/tasks" className="text-sm text-aulas hover:underline">
               Voltar para tarefas
-            </a>
+            </Link>
           </div>
         </div>
       );
