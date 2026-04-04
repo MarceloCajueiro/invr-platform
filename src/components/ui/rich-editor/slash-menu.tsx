@@ -21,16 +21,88 @@ async function uploadFile(file: File, folder: string): Promise<{ url: string; na
   return res.json();
 }
 
+function FileMenuItem({
+  icon,
+  label,
+  accept,
+  folder,
+  active,
+  onInsert,
+  onClose,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  accept: string;
+  folder: string;
+  active: boolean;
+  onInsert: (result: { url: string; name: string; size: number }, file: File) => void;
+  onClose: () => void;
+}) {
+  const id = `slash-file-${label}`;
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    onClose();
+    uploadFile(file, folder).then((result) => onInsert(result, file));
+  }
+
+  return (
+    <label
+      htmlFor={id}
+      className={cn(
+        "flex items-center gap-2.5 w-full px-3 py-2 text-sm text-left transition-colors cursor-pointer",
+        active
+          ? "bg-aulas/10 text-aulas"
+          : "text-text-primary hover:bg-bg-light"
+      )}
+    >
+      {icon}
+      {label}
+      <input
+        id={id}
+        type="file"
+        accept={accept}
+        className="hidden"
+        onChange={handleChange}
+      />
+    </label>
+  );
+}
+
+function ActionMenuItem({
+  icon,
+  label,
+  active,
+  onClick,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  active: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "flex items-center gap-2.5 w-full px-3 py-2 text-sm text-left transition-colors",
+        active
+          ? "bg-aulas/10 text-aulas"
+          : "text-text-primary hover:bg-bg-light"
+      )}
+    >
+      {icon}
+      {label}
+    </button>
+  );
+}
+
 export function SlashMenu({ editor, open, onClose }: SlashMenuProps) {
   const [search, setSearch] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
   const menuRef = useRef<HTMLDivElement>(null);
-
-  // Hidden file inputs — triggered synchronously on click for browser trust
-  const imageInputRef = useRef<HTMLInputElement>(null);
-  const audioInputRef = useRef<HTMLInputElement>(null);
-  const documentInputRef = useRef<HTMLInputElement>(null);
-  const videoUploadInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (open) {
@@ -39,24 +111,32 @@ export function SlashMenu({ editor, open, onClose }: SlashMenuProps) {
     }
   }, [open]);
 
-  function handleFileSelected(input: HTMLInputElement, folder: string, insertFn: (result: { url: string; name: string; size: number }, file: File) => void) {
-    const file = input.files?.[0];
-    if (!file) return;
-    input.value = "";
-    uploadFile(file, folder).then((result) => insertFn(result, file));
-  }
+  type MenuItem = {
+    label: string;
+    type: "file" | "action";
+    icon: React.ReactNode;
+    // file props
+    accept?: string;
+    folder?: string;
+    onInsert?: (result: { url: string; name: string; size: number }, file: File) => void;
+    // action props
+    action?: () => void;
+  };
 
-  const items = [
+  const items: MenuItem[] = [
     {
       label: "Imagem",
+      type: "file",
       icon: <Image size={16} />,
-      action: () => {
-        imageInputRef.current?.click();
-        onClose();
+      accept: "image/jpeg,image/png,image/webp",
+      folder: "content/images",
+      onInsert: (result, file) => {
+        editor.chain().focus().setImage({ src: result.url, alt: file.name }).run();
       },
     },
     {
       label: "Vídeo (link)",
+      type: "action",
       icon: <Film size={16} />,
       action: () => {
         onClose();
@@ -68,30 +148,40 @@ export function SlashMenu({ editor, open, onClose }: SlashMenuProps) {
     },
     {
       label: "Vídeo (upload)",
+      type: "file",
       icon: <Upload size={16} />,
-      action: () => {
-        videoUploadInputRef.current?.click();
-        onClose();
+      accept: "video/mp4,video/webm,video/quicktime",
+      folder: "content/videos",
+      onInsert: (result) => {
+        editor.chain().focus().insertContent({ type: "video", attrs: { src: result.url, provider: "upload" } }).run();
       },
     },
     {
       label: "Áudio",
+      type: "file",
       icon: <Headphones size={16} />,
-      action: () => {
-        audioInputRef.current?.click();
-        onClose();
+      accept: "audio/mpeg,audio/wav,audio/ogg,audio/mp4",
+      folder: "content/audio",
+      onInsert: (result, file) => {
+        editor.chain().focus().insertContent({ type: "audio", attrs: { src: result.url, name: file.name } }).run();
       },
     },
     {
       label: "Documento",
+      type: "file",
       icon: <FileText size={16} />,
-      action: () => {
-        documentInputRef.current?.click();
-        onClose();
+      accept: "application/pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx",
+      folder: "content/documents",
+      onInsert: (result, file) => {
+        editor.chain().focus().insertContent({
+          type: "document",
+          attrs: { src: result.url, name: file.name, size: file.size },
+        }).run();
       },
     },
     {
       label: "Embed",
+      type: "action",
       icon: <Globe size={16} />,
       action: () => {
         onClose();
@@ -106,7 +196,7 @@ export function SlashMenu({ editor, open, onClose }: SlashMenuProps) {
     item.label.toLowerCase().includes(search.toLowerCase())
   );
 
-  // Keyboard navigation when menu is open
+  // Keyboard navigation
   useEffect(() => {
     if (!open) return;
 
@@ -126,7 +216,11 @@ export function SlashMenu({ editor, open, onClose }: SlashMenuProps) {
       } else if (e.key === "Enter") {
         e.preventDefault();
         e.stopPropagation();
-        filtered[selectedIndex]?.action();
+        const item = filtered[selectedIndex];
+        if (item?.type === "action") {
+          item.action?.();
+        }
+        // For file items, Enter won't trigger file picker — user must click
       } else if (e.key === "Backspace") {
         e.preventDefault();
         e.stopPropagation();
@@ -164,92 +258,47 @@ export function SlashMenu({ editor, open, onClose }: SlashMenuProps) {
     };
   }, [open, onClose]);
 
-  return (
-    <>
-      {/* Hidden file inputs — always mounted so they survive menu close */}
-      <input
-        ref={imageInputRef}
-        type="file"
-        accept="image/jpeg,image/png,image/webp"
-        className="hidden"
-        onChange={(e) =>
-          handleFileSelected(e.target, "content/images", (result, file) => {
-            editor.chain().focus().setImage({ src: result.url, alt: file.name }).run();
-          })
-        }
-      />
-      <input
-        ref={videoUploadInputRef}
-        type="file"
-        accept="video/mp4,video/webm,video/quicktime"
-        className="hidden"
-        onChange={(e) =>
-          handleFileSelected(e.target, "content/videos", (result) => {
-            editor.chain().focus().insertContent({ type: "video", attrs: { src: result.url, provider: "upload" } }).run();
-          })
-        }
-      />
-      <input
-        ref={audioInputRef}
-        type="file"
-        accept="audio/mpeg,audio/wav,audio/ogg,audio/mp4"
-        className="hidden"
-        onChange={(e) =>
-          handleFileSelected(e.target, "content/audio", (result, file) => {
-            editor.chain().focus().insertContent({ type: "audio", attrs: { src: result.url, name: file.name } }).run();
-          })
-        }
-      />
-      <input
-        ref={documentInputRef}
-        type="file"
-        accept="application/pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx"
-        className="hidden"
-        onChange={(e) =>
-          handleFileSelected(e.target, "content/documents", (result, file) => {
-            editor.chain().focus().insertContent({
-              type: "document",
-              attrs: { src: result.url, name: file.name, size: file.size },
-            }).run();
-          })
-        }
-      />
+  if (!open) return null;
 
-      {open && (
-        <div
-          ref={menuRef}
-          className="absolute z-50 w-56 bg-bg-card border border-border rounded-[var(--radius-md)] shadow-lg py-1 animate-fade-in"
-          style={{ left: 16, top: 8 }}
-        >
-          {search && (
-            <div className="px-3 py-1 text-xs text-text-muted border-b border-border mb-1">
-              /{search}
-            </div>
-          )}
-          {filtered.length === 0 ? (
-            <div className="px-3 py-2 text-sm text-text-muted">
-              Nenhum resultado
-            </div>
-          ) : (
-            filtered.map((item, i) => (
-              <button
-                key={item.label}
-                type="button"
-                onClick={item.action}
-                className={cn(
-                  "flex items-center gap-2.5 w-full px-3 py-2 text-sm text-left transition-colors",
-                  i === selectedIndex
-                    ? "bg-aulas/10 text-aulas"
-                    : "text-text-primary hover:bg-bg-light"
-                )}
-              >
-                {item.icon}
-                {item.label}
-              </button>
-            ))
-          )}
+  return (
+    <div
+      ref={menuRef}
+      className="absolute z-50 w-56 bg-bg-card border border-border rounded-[var(--radius-md)] shadow-lg py-1 animate-fade-in"
+      style={{ left: 16, top: 8 }}
+    >
+      {search && (
+        <div className="px-3 py-1 text-xs text-text-muted border-b border-border mb-1">
+          /{search}
         </div>
       )}
-    </>
+      {filtered.length === 0 ? (
+        <div className="px-3 py-2 text-sm text-text-muted">
+          Nenhum resultado
+        </div>
+      ) : (
+        filtered.map((item, i) =>
+          item.type === "file" ? (
+            <FileMenuItem
+              key={item.label}
+              icon={item.icon}
+              label={item.label}
+              accept={item.accept!}
+              folder={item.folder!}
+              active={i === selectedIndex}
+              onInsert={item.onInsert!}
+              onClose={onClose}
+            />
+          ) : (
+            <ActionMenuItem
+              key={item.label}
+              icon={item.icon}
+              label={item.label}
+              active={i === selectedIndex}
+              onClick={item.action!}
+            />
+          )
+        )
+      )}
+    </div>
   );
 }
