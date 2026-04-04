@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const createLessonSchema = z.object({
   title: z.string().min(1, "Título é obrigatório"),
-  description: z.string().optional(),
+  content: z.string().optional(),
   category: z.enum([
     "conversation",
     "grammar",
@@ -10,10 +10,7 @@ export const createLessonSchema = z.object({
     "listening",
     "culture",
   ]),
-  videoUrl: z.string().optional(),
   coverImageUrl: z.string().optional(),
-  audioUrls: z.string().optional(), // JSON array
-  documentUrls: z.string().optional(), // JSON array
   durationMinutes: z.coerce.number().min(0).optional(),
   position: z.coerce.number().min(0).optional(),
 });

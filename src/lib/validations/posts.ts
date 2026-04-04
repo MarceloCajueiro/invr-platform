@@ -7,6 +7,7 @@ export const createPostSchema = z.object({
     .min(1, "Slug é obrigatório")
     .regex(/^[a-z0-9-]+$/, "Slug inválido"),
   content: z.string().optional(),
+  coverImageUrl: z.string().optional(),
   category: z.enum(["tips", "grammar", "culture", "vocabulary"]),
   featured: z.boolean().optional(),
 });
