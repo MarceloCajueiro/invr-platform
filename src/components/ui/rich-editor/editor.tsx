@@ -20,6 +20,7 @@ import {
   renderItems,
   handleImageDrop,
   handleImagePaste,
+  handleCommandNavigation,
   createImageUpload,
   type JSONContent,
 } from "novel";
@@ -331,6 +332,9 @@ export function RichEditor({ content, onChange }: RichEditorProps) {
           onChange(JSON.stringify(editor.getJSON()));
         }}
         editorProps={{
+          handleDOMEvents: {
+            keydown: (_view, event) => handleCommandNavigation(event),
+          },
           handlePaste: (view, event) => handleImagePaste(view, event, uploadFn),
           handleDrop: (view, event, _slice, moved) => handleImageDrop(view, event, moved, uploadFn),
           attributes: {
