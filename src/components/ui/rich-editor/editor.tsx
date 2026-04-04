@@ -25,6 +25,7 @@ export function RichEditor({
   placeholder = "Comece a escrever o conteúdo ou digite / para inserir mídia...",
 }: RichEditorProps) {
   const editor = useEditor({
+    immediatelyRender: false,
     extensions: [
       StarterKit.configure({
         heading: { levels: [2, 3] },
