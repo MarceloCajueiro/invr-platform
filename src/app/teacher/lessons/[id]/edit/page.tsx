@@ -4,6 +4,7 @@ import { getLesson } from "@/lib/queries/lessons";
 import { updateLesson } from "@/lib/actions/lessons";
 import { PageHeader } from "@/components/ui/page-header";
 import { LessonForm } from "@/components/teacher/lesson-form";
+import { getTurmasForSelector, getLessonTurmaIds } from "@/lib/queries/turmas";
 
 interface EditLessonPageProps {
   params: Promise<{ id: string }>;
@@ -16,6 +17,11 @@ export default async function EditLessonPage({ params }: EditLessonPageProps) {
   const lesson = await getLesson(id, teacher.id);
   if (!lesson) redirect("/teacher/lessons");
 
+  const [turmas, selectedTurmaIds] = await Promise.all([
+    getTurmasForSelector(teacher.id),
+    getLessonTurmaIds(lesson.id),
+  ]);
+
   const updateLessonWithId = updateLesson.bind(null, lesson.id);
 
   return (
@@ -24,7 +30,12 @@ export default async function EditLessonPage({ params }: EditLessonPageProps) {
         title="Editar Aula"
         description={`Editando: ${lesson.title}`}
       />
-      <LessonForm lesson={lesson} action={updateLessonWithId} />
+      <LessonForm
+        lesson={lesson}
+        action={updateLessonWithId}
+        turmas={turmas}
+        selectedTurmaIds={selectedTurmaIds}
+      />
     </div>
   );
 }

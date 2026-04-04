@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getTeacher } from "@/lib/auth/get-teacher";
 import { getDb } from "@/lib/db";
-import { lessons } from "@/lib/db/schema";
+import { lessons, turmaLessons } from "@/lib/db/schema";
 import { createLessonSchema, updateLessonSchema } from "@/lib/validations/lessons";
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
@@ -20,6 +20,17 @@ function extractSingleUrl(value: string | null): string | null {
     return null;
   } catch {
     return value || null;
+  }
+}
+
+function parseTurmaIds(formData: FormData): string[] {
+  const raw = formData.get("turmaIds") as string | null;
+  if (!raw) return [];
+  try {
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.filter((id: unknown) => typeof id === "string" && id.length > 0) : [];
+  } catch {
+    return [];
   }
 }
 
@@ -43,7 +54,7 @@ export async function createLesson(formData: FormData) {
   const parsed = createLessonSchema.parse(raw);
 
   const db = getDb();
-  await db.insert(lessons).values({
+  const [inserted] = await db.insert(lessons).values({
     teacherId: teacher.id,
     title: parsed.title,
     content: parsed.content || null,
@@ -51,7 +62,15 @@ export async function createLesson(formData: FormData) {
     coverImageUrl: parsed.coverImageUrl || null,
     durationMinutes: parsed.durationMinutes || null,
     status: "draft",
-  });
+  }).returning({ id: lessons.id });
+
+  const turmaIds = parseTurmaIds(formData);
+  if (turmaIds.length > 0) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await db.batch(turmaIds.map((turmaId) =>
+      db.insert(turmaLessons).values({ turmaId, lessonId: inserted.id }),
+    ) as any);
+  }
 
   revalidatePath("/teacher/lessons");
   redirect("/teacher/lessons");
@@ -84,6 +103,16 @@ export async function updateLesson(id: string, formData: FormData) {
       updatedAt: new Date(),
     })
     .where(and(eq(lessons.id, id), eq(lessons.teacherId, teacher.id)));
+
+  // Sync turma links: delete existing, re-insert selected
+  const turmaIds = parseTurmaIds(formData);
+  await db.delete(turmaLessons).where(eq(turmaLessons.lessonId, id));
+  if (turmaIds.length > 0) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await db.batch(turmaIds.map((turmaId) =>
+      db.insert(turmaLessons).values({ turmaId, lessonId: id }),
+    ) as any);
+  }
 
   revalidatePath("/teacher/lessons");
   redirect("/teacher/lessons");

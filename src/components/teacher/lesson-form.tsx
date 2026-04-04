@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { FileUpload, type FileItem } from "@/components/ui/file-upload";
 import { RichEditor } from "@/components/ui/rich-editor/editor";
+import { TurmaSelector } from "@/components/teacher/turma-selector";
 
 interface LessonData {
   id: string;
@@ -20,6 +21,8 @@ interface LessonData {
 interface LessonFormProps {
   lesson?: LessonData;
   action: (formData: FormData) => Promise<void>;
+  turmas?: { id: string; name: string; color: string | null }[];
+  selectedTurmaIds?: string[];
 }
 
 const categoryOptions = [
@@ -37,7 +40,7 @@ function coverUrlToFileItems(url: string | null | undefined): FileItem[] {
   return [{ url, name: url.split("/").pop() ?? "cover", size: 0 }];
 }
 
-export function LessonForm({ lesson, action }: LessonFormProps) {
+export function LessonForm({ lesson, action, turmas = [], selectedTurmaIds = [] }: LessonFormProps) {
   const isEdit = !!lesson;
   const [content, setContent] = useState(lesson?.content ?? "");
 
@@ -111,6 +114,11 @@ export function LessonForm({ lesson, action }: LessonFormProps) {
           />
         </CardContent>
       </Card>
+
+      {/* ── Section 7: Turmas ────────────────────────────────────────── */}
+      {turmas.length > 0 && (
+        <TurmaSelector turmas={turmas} selectedIds={selectedTurmaIds} />
+      )}
 
       <div className="flex justify-end pt-4">
         <Button type="submit">
