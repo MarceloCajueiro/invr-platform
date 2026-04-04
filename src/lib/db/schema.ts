@@ -437,6 +437,27 @@ export const turmaTasks = sqliteTable(
   ],
 );
 
+export const turmaPosts = sqliteTable(
+  "turma_posts",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    turmaId: text("turma_id")
+      .notNull()
+      .references(() => turmas.id, { onDelete: "cascade" }),
+    postId: text("post_id")
+      .notNull()
+      .references(() => posts.id, { onDelete: "cascade" }),
+    createdAt: integer("created_at", { mode: "timestamp" })
+      .notNull()
+      .default(sql`(unixepoch())`),
+  },
+  (table) => [
+    uniqueIndex("turma_posts_turma_post_idx").on(table.turmaId, table.postId),
+  ],
+);
+
 export const challenges = sqliteTable("challenges", {
   id: text("id")
     .primaryKey()
