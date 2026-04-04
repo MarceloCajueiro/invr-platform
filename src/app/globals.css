@@ -436,16 +436,19 @@ body::after {
   figure,
   video,
   iframe {
-    max-width: 32rem; /* max-w-lg */
+    max-width: 32rem;
   }
 
   figure img {
-    width: 100%;
+    max-width: 100%;
+    max-height: 24rem;
     height: auto;
+    object-fit: contain;
     border-radius: var(--radius-md);
   }
 
   video {
+    max-height: 24rem;
     border-radius: var(--radius-md);
   }
 
