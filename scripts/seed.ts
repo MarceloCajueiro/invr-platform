@@ -361,6 +361,10 @@ lessonIds.slice(0, 3).forEach(lid => {
 taskIds.slice(0, 2).forEach(tid => {
   sql(`INSERT INTO turma_tasks (id, turma_id, task_id, created_at) VALUES ('${uuid()}', '${turmaId}', '${tid}', ${ts})`);
 });
+// Link posts to turma
+postIds.forEach(pid => {
+  sql(`INSERT INTO turma_posts (id, turma_id, post_id, created_at) VALUES ('${uuid()}', '${turmaId}', '${pid}', ${ts})`);
+});
 
 // ============================================================
 // Done!
