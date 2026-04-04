@@ -4,6 +4,7 @@ import { getPost } from "@/lib/queries/posts";
 import { updatePost } from "@/lib/actions/posts";
 import { PageHeader } from "@/components/ui/page-header";
 import { PostForm } from "@/components/teacher/post-form";
+import { getTurmasForSelector, getPostTurmaIds } from "@/lib/queries/turmas";
 
 interface EditPostPageProps {
   params: Promise<{ id: string }>;
@@ -16,6 +17,11 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
   const post = await getPost(id, teacher.id);
   if (!post) redirect("/teacher/posts");
 
+  const [turmas, selectedTurmaIds] = await Promise.all([
+    getTurmasForSelector(teacher.id),
+    getPostTurmaIds(post.id),
+  ]);
+
   const updatePostWithId = updatePost.bind(null, post.id);
 
   return (
@@ -24,7 +30,12 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
         title="Editar Post"
         description={`Editando: ${post.title}`}
       />
-      <PostForm post={post} action={updatePostWithId} />
+      <PostForm
+        post={post}
+        action={updatePostWithId}
+        turmas={turmas}
+        selectedTurmaIds={selectedTurmaIds}
+      />
     </div>
   );
 }

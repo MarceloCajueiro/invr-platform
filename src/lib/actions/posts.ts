@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getTeacher } from "@/lib/auth/get-teacher";
 import { getDb } from "@/lib/db";
-import { posts } from "@/lib/db/schema";
+import { posts, turmaPosts } from "@/lib/db/schema";
 import { createPostSchema, updatePostSchema } from "@/lib/validations/posts";
 
 function generateSlug(title: string): string {
@@ -30,6 +30,17 @@ function extractSingleUrl(value: string | null): string | null {
   }
 }
 
+function parseTurmaIds(formData: FormData): string[] {
+  const raw = formData.get("turmaIds") as string | null;
+  if (!raw) return [];
+  try {
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.filter((id: unknown) => typeof id === "string" && id.length > 0) : [];
+  } catch {
+    return [];
+  }
+}
+
 export async function createPost(formData: FormData) {
   const { teacher } = await getTeacher();
 
@@ -51,7 +62,7 @@ export async function createPost(formData: FormData) {
   const parsed = createPostSchema.parse(raw);
 
   const db = getDb();
-  await db.insert(posts).values({
+  const [inserted] = await db.insert(posts).values({
     teacherId: teacher.id,
     title: parsed.title,
     slug: parsed.slug,
@@ -60,7 +71,15 @@ export async function createPost(formData: FormData) {
     category: parsed.category,
     featured: parsed.featured ?? false,
     status: "draft",
-  });
+  }).returning({ id: posts.id });
+
+  const turmaIds = parseTurmaIds(formData);
+  if (turmaIds.length > 0) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await db.batch(turmaIds.map((turmaId) =>
+      db.insert(turmaPosts).values({ turmaId, postId: inserted.id }),
+    ) as any);
+  }
 
   revalidatePath("/teacher/posts");
   redirect("/teacher/posts");
@@ -97,6 +116,16 @@ export async function updatePost(id: string, formData: FormData) {
       updatedAt: new Date(),
     })
     .where(and(eq(posts.id, id), eq(posts.teacherId, teacher.id)));
+
+  // Sync turma links
+  const turmaIds = parseTurmaIds(formData);
+  await db.delete(turmaPosts).where(eq(turmaPosts.postId, id));
+  if (turmaIds.length > 0) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await db.batch(turmaIds.map((turmaId) =>
+      db.insert(turmaPosts).values({ turmaId, postId: id }),
+    ) as any);
+  }
 
   revalidatePath("/teacher/posts");
   redirect("/teacher/posts");

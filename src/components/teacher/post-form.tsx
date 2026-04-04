@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { FileUpload, type FileItem } from "@/components/ui/file-upload";
 import { RichEditor } from "@/components/ui/rich-editor/editor";
+import { TurmaSelector } from "@/components/teacher/turma-selector";
 
 interface PostData {
   id: string;
@@ -21,6 +22,8 @@ interface PostData {
 interface PostFormProps {
   post?: PostData;
   action: (formData: FormData) => Promise<void>;
+  turmas?: { id: string; name: string; color: string | null }[];
+  selectedTurmaIds?: string[];
 }
 
 const categoryOptions = [
@@ -46,7 +49,7 @@ function coverUrlToFileItems(url: string | null | undefined): FileItem[] {
   return [{ url, name: url.split("/").pop() ?? "cover", size: 0 }];
 }
 
-export function PostForm({ post, action }: PostFormProps) {
+export function PostForm({ post, action, turmas = [], selectedTurmaIds = [] }: PostFormProps) {
   const isEdit = !!post;
   const [slug, setSlug] = useState(post?.slug ?? "");
   const [content, setContent] = useState(post?.content ?? "");
@@ -154,6 +157,10 @@ export function PostForm({ post, action }: PostFormProps) {
               onChange={setContent}
             />
           </div>
+
+          {turmas.length > 0 && (
+            <TurmaSelector turmas={turmas} selectedIds={selectedTurmaIds} />
+          )}
 
           <div className="flex justify-end pt-4">
             <Button type="submit">
