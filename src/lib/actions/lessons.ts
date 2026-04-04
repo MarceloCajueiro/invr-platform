@@ -10,10 +10,6 @@ import { createLessonSchema, updateLessonSchema } from "@/lib/validations/lesson
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
-/**
- * Extract the first URL from a FileUpload JSON array, or return the raw
- * string if it's already a plain URL.
- */
 function extractSingleUrl(value: string | null): string | null {
   if (!value) return null;
   try {
@@ -23,23 +19,8 @@ function extractSingleUrl(value: string | null): string | null {
     }
     return null;
   } catch {
-    // Not JSON — treat as a plain URL string
     return value || null;
   }
-}
-
-/**
- * Resolve the video URL from form data.
- * Supports both "link" mode (plain URL) and "upload" mode (FileUpload JSON).
- */
-function resolveVideoUrl(formData: FormData): string | null {
-  const source = formData.get("videoSource") as string | null;
-  if (source === "upload") {
-    return extractSingleUrl(formData.get("videoFile") as string | null);
-  }
-  // "link" mode or fallback
-  const url = formData.get("videoUrl") as string | null;
-  return url || null;
 }
 
 // ── Actions ──────────────────────────────────────────────────────────────────
@@ -47,19 +28,15 @@ function resolveVideoUrl(formData: FormData): string | null {
 export async function createLesson(formData: FormData) {
   const { teacher } = await getTeacher();
 
-  const videoUrl = resolveVideoUrl(formData);
   const coverImageUrl = extractSingleUrl(
     formData.get("coverImageFile") as string | null
   );
 
   const raw = {
     title: formData.get("title"),
-    description: formData.get("description"),
+    content: formData.get("content") || undefined,
     category: formData.get("category"),
-    videoUrl: videoUrl || undefined,
     coverImageUrl: coverImageUrl ?? undefined,
-    audioUrls: (formData.get("audioUrls") as string) || undefined,
-    documentUrls: (formData.get("documentUrls") as string) || undefined,
     durationMinutes: formData.get("durationMinutes") || undefined,
   };
 
@@ -69,12 +46,9 @@ export async function createLesson(formData: FormData) {
   await db.insert(lessons).values({
     teacherId: teacher.id,
     title: parsed.title,
-    description: parsed.description || null,
+    content: parsed.content || null,
     category: parsed.category,
-    videoUrl: parsed.videoUrl || null,
     coverImageUrl: parsed.coverImageUrl || null,
-    audioUrls: parsed.audioUrls || null,
-    documentUrls: parsed.documentUrls || null,
     durationMinutes: parsed.durationMinutes || null,
     status: "draft",
   });
@@ -86,19 +60,15 @@ export async function createLesson(formData: FormData) {
 export async function updateLesson(id: string, formData: FormData) {
   const { teacher } = await getTeacher();
 
-  const videoUrl = resolveVideoUrl(formData);
   const coverImageUrl = extractSingleUrl(
     formData.get("coverImageFile") as string | null
   );
 
   const raw = {
     title: formData.get("title"),
-    description: formData.get("description"),
+    content: formData.get("content") || undefined,
     category: formData.get("category"),
-    videoUrl: videoUrl || undefined,
     coverImageUrl: coverImageUrl ?? undefined,
-    audioUrls: (formData.get("audioUrls") as string) || undefined,
-    documentUrls: (formData.get("documentUrls") as string) || undefined,
     durationMinutes: formData.get("durationMinutes") || undefined,
   };
 
@@ -109,10 +79,7 @@ export async function updateLesson(id: string, formData: FormData) {
     .update(lessons)
     .set({
       ...parsed,
-      videoUrl: parsed.videoUrl || null,
       coverImageUrl: parsed.coverImageUrl || null,
-      audioUrls: parsed.audioUrls || null,
-      documentUrls: parsed.documentUrls || null,
       durationMinutes: parsed.durationMinutes || null,
       updatedAt: new Date(),
     })

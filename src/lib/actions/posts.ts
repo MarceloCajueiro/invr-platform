@@ -17,16 +17,33 @@ function generateSlug(title: string): string {
     .replace(/^-|-$/g, "");
 }
 
+function extractSingleUrl(value: string | null): string | null {
+  if (!value) return null;
+  try {
+    const parsed = JSON.parse(value);
+    if (Array.isArray(parsed) && parsed.length > 0) {
+      return parsed[0].url ?? null;
+    }
+    return null;
+  } catch {
+    return value || null;
+  }
+}
+
 export async function createPost(formData: FormData) {
   const { teacher } = await getTeacher();
 
   const title = formData.get("title") as string;
   const slugRaw = formData.get("slug") as string;
+  const coverImageUrl = extractSingleUrl(
+    formData.get("coverImageFile") as string | null
+  );
 
   const raw = {
     title,
     slug: slugRaw || generateSlug(title || ""),
-    content: formData.get("content"),
+    content: formData.get("content") || undefined,
+    coverImageUrl: coverImageUrl ?? undefined,
     category: formData.get("category"),
     featured: formData.get("featured") === "on",
   };
@@ -39,6 +56,7 @@ export async function createPost(formData: FormData) {
     title: parsed.title,
     slug: parsed.slug,
     content: parsed.content || null,
+    coverImageUrl: parsed.coverImageUrl || null,
     category: parsed.category,
     featured: parsed.featured ?? false,
     status: "draft",
@@ -53,11 +71,15 @@ export async function updatePost(id: string, formData: FormData) {
 
   const title = formData.get("title") as string;
   const slugRaw = formData.get("slug") as string;
+  const coverImageUrl = extractSingleUrl(
+    formData.get("coverImageFile") as string | null
+  );
 
   const raw = {
     title,
     slug: slugRaw || generateSlug(title || ""),
-    content: formData.get("content"),
+    content: formData.get("content") || undefined,
+    coverImageUrl: coverImageUrl ?? undefined,
     category: formData.get("category"),
     featured: formData.get("featured") === "on",
   };
@@ -70,6 +92,7 @@ export async function updatePost(id: string, formData: FormData) {
     .set({
       ...parsed,
       content: parsed.content || null,
+      coverImageUrl: parsed.coverImageUrl || null,
       featured: parsed.featured ?? false,
       updatedAt: new Date(),
     })
