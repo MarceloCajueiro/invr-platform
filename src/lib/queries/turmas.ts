@@ -4,6 +4,7 @@ import {
   turmaStudents,
   turmaLessons,
   turmaTasks,
+  turmaPosts,
   students,
   user,
   lessons,
@@ -164,4 +165,40 @@ export async function getAvailableTasks(teacherId: string, turmaId: string) {
     .from(tasks)
     .where(and(...conditions))
     .orderBy(desc(tasks.createdAt));
+}
+
+export async function getTurmasForSelector(teacherId: string) {
+  const db = getDb();
+  return db
+    .select({ id: turmas.id, name: turmas.name, color: turmas.color })
+    .from(turmas)
+    .where(eq(turmas.teacherId, teacherId))
+    .orderBy(desc(turmas.createdAt));
+}
+
+export async function getLessonTurmaIds(lessonId: string) {
+  const db = getDb();
+  const rows = await db
+    .select({ turmaId: turmaLessons.turmaId })
+    .from(turmaLessons)
+    .where(eq(turmaLessons.lessonId, lessonId));
+  return rows.map((r) => r.turmaId);
+}
+
+export async function getTaskTurmaIds(taskId: string) {
+  const db = getDb();
+  const rows = await db
+    .select({ turmaId: turmaTasks.turmaId })
+    .from(turmaTasks)
+    .where(eq(turmaTasks.taskId, taskId));
+  return rows.map((r) => r.turmaId);
+}
+
+export async function getPostTurmaIds(postId: string) {
+  const db = getDb();
+  const rows = await db
+    .select({ turmaId: turmaPosts.turmaId })
+    .from(turmaPosts)
+    .where(eq(turmaPosts.postId, postId));
+  return rows.map((r) => r.turmaId);
 }
