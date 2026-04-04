@@ -76,12 +76,15 @@ function renderNode(node: TiptapNode, key: number): React.ReactNode {
     case "text":
       return renderText(node, key);
 
-    case "paragraph":
+    case "paragraph": {
+      const children = renderChildren(node.content);
+      const isEmpty = !node.content || node.content.length === 0;
       return (
-        <p key={key} className="mb-3 text-text-secondary leading-relaxed">
-          {renderChildren(node.content)}
+        <p key={key} className="text-text-secondary leading-relaxed min-h-[1.5em]">
+          {isEmpty ? <br /> : children}
         </p>
       );
+    }
 
     case "heading": {
       const level = (node.attrs?.level as number) ?? 2;
