@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useCallback } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
@@ -24,6 +25,11 @@ export function RichEditor({
   onChange,
   placeholder = "Comece a escrever o conteúdo ou digite / para inserir mídia...",
 }: RichEditorProps) {
+  const [slashMenuOpen, setSlashMenuOpen] = useState(false);
+
+  const openSlashMenu = useCallback(() => setSlashMenuOpen(true), []);
+  const closeSlashMenu = useCallback(() => setSlashMenuOpen(false), []);
+
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
@@ -47,8 +53,21 @@ export function RichEditor({
     },
     editorProps: {
       attributes: {
-        class:
-          "prose prose-sm max-w-none p-4 min-h-[300px] focus:outline-none text-text-primary prose-headings:text-text-primary prose-p:text-text-secondary prose-strong:text-text-primary prose-a:text-aulas [&_.is-editor-empty:first-child::before]:text-text-muted [&_.is-editor-empty:first-child::before]:content-[attr(data-placeholder)] [&_.is-editor-empty:first-child::before]:float-left [&_.is-editor-empty:first-child::before]:h-0 [&_.is-editor-empty:first-child::before]:pointer-events-none",
+        class: "tiptap-editor",
+      },
+      handleKeyDown(_view, event) {
+        if (event.key === "/" && !event.ctrlKey && !event.metaKey && !slashMenuOpen) {
+          // Only trigger on empty paragraph
+          const { state } = _view;
+          const { $from } = state.selection;
+          const textBefore = $from.parent.textContent.slice(0, $from.parentOffset);
+          if (textBefore === "") {
+            event.preventDefault();
+            openSlashMenu();
+            return true;
+          }
+        }
+        return false;
       },
       handleDrop(view, event) {
         const files = event.dataTransfer?.files;
@@ -119,7 +138,7 @@ export function RichEditor({
       <Toolbar editor={editor} />
       <div className="relative">
         <EditorContent editor={editor} />
-        <SlashMenu editor={editor} />
+        <SlashMenu editor={editor} open={slashMenuOpen} onClose={closeSlashMenu} />
       </div>
     </div>
   );

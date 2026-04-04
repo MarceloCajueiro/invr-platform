@@ -8,12 +8,8 @@ import { detectProvider } from "./extensions/video";
 
 interface SlashMenuProps {
   editor: Editor;
-}
-
-interface MenuItem {
-  label: string;
-  icon: React.ReactNode;
-  action: () => void;
+  open: boolean;
+  onClose: () => void;
 }
 
 async function uploadFile(file: File, folder: string): Promise<{ url: string; name: string; size: number }> {
@@ -35,22 +31,29 @@ function openFilePicker(accept: string): Promise<File | null> {
   });
 }
 
-export function SlashMenu({ editor }: SlashMenuProps) {
-  const [open, setOpen] = useState(false);
+export function SlashMenu({ editor, open, onClose }: SlashMenuProps) {
   const [search, setSearch] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
   const menuRef = useRef<HTMLDivElement>(null);
 
+  // Reset search when menu opens
+  useEffect(() => {
+    if (open) {
+      setSearch("");
+      setSelectedIndex(0);
+    }
+  }, [open]);
+
   const insertImage = useCallback(async () => {
-    setOpen(false);
+    onClose();
     const file = await openFilePicker("image/jpeg,image/png,image/webp");
     if (!file) return;
     const result = await uploadFile(file, "content/images");
     editor.chain().focus().setImage({ src: result.url, alt: file.name }).run();
-  }, [editor]);
+  }, [editor, onClose]);
 
   const insertVideo = useCallback(async () => {
-    setOpen(false);
+    onClose();
     const url = window.prompt("URL do vídeo (YouTube, Vimeo ou link direto):");
     if (!url) return;
     const provider = detectProvider(url);
@@ -59,10 +62,10 @@ export function SlashMenu({ editor }: SlashMenuProps) {
       .focus()
       .insertContent({ type: "video", attrs: { src: url, provider } })
       .run();
-  }, [editor]);
+  }, [editor, onClose]);
 
   const insertAudio = useCallback(async () => {
-    setOpen(false);
+    onClose();
     const file = await openFilePicker("audio/mpeg,audio/wav,audio/ogg,audio/mp4");
     if (!file) return;
     const result = await uploadFile(file, "content/audio");
@@ -71,10 +74,10 @@ export function SlashMenu({ editor }: SlashMenuProps) {
       .focus()
       .insertContent({ type: "audio", attrs: { src: result.url, name: file.name } })
       .run();
-  }, [editor]);
+  }, [editor, onClose]);
 
   const insertDocument = useCallback(async () => {
-    setOpen(false);
+    onClose();
     const file = await openFilePicker("application/pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx");
     if (!file) return;
     const result = await uploadFile(file, "content/documents");
@@ -86,10 +89,10 @@ export function SlashMenu({ editor }: SlashMenuProps) {
         attrs: { src: result.url, name: file.name, size: file.size },
       })
       .run();
-  }, [editor]);
+  }, [editor, onClose]);
 
   const insertEmbed = useCallback(async () => {
-    setOpen(false);
+    onClose();
     const url = window.prompt("URL do embed:");
     if (!url) return;
     editor
@@ -97,9 +100,9 @@ export function SlashMenu({ editor }: SlashMenuProps) {
       .focus()
       .insertContent({ type: "embed", attrs: { src: url } })
       .run();
-  }, [editor]);
+  }, [editor, onClose]);
 
-  const items: MenuItem[] = [
+  const items = [
     { label: "Imagem", icon: <Image size={16} />, action: insertImage },
     { label: "Vídeo", icon: <Film size={16} />, action: insertVideo },
     { label: "Áudio", icon: <Headphones size={16} />, action: insertAudio },
@@ -111,28 +114,6 @@ export function SlashMenu({ editor }: SlashMenuProps) {
     item.label.toLowerCase().includes(search.toLowerCase())
   );
 
-  // Listen for editor transactions to detect "/" typed on empty line
-  useEffect(() => {
-    function onTransaction() {
-      if (open) return;
-      const { state } = editor;
-      const { $from } = state.selection;
-      const text = $from.parent.textContent;
-      if (text === "/") {
-        // Delete the "/" character and open menu
-        editor.chain().deleteRange({ from: $from.pos - 1, to: $from.pos }).run();
-        setOpen(true);
-        setSearch("");
-        setSelectedIndex(0);
-      }
-    }
-
-    editor.on("transaction", onTransaction);
-    return () => {
-      editor.off("transaction", onTransaction);
-    };
-  }, [editor, open]);
-
   // Keyboard navigation when menu is open
   useEffect(() => {
     if (!open) return;
@@ -140,45 +121,52 @@ export function SlashMenu({ editor }: SlashMenuProps) {
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") {
         e.preventDefault();
-        setOpen(false);
+        e.stopPropagation();
+        onClose();
       } else if (e.key === "ArrowDown") {
         e.preventDefault();
+        e.stopPropagation();
         setSelectedIndex((i) => (i + 1) % filtered.length);
       } else if (e.key === "ArrowUp") {
         e.preventDefault();
+        e.stopPropagation();
         setSelectedIndex((i) => (i - 1 + filtered.length) % filtered.length);
       } else if (e.key === "Enter") {
         e.preventDefault();
+        e.stopPropagation();
         filtered[selectedIndex]?.action();
       } else if (e.key === "Backspace") {
+        e.preventDefault();
+        e.stopPropagation();
         if (search === "") {
-          setOpen(false);
+          onClose();
         } else {
           setSearch((s) => s.slice(0, -1));
         }
-        e.preventDefault();
       } else if (e.key.length === 1 && !e.ctrlKey && !e.metaKey) {
         e.preventDefault();
+        e.stopPropagation();
         setSearch((s) => s + e.key);
         setSelectedIndex(0);
       }
     }
 
+    // Use capture phase to intercept before ProseMirror
     document.addEventListener("keydown", handleKeyDown, true);
     return () => document.removeEventListener("keydown", handleKeyDown, true);
-  }, [open, search, selectedIndex, filtered]);
+  }, [open, search, selectedIndex, filtered, onClose]);
 
   // Close when clicking outside
   useEffect(() => {
     if (!open) return;
     function handleClick(e: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(e.target as HTMLElement)) {
-        setOpen(false);
+        onClose();
       }
     }
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
-  }, [open]);
+  }, [open, onClose]);
 
   if (!open) return null;
 
@@ -186,7 +174,7 @@ export function SlashMenu({ editor }: SlashMenuProps) {
     <div
       ref={menuRef}
       className="absolute z-50 w-56 bg-bg-card border border-border rounded-[var(--radius-md)] shadow-lg py-1 animate-fade-in"
-      style={{ top: "auto", left: 16, bottom: "auto" }}
+      style={{ left: 16, top: 8 }}
     >
       {search && (
         <div className="px-3 py-1 text-xs text-text-muted border-b border-border mb-1">
@@ -202,6 +190,7 @@ export function SlashMenu({ editor }: SlashMenuProps) {
           <button
             key={item.label}
             type="button"
+            onMouseDown={(e) => e.preventDefault()}
             onClick={item.action}
             className={cn(
               "flex items-center gap-2.5 w-full px-3 py-2 text-sm text-left transition-colors",
