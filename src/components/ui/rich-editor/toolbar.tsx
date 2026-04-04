@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect, useCallback } from "react";
 import type { Editor } from "@tiptap/react";
 import {
   Bold,
@@ -30,6 +31,7 @@ function ToolbarButton({ onClick, active, children, title }: ToolbarButtonProps)
   return (
     <button
       type="button"
+      onMouseDown={(e) => e.preventDefault()}
       onClick={onClick}
       title={title}
       className={cn(
@@ -45,12 +47,22 @@ function ToolbarButton({ onClick, active, children, title }: ToolbarButtonProps)
 }
 
 export function Toolbar({ editor }: ToolbarProps) {
-  function addLink() {
+  // Force re-render on editor state changes so isActive() updates
+  const [, setTick] = useState(0);
+  useEffect(() => {
+    const handler = () => setTick((t) => t + 1);
+    editor.on("transaction", handler);
+    return () => {
+      editor.off("transaction", handler);
+    };
+  }, [editor]);
+
+  const addLink = useCallback(() => {
     const url = window.prompt("URL do link:");
     if (url) {
       editor.chain().focus().setLink({ href: url }).run();
     }
-  }
+  }, [editor]);
 
   return (
     <div className="flex items-center gap-0.5 p-1.5 border-b border-border flex-wrap">

@@ -5,7 +5,7 @@ import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import LinkExtension from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
-import UnderlineExtension from "@tiptap/extension-underline";
+import Underline from "@tiptap/extension-underline";
 import { Toolbar } from "./toolbar";
 import { SlashMenu } from "./slash-menu";
 import { AudioBlock } from "./extensions/audio";
@@ -35,7 +35,7 @@ export function RichEditor({
         openOnClick: false,
       }),
       Placeholder.configure({ placeholder }),
-      UnderlineExtension,
+      Underline,
       AudioBlock,
       VideoBlock,
       DocumentBlock,

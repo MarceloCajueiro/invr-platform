@@ -111,23 +111,33 @@ export function SlashMenu({ editor }: SlashMenuProps) {
     item.label.toLowerCase().includes(search.toLowerCase())
   );
 
+  // Listen for editor transactions to detect "/" typed on empty line
   useEffect(() => {
-    function handleKeyDown(e: KeyboardEvent) {
-      if (!open) {
-        if (e.key === "/" && !e.ctrlKey && !e.metaKey) {
-          const { state } = editor;
-          const { $from } = state.selection;
-          const textBefore = $from.parent.textContent.slice(0, $from.parentOffset);
-          if (textBefore === "") {
-            e.preventDefault();
-            setOpen(true);
-            setSearch("");
-            setSelectedIndex(0);
-          }
-        }
-        return;
+    function onTransaction() {
+      if (open) return;
+      const { state } = editor;
+      const { $from } = state.selection;
+      const text = $from.parent.textContent;
+      if (text === "/") {
+        // Delete the "/" character and open menu
+        editor.chain().deleteRange({ from: $from.pos - 1, to: $from.pos }).run();
+        setOpen(true);
+        setSearch("");
+        setSelectedIndex(0);
       }
+    }
 
+    editor.on("transaction", onTransaction);
+    return () => {
+      editor.off("transaction", onTransaction);
+    };
+  }, [editor, open]);
+
+  // Keyboard navigation when menu is open
+  useEffect(() => {
+    if (!open) return;
+
+    function handleKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") {
         e.preventDefault();
         setOpen(false);
@@ -140,8 +150,13 @@ export function SlashMenu({ editor }: SlashMenuProps) {
       } else if (e.key === "Enter") {
         e.preventDefault();
         filtered[selectedIndex]?.action();
-      } else if (e.key === "Backspace" && search === "") {
-        setOpen(false);
+      } else if (e.key === "Backspace") {
+        if (search === "") {
+          setOpen(false);
+        } else {
+          setSearch((s) => s.slice(0, -1));
+        }
+        e.preventDefault();
       } else if (e.key.length === 1 && !e.ctrlKey && !e.metaKey) {
         e.preventDefault();
         setSearch((s) => s + e.key);
@@ -149,10 +164,11 @@ export function SlashMenu({ editor }: SlashMenuProps) {
       }
     }
 
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [open, search, selectedIndex, filtered, editor]);
+    document.addEventListener("keydown", handleKeyDown, true);
+    return () => document.removeEventListener("keydown", handleKeyDown, true);
+  }, [open, search, selectedIndex, filtered]);
 
+  // Close when clicking outside
   useEffect(() => {
     if (!open) return;
     function handleClick(e: MouseEvent) {
@@ -170,6 +186,7 @@ export function SlashMenu({ editor }: SlashMenuProps) {
     <div
       ref={menuRef}
       className="absolute z-50 w-56 bg-bg-card border border-border rounded-[var(--radius-md)] shadow-lg py-1 animate-fade-in"
+      style={{ top: "auto", left: 16, bottom: "auto" }}
     >
       {search && (
         <div className="px-3 py-1 text-xs text-text-muted border-b border-border mb-1">
