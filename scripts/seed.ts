@@ -85,16 +85,101 @@ sql(`INSERT INTO invitations (id, email, token, teacher_id, expires_at, accepted
 // ============================================================
 console.log("Creating lessons...");
 const lessonsData = [
-  { title: "Introduction to Present Simple", category: "grammar", desc: "Learn when and how to use the Present Simple tense in English. We cover affirmative, negative, and question forms.", duration: 15, status: "published", pos: 1 },
-  { title: "Ordering Food at a Restaurant", category: "conversation", desc: "Practice common phrases and vocabulary for ordering food, asking for the bill, and making special requests.", duration: 20, status: "published", pos: 2 },
-  { title: "Daily Routine Vocabulary", category: "vocabulary", desc: "Essential words and phrases to describe your daily routine: wake up, get dressed, commute, have lunch, etc.", duration: 12, status: "published", pos: 3 },
-  { title: "Listening Practice: The Weather", category: "listening", desc: "Listen to weather forecasts and practice understanding temperatures, conditions, and predictions.", duration: 10, status: "published", pos: 4 },
-  { title: "British vs American English", category: "culture", desc: "Explore the differences between British and American English in vocabulary, spelling, and pronunciation.", duration: 18, status: "draft", pos: 5 },
+  {
+    title: "Introduction to Present Simple",
+    category: "grammar",
+    content: JSON.stringify({
+      type: "doc",
+      content: [
+        { type: "heading", attrs: { level: 2 }, content: [{ type: "text", text: "When to use Present Simple" }] },
+        { type: "paragraph", content: [{ type: "text", text: "We use the Present Simple tense to talk about habits, routines, and general truths." }] },
+        { type: "paragraph", content: [{ type: "text", text: "Watch this video to understand the basics:" }] },
+        { type: "video", attrs: { src: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", provider: "youtube" } },
+        { type: "heading", attrs: { level: 3 }, content: [{ type: "text", text: "Key rules" }] },
+        { type: "bulletList", content: [
+          { type: "listItem", content: [{ type: "paragraph", content: [{ type: "text", text: "Add -s or -es for third person singular (he/she/it)" }] }] },
+          { type: "listItem", content: [{ type: "paragraph", content: [{ type: "text", text: "Use do/does for questions and negatives" }] }] },
+          { type: "listItem", content: [{ type: "paragraph", content: [{ type: "text", text: "Time expressions: always, usually, often, sometimes, never" }] }] },
+        ] },
+      ],
+    }),
+    duration: 15,
+    status: "published",
+    pos: 1,
+  },
+  {
+    title: "Ordering Food at a Restaurant",
+    category: "conversation",
+    content: JSON.stringify({
+      type: "doc",
+      content: [
+        { type: "paragraph", content: [{ type: "text", text: "Practice common phrases and vocabulary for ordering food, asking for the bill, and making special requests." }] },
+        { type: "heading", attrs: { level: 2 }, content: [{ type: "text", text: "Useful phrases" }] },
+        { type: "orderedList", content: [
+          { type: "listItem", content: [{ type: "paragraph", content: [{ type: "text", text: "Can I see the menu, please?" }] }] },
+          { type: "listItem", content: [{ type: "paragraph", content: [{ type: "text", text: "I'd like to order..." }] }] },
+          { type: "listItem", content: [{ type: "paragraph", content: [{ type: "text", text: "Could I have the check, please?" }] }] },
+        ] },
+      ],
+    }),
+    duration: 20,
+    status: "published",
+    pos: 2,
+  },
+  {
+    title: "Daily Routine Vocabulary",
+    category: "vocabulary",
+    content: JSON.stringify({
+      type: "doc",
+      content: [
+        { type: "paragraph", content: [{ type: "text", text: "Essential words and phrases to describe your daily routine." }] },
+        { type: "heading", attrs: { level: 2 }, content: [{ type: "text", text: "Morning routine" }] },
+        { type: "paragraph", content: [
+          { type: "text", marks: [{ type: "bold" }], text: "wake up" },
+          { type: "text", text: " — acordar, " },
+          { type: "text", marks: [{ type: "bold" }], text: "get dressed" },
+          { type: "text", text: " — se vestir, " },
+          { type: "text", marks: [{ type: "bold" }], text: "have breakfast" },
+          { type: "text", text: " — tomar café da manhã" },
+        ] },
+      ],
+    }),
+    duration: 12,
+    status: "published",
+    pos: 3,
+  },
+  {
+    title: "Listening Practice: The Weather",
+    category: "listening",
+    content: JSON.stringify({
+      type: "doc",
+      content: [
+        { type: "paragraph", content: [{ type: "text", text: "Listen to weather forecasts and practice understanding temperatures, conditions, and predictions." }] },
+      ],
+    }),
+    duration: 10,
+    status: "published",
+    pos: 4,
+  },
+  {
+    title: "British vs American English",
+    category: "culture",
+    content: JSON.stringify({
+      type: "doc",
+      content: [
+        { type: "paragraph", content: [{ type: "text", text: "Explore the differences between British and American English in vocabulary, spelling, and pronunciation." }] },
+        { type: "heading", attrs: { level: 2 }, content: [{ type: "text", text: "Vocabulary differences" }] },
+        { type: "blockquote", content: [{ type: "paragraph", content: [{ type: "text", text: "British: flat, lift, biscuit. American: apartment, elevator, cookie." }] }] },
+      ],
+    }),
+    duration: 18,
+    status: "draft",
+    pos: 5,
+  },
 ];
 
 lessonsData.forEach((l, i) => {
-  const videoUrl = i === 0 ? "'https://www.youtube.com/watch?v=dQw4w9WgXcQ'" : "NULL";
-  sql(`INSERT INTO lessons (id, teacher_id, title, description, category, video_url, duration_minutes, status, position, created_at, updated_at) VALUES ('${lessonIds[i]}', '${teacherId}', '${l.title}', '${l.desc}', '${l.category}', ${videoUrl}, ${l.duration}, '${l.status}', ${l.pos}, ${ts - (5 - i) * 86400}, ${ts})`);
+  sql(`INSERT INTO lessons (id, teacher_id, title, content, category, duration_minutes, status, position, created_at, updated_at) VALUES ('${lessonIds[i]}', '${teacherId}', '${l.title}', '${l.content.replace(/'/g, "''")}', '${l.category}', ${l.duration}, '${l.status}', ${l.pos}, ${ts - (5 - i) * 86400}, ${ts})`);
 });
 
 // ============================================================
@@ -161,9 +246,99 @@ sql(`INSERT INTO submissions (id, student_id, task_id, answers, score, feedback,
 // ============================================================
 console.log("Creating posts...");
 const postsData = [
-  { title: "5 Dicas para Melhorar seu Listening", slug: "5-dicas-listening", category: "tips", content: "# 5 Dicas para Melhorar seu Listening\n\n## 1. Ouça podcasts em inglês\nComece com podcasts para aprendizes como **6 Minute English** da BBC.\n\n## 2. Assista séries com legendas em inglês\nNão use legendas em português! Comece com legendas em inglês.\n\n## 3. Repita frases em voz alta\nShadowing é uma técnica poderosa para melhorar pronúncia e compreensão.\n\n## 4. Ouça a mesma coisa várias vezes\nRepetição é chave. Ouça o mesmo episódio 2-3 vezes.\n\n## 5. Anote palavras novas\nMantenha um caderno de vocabulário novo.", featured: true, views: 42 },
-  { title: "Verbos Irregulares Mais Comuns", slug: "verbos-irregulares-comuns", category: "grammar", content: "# Verbos Irregulares Mais Comuns\n\n| Base | Past | Past Participle |\n|------|------|---|\n| be | was/were | been |\n| go | went | gone |\n| have | had | had |\n| do | did | done |\n| say | said | said |", featured: false, views: 28 },
-  { title: "Filmes para Praticar Inglês", slug: "filmes-praticar-ingles", category: "culture", content: "# Filmes para Praticar Inglês\n\n## Para Iniciantes\n- **Toy Story** - vocabulário simples, diálogos claros\n- **Finding Nemo** - ótimo para pronúncia\n\n## Para Intermediários\n- **The Social Network** - inglês moderno\n- **The Intern** - vocabulário profissional", featured: false, views: 15 },
+  {
+    title: "5 Dicas para Melhorar seu Listening",
+    slug: "5-dicas-listening",
+    category: "tips",
+    content: JSON.stringify({
+      type: "doc",
+      content: [
+        { type: "heading", attrs: { level: 2 }, content: [{ type: "text", text: "1. Ouça podcasts em inglês" }] },
+        { type: "paragraph", content: [
+          { type: "text", text: "Comece com podcasts para aprendizes como " },
+          { type: "text", marks: [{ type: "bold" }], text: "6 Minute English" },
+          { type: "text", text: " da BBC." },
+        ] },
+        { type: "heading", attrs: { level: 2 }, content: [{ type: "text", text: "2. Assista séries com legendas em inglês" }] },
+        { type: "paragraph", content: [{ type: "text", text: "Não use legendas em português! Comece com legendas em inglês." }] },
+        { type: "heading", attrs: { level: 2 }, content: [{ type: "text", text: "3. Repita frases em voz alta" }] },
+        { type: "paragraph", content: [{ type: "text", text: "Shadowing é uma técnica poderosa para melhorar pronúncia e compreensão." }] },
+        { type: "heading", attrs: { level: 2 }, content: [{ type: "text", text: "4. Ouça a mesma coisa várias vezes" }] },
+        { type: "paragraph", content: [{ type: "text", text: "Repetição é chave. Ouça o mesmo episódio 2-3 vezes." }] },
+        { type: "heading", attrs: { level: 2 }, content: [{ type: "text", text: "5. Anote palavras novas" }] },
+        { type: "paragraph", content: [{ type: "text", text: "Mantenha um caderno de vocabulário novo." }] },
+      ],
+    }),
+    featured: true,
+    views: 42,
+  },
+  {
+    title: "Verbos Irregulares Mais Comuns",
+    slug: "verbos-irregulares-comuns",
+    category: "grammar",
+    content: JSON.stringify({
+      type: "doc",
+      content: [
+        { type: "heading", attrs: { level: 2 }, content: [{ type: "text", text: "Verbos Irregulares Mais Comuns" }] },
+        { type: "paragraph", content: [
+          { type: "text", marks: [{ type: "bold" }], text: "be" },
+          { type: "text", text: " — was/were — been" },
+        ] },
+        { type: "paragraph", content: [
+          { type: "text", marks: [{ type: "bold" }], text: "go" },
+          { type: "text", text: " — went — gone" },
+        ] },
+        { type: "paragraph", content: [
+          { type: "text", marks: [{ type: "bold" }], text: "have" },
+          { type: "text", text: " — had — had" },
+        ] },
+        { type: "paragraph", content: [
+          { type: "text", marks: [{ type: "bold" }], text: "do" },
+          { type: "text", text: " — did — done" },
+        ] },
+        { type: "paragraph", content: [
+          { type: "text", marks: [{ type: "bold" }], text: "say" },
+          { type: "text", text: " — said — said" },
+        ] },
+      ],
+    }),
+    featured: false,
+    views: 28,
+  },
+  {
+    title: "Filmes para Praticar Inglês",
+    slug: "filmes-praticar-ingles",
+    category: "culture",
+    content: JSON.stringify({
+      type: "doc",
+      content: [
+        { type: "heading", attrs: { level: 2 }, content: [{ type: "text", text: "Para Iniciantes" }] },
+        { type: "bulletList", content: [
+          { type: "listItem", content: [{ type: "paragraph", content: [
+            { type: "text", marks: [{ type: "bold" }], text: "Toy Story" },
+            { type: "text", text: " — vocabulário simples, diálogos claros" },
+          ] }] },
+          { type: "listItem", content: [{ type: "paragraph", content: [
+            { type: "text", marks: [{ type: "bold" }], text: "Finding Nemo" },
+            { type: "text", text: " — ótimo para pronúncia" },
+          ] }] },
+        ] },
+        { type: "heading", attrs: { level: 2 }, content: [{ type: "text", text: "Para Intermediários" }] },
+        { type: "bulletList", content: [
+          { type: "listItem", content: [{ type: "paragraph", content: [
+            { type: "text", marks: [{ type: "bold" }], text: "The Social Network" },
+            { type: "text", text: " — inglês moderno" },
+          ] }] },
+          { type: "listItem", content: [{ type: "paragraph", content: [
+            { type: "text", marks: [{ type: "bold" }], text: "The Intern" },
+            { type: "text", text: " — vocabulário profissional" },
+          ] }] },
+        ] },
+      ],
+    }),
+    featured: false,
+    views: 15,
+  },
 ];
 
 postsData.forEach((p, i) => {
