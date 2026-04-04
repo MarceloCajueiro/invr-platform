@@ -47,34 +47,37 @@ export function LessonPlayer({ lesson, initialProgress }: LessonPlayerProps) {
 
   return (
     <div className="animate-fade-in space-y-6">
-      <div className="space-y-3">
-        <Badge variant={categoryBadgeVariant[lesson.category] || "default"}>
-          {categoryLabels[lesson.category] || lesson.category}
-        </Badge>
-        <h1 className="text-xl font-display font-bold text-text-primary">
-          {lesson.title}
-        </h1>
-        {lesson.durationMinutes && (
-          <p className="text-sm text-text-muted">{lesson.durationMinutes} min</p>
+      <div className="flex items-start justify-between gap-4">
+        <div className="space-y-2">
+          <Badge variant={categoryBadgeVariant[lesson.category] || "default"}>
+            {categoryLabels[lesson.category] || lesson.category}
+          </Badge>
+          <h1 className="text-xl font-display font-bold text-text-primary">
+            {lesson.title}
+          </h1>
+          {lesson.durationMinutes && (
+            <p className="text-sm text-text-muted">{lesson.durationMinutes} min</p>
+          )}
+        </div>
+
+        {progress < 100 ? (
+          <Button
+            onClick={handleMarkWatched}
+            loading={isPending}
+            variant="primary"
+            size="sm"
+            className="shrink-0"
+          >
+            <Check size={14} />
+            Marcar como assistida
+          </Button>
+        ) : (
+          <div className="flex items-center gap-1.5 text-success text-sm font-medium shrink-0">
+            <Check size={14} />
+            Assistida
+          </div>
         )}
       </div>
-
-      {progress < 100 ? (
-        <Button
-          onClick={handleMarkWatched}
-          loading={isPending}
-          variant="primary"
-          size="md"
-        >
-          <Check size={16} />
-          Marcar como assistida
-        </Button>
-      ) : (
-        <div className="flex items-center gap-2 text-success text-sm font-medium">
-          <Check size={16} />
-          Aula assistida
-        </div>
-      )}
 
       {lesson.content && <RichContent content={lesson.content} />}
     </div>
