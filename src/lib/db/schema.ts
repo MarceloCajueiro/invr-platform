@@ -164,14 +164,11 @@ export const lessons = sqliteTable(
       .notNull()
       .references(() => teachers.id),
     title: text("title").notNull(),
-    description: text("description"),
+    content: text("content"), // Tiptap JSON
     category: text("category", {
       enum: ["conversation", "grammar", "vocabulary", "listening", "culture"],
     }).notNull(),
-    videoUrl: text("video_url"),
     coverImageUrl: text("cover_image_url"),
-    audioUrls: text("audio_urls"), // JSON: [{url, name, size}]
-    documentUrls: text("document_urls"), // JSON: [{url, name, size}]
     durationMinutes: integer("duration_minutes"),
     status: text("status", { enum: ["draft", "published"] })
       .notNull()
@@ -305,7 +302,8 @@ export const posts = sqliteTable(
       .references(() => teachers.id),
     title: text("title").notNull(),
     slug: text("slug").notNull().unique(),
-    content: text("content"),
+    content: text("content"), // Tiptap JSON (was Markdown)
+    coverImageUrl: text("cover_image_url"),
     category: text("category", {
       enum: ["tips", "grammar", "culture", "vocabulary"],
     }).notNull(),
