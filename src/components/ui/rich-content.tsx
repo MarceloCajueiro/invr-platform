@@ -133,11 +133,11 @@ function renderNode(node: TiptapNode, key: number): React.ReactNode {
 
     case "image":
       return (
-        <figure key={key} className="my-4">
+        <figure key={key} className="my-4 max-w-lg">
           <img
             src={node.attrs?.src as string}
             alt={(node.attrs?.alt as string) ?? ""}
-            className="rounded-[var(--radius-md)] max-w-full"
+            className="rounded-[var(--radius-md)] w-full h-auto"
             loading="lazy"
           />
         </figure>
@@ -156,21 +156,28 @@ function renderNode(node: TiptapNode, key: number): React.ReactNode {
         if (id) embedSrc = `https://player.vimeo.com/video/${id}`;
       }
 
-      return (
-        <div
-          key={key}
-          className="relative w-full aspect-video rounded-[var(--radius-md)] overflow-hidden bg-black my-4"
-        >
-          {embedSrc ? (
+      if (embedSrc) {
+        return (
+          <div
+            key={key}
+            className="relative w-full max-w-lg aspect-video rounded-[var(--radius-md)] overflow-hidden bg-black my-4"
+          >
             <iframe
               src={embedSrc}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
               className="absolute inset-0 w-full h-full"
             />
-          ) : (
-            <video src={src} controls className="w-full h-full" />
-          )}
+          </div>
+        );
+      }
+      return (
+        <div key={key} className="my-4 max-w-lg">
+          <video
+            src={src}
+            controls
+            className="rounded-[var(--radius-md)] w-full"
+          />
         </div>
       );
     }
@@ -198,7 +205,7 @@ function renderNode(node: TiptapNode, key: number): React.ReactNode {
           key={key}
           href={node.attrs?.src as string}
           download={node.attrs?.name as string}
-          className="flex items-center gap-3 p-3 rounded-[var(--radius-md)] bg-[#f8f9fb] border border-border hover:border-aulas transition-colors my-4"
+          className="flex items-center gap-3 p-3 rounded-[var(--radius-md)] bg-[#f8f9fb] border border-border hover:border-aulas transition-colors my-4 max-w-lg"
         >
           <FileText size={20} className="text-text-muted shrink-0" />
           <div className="flex-1 min-w-0">
@@ -219,7 +226,7 @@ function renderNode(node: TiptapNode, key: number): React.ReactNode {
       return (
         <div
           key={key}
-          className="relative w-full aspect-video rounded-[var(--radius-md)] overflow-hidden border border-border my-4"
+          className="relative w-full max-w-lg aspect-video rounded-[var(--radius-md)] overflow-hidden border border-border my-4"
         >
           <iframe
             src={node.attrs?.src as string}
@@ -245,5 +252,5 @@ export function RichContent({ content }: RichContentProps) {
     return <p className="text-text-secondary">{content}</p>;
   }
 
-  return <div className="rich-content">{renderNode(doc, 0)}</div>;
+  return <div className="rich-content max-w-2xl">{renderNode(doc, 0)}</div>;
 }

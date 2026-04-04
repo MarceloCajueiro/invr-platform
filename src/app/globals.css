@@ -426,4 +426,32 @@ body::after {
     color: var(--color-text-muted);
   }
 }
+
+
+/* ── Rich Content (student-side) ── */
+
+.rich-content {
+  max-width: 42rem; /* max-w-2xl */
+
+  figure,
+  video,
+  iframe {
+    max-width: 32rem; /* max-w-lg */
+  }
+
+  figure img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-md);
+  }
+
+  video {
+    border-radius: var(--radius-md);
+  }
+
+  & > div:has(> video),
+  & > div:has(> iframe) {
+    max-width: 32rem;
+  }
+}
 } /* end @layer components */
