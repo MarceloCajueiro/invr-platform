@@ -34,14 +34,20 @@ const categoryBadgeVariant: Record<
 
 function getExcerpt(content: string | null): string {
   if (!content) return "";
-  const plain = content
-    .replace(/^\|.*\|$/gm, "")           // remove table rows
-    .replace(/^[-|:\s]+$/gm, "")          // remove table separators
-    .replace(/[#*_~`>\[\]|]/g, "")         // strip markdown chars including pipes
-    .replace(/\n+/g, " ")                 // collapse newlines to spaces
-    .replace(/\s+/g, " ")                 // collapse multiple spaces
-    .trim();
-  return plain.length > 120 ? `${plain.slice(0, 120)}...` : plain;
+  try {
+    const doc = JSON.parse(content);
+    const texts: string[] = [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    function walk(node: any) {
+      if (node.text) texts.push(node.text);
+      if (Array.isArray(node.content)) node.content.forEach(walk);
+    }
+    walk(doc);
+    const plain = texts.join(" ").trim();
+    return plain.length > 120 ? `${plain.slice(0, 120)}...` : plain;
+  } catch {
+    return content.length > 120 ? `${content.slice(0, 120)}...` : content;
+  }
 }
 
 export function PostCard({ post }: PostCardProps) {
