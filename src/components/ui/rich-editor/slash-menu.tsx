@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { Editor } from "@tiptap/react";
-import { Image, Film, Headphones, FileText, Globe } from "lucide-react";
+import { Image, Film, Upload, Headphones, FileText, Globe } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { detectProvider } from "./extensions/video";
 
@@ -21,22 +21,17 @@ async function uploadFile(file: File, folder: string): Promise<{ url: string; na
   return res.json();
 }
 
-function openFilePicker(accept: string): Promise<File | null> {
-  return new Promise((resolve) => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = accept;
-    input.onchange = () => resolve(input.files?.[0] ?? null);
-    input.click();
-  });
-}
-
 export function SlashMenu({ editor, open, onClose }: SlashMenuProps) {
   const [search, setSearch] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // Reset search when menu opens
+  // Hidden file inputs — triggered synchronously on click for browser trust
+  const imageInputRef = useRef<HTMLInputElement>(null);
+  const audioInputRef = useRef<HTMLInputElement>(null);
+  const documentInputRef = useRef<HTMLInputElement>(null);
+  const videoUploadInputRef = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     if (open) {
       setSearch("");
@@ -44,70 +39,67 @@ export function SlashMenu({ editor, open, onClose }: SlashMenuProps) {
     }
   }, [open]);
 
-  const insertImage = useCallback(async () => {
-    onClose();
-    const file = await openFilePicker("image/jpeg,image/png,image/webp");
+  function handleFileSelected(input: HTMLInputElement, folder: string, insertFn: (result: { url: string; name: string; size: number }, file: File) => void) {
+    const file = input.files?.[0];
     if (!file) return;
-    const result = await uploadFile(file, "content/images");
-    editor.chain().focus().setImage({ src: result.url, alt: file.name }).run();
-  }, [editor, onClose]);
-
-  const insertVideo = useCallback(async () => {
-    onClose();
-    const url = window.prompt("URL do vídeo (YouTube, Vimeo ou link direto):");
-    if (!url) return;
-    const provider = detectProvider(url);
-    editor
-      .chain()
-      .focus()
-      .insertContent({ type: "video", attrs: { src: url, provider } })
-      .run();
-  }, [editor, onClose]);
-
-  const insertAudio = useCallback(async () => {
-    onClose();
-    const file = await openFilePicker("audio/mpeg,audio/wav,audio/ogg,audio/mp4");
-    if (!file) return;
-    const result = await uploadFile(file, "content/audio");
-    editor
-      .chain()
-      .focus()
-      .insertContent({ type: "audio", attrs: { src: result.url, name: file.name } })
-      .run();
-  }, [editor, onClose]);
-
-  const insertDocument = useCallback(async () => {
-    onClose();
-    const file = await openFilePicker("application/pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx");
-    if (!file) return;
-    const result = await uploadFile(file, "content/documents");
-    editor
-      .chain()
-      .focus()
-      .insertContent({
-        type: "document",
-        attrs: { src: result.url, name: file.name, size: file.size },
-      })
-      .run();
-  }, [editor, onClose]);
-
-  const insertEmbed = useCallback(async () => {
-    onClose();
-    const url = window.prompt("URL do embed:");
-    if (!url) return;
-    editor
-      .chain()
-      .focus()
-      .insertContent({ type: "embed", attrs: { src: url } })
-      .run();
-  }, [editor, onClose]);
+    input.value = "";
+    uploadFile(file, folder).then((result) => insertFn(result, file));
+  }
 
   const items = [
-    { label: "Imagem", icon: <Image size={16} />, action: insertImage },
-    { label: "Vídeo", icon: <Film size={16} />, action: insertVideo },
-    { label: "Áudio", icon: <Headphones size={16} />, action: insertAudio },
-    { label: "Documento", icon: <FileText size={16} />, action: insertDocument },
-    { label: "Embed", icon: <Globe size={16} />, action: insertEmbed },
+    {
+      label: "Imagem",
+      icon: <Image size={16} />,
+      action: () => {
+        imageInputRef.current?.click();
+        onClose();
+      },
+    },
+    {
+      label: "Vídeo (link)",
+      icon: <Film size={16} />,
+      action: () => {
+        onClose();
+        const url = window.prompt("URL do vídeo (YouTube, Vimeo ou link direto):");
+        if (!url) return;
+        const provider = detectProvider(url);
+        editor.chain().focus().insertContent({ type: "video", attrs: { src: url, provider } }).run();
+      },
+    },
+    {
+      label: "Vídeo (upload)",
+      icon: <Upload size={16} />,
+      action: () => {
+        videoUploadInputRef.current?.click();
+        onClose();
+      },
+    },
+    {
+      label: "Áudio",
+      icon: <Headphones size={16} />,
+      action: () => {
+        audioInputRef.current?.click();
+        onClose();
+      },
+    },
+    {
+      label: "Documento",
+      icon: <FileText size={16} />,
+      action: () => {
+        documentInputRef.current?.click();
+        onClose();
+      },
+    },
+    {
+      label: "Embed",
+      icon: <Globe size={16} />,
+      action: () => {
+        onClose();
+        const url = window.prompt("URL do embed:");
+        if (!url) return;
+        editor.chain().focus().insertContent({ type: "embed", attrs: { src: url } }).run();
+      },
+    },
   ];
 
   const filtered = items.filter((item) =>
@@ -151,13 +143,11 @@ export function SlashMenu({ editor, open, onClose }: SlashMenuProps) {
       }
     }
 
-    // Use capture phase to intercept before ProseMirror
     document.addEventListener("keydown", handleKeyDown, true);
     return () => document.removeEventListener("keydown", handleKeyDown, true);
   }, [open, search, selectedIndex, filtered, onClose]);
 
-  // Close when clicking outside — use "click" (not "mousedown") so button
-  // onClick handlers fire before the menu unmounts
+  // Close when clicking outside
   useEffect(() => {
     if (!open) return;
     function handleClick(e: MouseEvent) {
@@ -165,7 +155,6 @@ export function SlashMenu({ editor, open, onClose }: SlashMenuProps) {
         onClose();
       }
     }
-    // Small delay to avoid closing on the same click that opened the menu
     const timer = setTimeout(() => {
       document.addEventListener("click", handleClick);
     }, 0);
@@ -175,41 +164,92 @@ export function SlashMenu({ editor, open, onClose }: SlashMenuProps) {
     };
   }, [open, onClose]);
 
-  if (!open) return null;
-
   return (
-    <div
-      ref={menuRef}
-      className="absolute z-50 w-56 bg-bg-card border border-border rounded-[var(--radius-md)] shadow-lg py-1 animate-fade-in"
-      style={{ left: 16, top: 8 }}
-    >
-      {search && (
-        <div className="px-3 py-1 text-xs text-text-muted border-b border-border mb-1">
-          /{search}
+    <>
+      {/* Hidden file inputs — always mounted so they survive menu close */}
+      <input
+        ref={imageInputRef}
+        type="file"
+        accept="image/jpeg,image/png,image/webp"
+        className="hidden"
+        onChange={(e) =>
+          handleFileSelected(e.target, "content/images", (result, file) => {
+            editor.chain().focus().setImage({ src: result.url, alt: file.name }).run();
+          })
+        }
+      />
+      <input
+        ref={videoUploadInputRef}
+        type="file"
+        accept="video/mp4,video/webm,video/quicktime"
+        className="hidden"
+        onChange={(e) =>
+          handleFileSelected(e.target, "content/videos", (result) => {
+            editor.chain().focus().insertContent({ type: "video", attrs: { src: result.url, provider: "upload" } }).run();
+          })
+        }
+      />
+      <input
+        ref={audioInputRef}
+        type="file"
+        accept="audio/mpeg,audio/wav,audio/ogg,audio/mp4"
+        className="hidden"
+        onChange={(e) =>
+          handleFileSelected(e.target, "content/audio", (result, file) => {
+            editor.chain().focus().insertContent({ type: "audio", attrs: { src: result.url, name: file.name } }).run();
+          })
+        }
+      />
+      <input
+        ref={documentInputRef}
+        type="file"
+        accept="application/pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx"
+        className="hidden"
+        onChange={(e) =>
+          handleFileSelected(e.target, "content/documents", (result, file) => {
+            editor.chain().focus().insertContent({
+              type: "document",
+              attrs: { src: result.url, name: file.name, size: file.size },
+            }).run();
+          })
+        }
+      />
+
+      {open && (
+        <div
+          ref={menuRef}
+          className="absolute z-50 w-56 bg-bg-card border border-border rounded-[var(--radius-md)] shadow-lg py-1 animate-fade-in"
+          style={{ left: 16, top: 8 }}
+        >
+          {search && (
+            <div className="px-3 py-1 text-xs text-text-muted border-b border-border mb-1">
+              /{search}
+            </div>
+          )}
+          {filtered.length === 0 ? (
+            <div className="px-3 py-2 text-sm text-text-muted">
+              Nenhum resultado
+            </div>
+          ) : (
+            filtered.map((item, i) => (
+              <button
+                key={item.label}
+                type="button"
+                onClick={item.action}
+                className={cn(
+                  "flex items-center gap-2.5 w-full px-3 py-2 text-sm text-left transition-colors",
+                  i === selectedIndex
+                    ? "bg-aulas/10 text-aulas"
+                    : "text-text-primary hover:bg-bg-light"
+                )}
+              >
+                {item.icon}
+                {item.label}
+              </button>
+            ))
+          )}
         </div>
       )}
-      {filtered.length === 0 ? (
-        <div className="px-3 py-2 text-sm text-text-muted">
-          Nenhum resultado
-        </div>
-      ) : (
-        filtered.map((item, i) => (
-          <button
-            key={item.label}
-            type="button"
-            onClick={item.action}
-            className={cn(
-              "flex items-center gap-2.5 w-full px-3 py-2 text-sm text-left transition-colors",
-              i === selectedIndex
-                ? "bg-aulas/10 text-aulas"
-                : "text-text-primary hover:bg-bg-light"
-            )}
-          >
-            {item.icon}
-            {item.label}
-          </button>
-        ))
-      )}
-    </div>
+    </>
   );
 }
