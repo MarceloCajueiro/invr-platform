@@ -22,6 +22,7 @@ import {
   handleImagePaste,
   handleCommandNavigation,
   createImageUpload,
+  UploadImagesPlugin,
   type JSONContent,
 } from "novel";
 import TiptapUnderline from "@tiptap/extension-underline";
@@ -137,17 +138,21 @@ const suggestionItems = createSuggestionItems([
     icon: <Image size={18} />,
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).run();
+
       const input = document.createElement("input");
       input.type = "file";
       input.accept = "image/*";
       input.onchange = async () => {
+  
         if (input.files?.length) {
           const file = input.files[0];
           const pos = editor.view.state.selection.from;
           uploadFn(file, editor.view, pos);
         }
       };
+
       input.click();
+
     },
   },
   {
@@ -253,7 +258,15 @@ const slashCommand = Command.configure({
 
 // ── Extensions ──────────────────────────────────────────────────────────────
 
-const tiptapImage = TiptapImage.configure({
+const tiptapImage = TiptapImage.extend({
+  addProseMirrorPlugins() {
+    return [
+      UploadImagesPlugin({
+        imageClass: "opacity-40 rounded-[var(--radius-md)] border border-border",
+      }),
+    ];
+  },
+}).configure({
   allowBase64: true,
   HTMLAttributes: { class: "rounded-[var(--radius-md)] max-w-full my-4" },
 });
