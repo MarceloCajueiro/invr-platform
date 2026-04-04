@@ -1,18 +1,19 @@
 "use client";
 
-import { useState } from "react";
-import ReactMarkdown from "react-markdown";
+import { useState, useMemo } from "react";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { FileUpload, type FileItem } from "@/components/ui/file-upload";
+import { RichEditor } from "@/components/ui/rich-editor/editor";
 
 interface PostData {
   id: string;
   title: string;
   slug: string;
   content: string | null;
+  coverImageUrl: string | null;
   category: "tips" | "grammar" | "culture" | "vocabulary";
   featured: boolean;
 }
@@ -29,6 +30,8 @@ const categoryOptions = [
   { value: "vocabulary", label: "Vocabulário" },
 ];
 
+const MB = 1024 * 1024;
+
 function generateSlug(title: string): string {
   return title
     .toLowerCase()
@@ -38,16 +41,27 @@ function generateSlug(title: string): string {
     .replace(/^-|-$/g, "");
 }
 
+function coverUrlToFileItems(url: string | null | undefined): FileItem[] {
+  if (!url) return [];
+  return [{ url, name: url.split("/").pop() ?? "cover", size: 0 }];
+}
+
 export function PostForm({ post, action }: PostFormProps) {
   const isEdit = !!post;
   const [slug, setSlug] = useState(post?.slug ?? "");
   const [content, setContent] = useState(post?.content ?? "");
-  const [preview, setPreview] = useState(false);
+
+  const existingCover = useMemo(
+    () => coverUrlToFileItems(post?.coverImageUrl),
+    [post?.coverImageUrl]
+  );
 
   return (
     <Card>
       <CardContent className="pt-6">
         <form action={action} className="space-y-5">
+          <input type="hidden" name="content" value={content} />
+
           <Input
             label="Título"
             name="title"
@@ -99,6 +113,22 @@ export function PostForm({ post, action }: PostFormProps) {
             defaultValue={post?.category ?? "tips"}
           />
 
+          <div className="space-y-1.5">
+            <h3 className="text-sm font-semibold text-text-primary">
+              Imagem de Capa
+            </h3>
+            <FileUpload
+              name="coverImageFile"
+              accept="image/jpeg,image/png,image/webp"
+              maxSize={5 * MB}
+              maxFiles={1}
+              folder="posts/covers"
+              label="Imagem de Capa"
+              description="JPG, PNG, WebP. Máximo 5MB"
+              existingFiles={existingCover}
+            />
+          </div>
+
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
@@ -116,42 +146,13 @@ export function PostForm({ post, action }: PostFormProps) {
           </div>
 
           <div className="space-y-1.5">
-            <div className="flex items-center justify-between">
-              <label className="block text-xs font-medium text-text-primary">
-                Conteúdo
-              </label>
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                onClick={() => setPreview(!preview)}
-              >
-                {preview ? "Editar" : "Visualizar"}
-              </Button>
-            </div>
-
-            {preview ? (
-              <div className="w-full px-3 py-2.5 rounded-[var(--radius-sm)] bg-[#f8f9fb] border border-border min-h-[192px] prose prose-sm max-w-none text-text-primary prose-headings:text-text-primary prose-p:text-text-primary prose-strong:text-text-primary prose-a:text-aulas">
-                {content ? (
-                  <ReactMarkdown>{content}</ReactMarkdown>
-                ) : (
-                  <p className="text-text-muted italic">
-                    Nenhum conteúdo para visualizar.
-                  </p>
-                )}
-              </div>
-            ) : (
-              <textarea
-                name="content"
-                rows={12}
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                placeholder="Escreva o conteúdo do post em Markdown..."
-                className="w-full px-3 py-2.5 rounded-[var(--radius-sm)] bg-[#f8f9fb] border border-border text-text-primary placeholder:text-text-muted focus:outline-none focus:border-aulas transition-colors resize-y"
-              />
-            )}
-
-            {preview && <input type="hidden" name="content" value={content} />}
+            <h3 className="text-sm font-semibold text-text-primary">
+              Conteúdo
+            </h3>
+            <RichEditor
+              content={post?.content || undefined}
+              onChange={setContent}
+            />
           </div>
 
           <div className="flex justify-end pt-4">
