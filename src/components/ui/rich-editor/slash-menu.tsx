@@ -156,7 +156,8 @@ export function SlashMenu({ editor, open, onClose }: SlashMenuProps) {
     return () => document.removeEventListener("keydown", handleKeyDown, true);
   }, [open, search, selectedIndex, filtered, onClose]);
 
-  // Close when clicking outside
+  // Close when clicking outside — use "click" (not "mousedown") so button
+  // onClick handlers fire before the menu unmounts
   useEffect(() => {
     if (!open) return;
     function handleClick(e: MouseEvent) {
@@ -164,8 +165,14 @@ export function SlashMenu({ editor, open, onClose }: SlashMenuProps) {
         onClose();
       }
     }
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
+    // Small delay to avoid closing on the same click that opened the menu
+    const timer = setTimeout(() => {
+      document.addEventListener("click", handleClick);
+    }, 0);
+    return () => {
+      clearTimeout(timer);
+      document.removeEventListener("click", handleClick);
+    };
   }, [open, onClose]);
 
   if (!open) return null;
@@ -190,7 +197,6 @@ export function SlashMenu({ editor, open, onClose }: SlashMenuProps) {
           <button
             key={item.label}
             type="button"
-            onMouseDown={(e) => e.preventDefault()}
             onClick={item.action}
             className={cn(
               "flex items-center gap-2.5 w-full px-3 py-2 text-sm text-left transition-colors",

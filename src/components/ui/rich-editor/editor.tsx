@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
@@ -26,9 +26,16 @@ export function RichEditor({
   placeholder = "Comece a escrever o conteúdo ou digite / para inserir mídia...",
 }: RichEditorProps) {
   const [slashMenuOpen, setSlashMenuOpen] = useState(false);
+  const slashMenuOpenRef = useRef(false);
 
-  const openSlashMenu = useCallback(() => setSlashMenuOpen(true), []);
-  const closeSlashMenu = useCallback(() => setSlashMenuOpen(false), []);
+  const openSlashMenu = useCallback(() => {
+    slashMenuOpenRef.current = true;
+    setSlashMenuOpen(true);
+  }, []);
+  const closeSlashMenu = useCallback(() => {
+    slashMenuOpenRef.current = false;
+    setSlashMenuOpen(false);
+  }, []);
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -56,7 +63,7 @@ export function RichEditor({
         class: "tiptap-editor",
       },
       handleKeyDown(_view, event) {
-        if (event.key === "/" && !event.ctrlKey && !event.metaKey && !slashMenuOpen) {
+        if (event.key === "/" && !event.ctrlKey && !event.metaKey && !slashMenuOpenRef.current) {
           // Only trigger on empty paragraph
           const { state } = _view;
           const { $from } = state.selection;
