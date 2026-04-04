@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { QuestionEditor } from "@/components/teacher/question-editor";
 import { AiGeneratorPanel } from "@/components/teacher/ai-generator-panel";
+import { TurmaSelector } from "@/components/teacher/turma-selector";
 
 type TaskType = "quiz" | "listening" | "fill_gaps" | "writing";
 type Level = "beginner" | "intermediate" | "advanced";
@@ -26,6 +27,8 @@ interface TaskData {
 interface TaskFormProps {
   task?: TaskData;
   action: (formData: FormData) => Promise<void>;
+  turmas?: { id: string; name: string; color: string | null }[];
+  selectedTurmaIds?: string[];
 }
 
 const typeOptions = [
@@ -41,7 +44,7 @@ const levelOptions = [
   { value: "advanced", label: "Avançado" },
 ];
 
-export function TaskForm({ task, action }: TaskFormProps) {
+export function TaskForm({ task, action, turmas = [], selectedTurmaIds = [] }: TaskFormProps) {
   const isEdit = !!task;
   const [taskType, setTaskType] = useState<TaskType>(
     task?.taskType ?? "quiz",
@@ -123,6 +126,10 @@ export function TaskForm({ task, action }: TaskFormProps) {
             value={generatedQuestions ? "true" : "false"}
           />
           <input type="hidden" name="aiPrompt" value={aiPrompt} />
+
+          {turmas.length > 0 && (
+            <TurmaSelector turmas={turmas} selectedIds={selectedTurmaIds} />
+          )}
 
           <div className="flex justify-end pt-4">
             <Button type="submit">

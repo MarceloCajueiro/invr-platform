@@ -5,8 +5,19 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getTeacher } from "@/lib/auth/get-teacher";
 import { getDb } from "@/lib/db";
-import { tasks } from "@/lib/db/schema";
+import { tasks, turmaTasks } from "@/lib/db/schema";
 import { createTaskSchema, updateTaskSchema } from "@/lib/validations/tasks";
+
+function parseTurmaIds(formData: FormData): string[] {
+  const raw = formData.get("turmaIds") as string | null;
+  if (!raw) return [];
+  try {
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.filter((id: unknown) => typeof id === "string" && id.length > 0) : [];
+  } catch {
+    return [];
+  }
+}
 
 export async function createTask(formData: FormData) {
   const { teacher } = await getTeacher();
@@ -26,7 +37,7 @@ export async function createTask(formData: FormData) {
   const aiPrompt = (formData.get("aiPrompt") as string) || undefined;
 
   const db = getDb();
-  await db.insert(tasks).values({
+  const [inserted] = await db.insert(tasks).values({
     teacherId: teacher.id,
     title: parsed.title,
     description: parsed.description || null,
@@ -37,7 +48,15 @@ export async function createTask(formData: FormData) {
     status: "draft",
     aiGenerated: aiGenerated,
     aiPrompt: aiPrompt || null,
-  });
+  }).returning({ id: tasks.id });
+
+  const turmaIds = parseTurmaIds(formData);
+  if (turmaIds.length > 0) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await db.batch(turmaIds.map((turmaId) =>
+      db.insert(turmaTasks).values({ turmaId, taskId: inserted.id }),
+    ) as any);
+  }
 
   revalidatePath("/teacher/tasks");
   redirect("/teacher/tasks");
@@ -75,6 +94,16 @@ export async function updateTask(id: string, formData: FormData) {
       updatedAt: new Date(),
     })
     .where(and(eq(tasks.id, id), eq(tasks.teacherId, teacher.id)));
+
+  // Sync turma links
+  const turmaIds = parseTurmaIds(formData);
+  await db.delete(turmaTasks).where(eq(turmaTasks.taskId, id));
+  if (turmaIds.length > 0) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await db.batch(turmaIds.map((turmaId) =>
+      db.insert(turmaTasks).values({ turmaId, taskId: id }),
+    ) as any);
+  }
 
   revalidatePath("/teacher/tasks");
   redirect("/teacher/tasks");
