@@ -4,7 +4,6 @@ import {
   tasks,
   submissions,
   lessonProgresses,
-  students,
 } from "@/lib/db/schema";
 import { eq, and, count, inArray, desc, or } from "drizzle-orm";
 
@@ -43,18 +42,11 @@ export async function getHomeStats(studentId: string, teacherId: string) {
       ),
     );
 
-  const studentRow = await db.query.students.findFirst({
-    where: (s, { eq: e }) => e(s.id, studentId),
-    columns: { xp: true, currentStreak: true },
-  });
-
   return {
     totalLessons: totalLessons.count,
     watchedLessons: watchedLessons.count,
     totalTasks: totalTasks.count,
     completedTasks: completedTasks.count,
-    xp: studentRow?.xp ?? 0,
-    currentStreak: studentRow?.currentStreak ?? 0,
   };
 }
 

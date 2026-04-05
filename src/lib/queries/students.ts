@@ -15,8 +15,6 @@ export interface StudentListItem {
   id: string;
   name: string;
   email: string;
-  xp: number;
-  currentStreak: number;
   lastActivityAt: Date | null;
 }
 
@@ -30,8 +28,6 @@ export async function getStudents(
       id: students.id,
       name: user.name,
       email: user.email,
-      xp: students.xp,
-      currentStreak: students.currentStreak,
       lastActivityAt: students.lastActivityAt,
     })
     .from(students)
@@ -47,9 +43,6 @@ export interface StudentProfile {
   name: string;
   email: string;
   image: string | null;
-  xp: number;
-  currentStreak: number;
-  longestStreak: number;
   lastActivityAt: Date | null;
   createdAt: Date;
 }
@@ -66,9 +59,6 @@ export async function getStudentProfile(
       name: user.name,
       email: user.email,
       image: user.image,
-      xp: students.xp,
-      currentStreak: students.currentStreak,
-      longestStreak: students.longestStreak,
       lastActivityAt: students.lastActivityAt,
       createdAt: students.createdAt,
     })

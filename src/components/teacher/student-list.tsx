@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { GraduationCap, Zap, Flame } from "lucide-react";
+import { GraduationCap } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/ui/empty-state";
 import type { StudentListItem } from "@/lib/queries/students";
 
@@ -61,20 +60,6 @@ export function StudentList({ students }: StudentListProps) {
                   {student.email}
                 </p>
               </div>
-
-              {/* XP */}
-              <Badge variant="challenges" className="shrink-0">
-                <Zap size={12} className="mr-1" />
-                {student.xp} XP
-              </Badge>
-
-              {/* Streak */}
-              {student.currentStreak > 0 && (
-                <div className="flex items-center gap-1 text-sm text-tarefas shrink-0">
-                  <Flame size={14} />
-                  <span className="font-medium">{student.currentStreak}</span>
-                </div>
-              )}
 
               {/* Last activity */}
               <span className="text-xs text-text-muted shrink-0 hidden sm:block">

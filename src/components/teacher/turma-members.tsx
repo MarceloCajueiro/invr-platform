@@ -1,4 +1,4 @@
-import { Users, Trash2, Flame } from "lucide-react";
+import { Users, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { removeStudentFromTurma } from "@/lib/actions/turmas";
@@ -7,8 +7,6 @@ interface Member {
   studentId: string;
   userName: string;
   userEmail: string;
-  xp: number;
-  currentStreak: number;
   joinedAt: Date;
 }
 
@@ -36,12 +34,8 @@ export function TurmaMembers({ turmaId, members }: TurmaMembersProps) {
             <th className="text-left py-3 px-4 text-xs font-medium text-text-muted">
               Aluno
             </th>
-            <th className="text-left py-3 px-4 text-xs font-medium text-text-muted">
-              XP
-            </th>
-            <th className="text-left py-3 px-4 text-xs font-medium text-text-muted">
-              Streak
-            </th>
+
+
             <th className="text-right py-3 px-4 text-xs font-medium text-text-muted">
               Ações
             </th>
@@ -61,17 +55,8 @@ export function TurmaMembers({ turmaId, members }: TurmaMembersProps) {
                   <p className="text-xs text-text-muted">{member.userEmail}</p>
                 </div>
               </td>
-              <td className="py-3 px-4">
-                <span className="text-text-secondary font-medium">
-                  {member.xp} XP
-                </span>
-              </td>
-              <td className="py-3 px-4">
-                <div className="flex items-center gap-1 text-text-secondary">
-                  <Flame size={14} className="text-fora" />
-                  <span>{member.currentStreak}</span>
-                </div>
-              </td>
+
+
               <td className="py-3 px-4 text-right">
                 <form action={removeStudentFromTurma}>
                   <input type="hidden" name="turmaId" value={turmaId} />

@@ -57,8 +57,8 @@ export async function getTurmaMembers(turmaId: string) {
     .select({
       studentId: students.id,
       studentUserId: students.userId,
-      xp: students.xp,
-      currentStreak: students.currentStreak,
+
+
       joinedAt: turmaStudents.createdAt,
       userName: user.name,
       userEmail: user.email,

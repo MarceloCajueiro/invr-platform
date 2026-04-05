@@ -1,9 +1,6 @@
 import Link from "next/link";
 import {
   ArrowLeft,
-  Zap,
-  Flame,
-  Trophy,
   Calendar,
   BookOpen,
   ClipboardCheck,
@@ -88,40 +85,13 @@ export function StudentProfile({
           </div>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
-          <div className="flex items-center gap-2 text-sm">
-            <Zap size={16} className="text-challenges" />
-            <div>
-              <p className="font-semibold text-text-primary">{student.xp}</p>
-              <p className="text-xs text-text-muted">XP total</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2 text-sm">
-            <Flame size={16} className="text-tarefas" />
-            <div>
-              <p className="font-semibold text-text-primary">
-                {student.currentStreak}
-              </p>
-              <p className="text-xs text-text-muted">Streak atual</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2 text-sm">
-            <Trophy size={16} className="text-fora" />
-            <div>
-              <p className="font-semibold text-text-primary">
-                {student.longestStreak}
-              </p>
-              <p className="text-xs text-text-muted">Melhor streak</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2 text-sm">
-            <Calendar size={16} className="text-text-muted" />
-            <div>
-              <p className="font-semibold text-text-primary">
-                {formatDate(student.lastActivityAt)}
-              </p>
-              <p className="text-xs text-text-muted">Última atividade</p>
-            </div>
+        <div className="flex items-center gap-2 text-sm mt-6">
+          <Calendar size={16} className="text-text-muted" />
+          <div>
+            <p className="font-semibold text-text-primary">
+              {formatDate(student.lastActivityAt)}
+            </p>
+            <p className="text-xs text-text-muted">Última atividade</p>
           </div>
         </div>
       </Card>

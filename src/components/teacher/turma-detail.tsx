@@ -10,8 +10,6 @@ interface Member {
   studentId: string;
   userName: string;
   userEmail: string;
-  xp: number;
-  currentStreak: number;
   joinedAt: Date;
 }
 

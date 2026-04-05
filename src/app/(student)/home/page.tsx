@@ -41,11 +41,7 @@ export default async function HomePage() {
           <p className="text-text-secondary mt-1">
             {stats.watchedLessons} de {stats.totalLessons} aulas assistidas
           </p>
-          {stats.currentStreak > 0 && (
-            <p className="text-sm text-text-muted mt-0.5">
-              🔥 {stats.currentStreak} dias seguidos
-            </p>
-          )}
+
         </div>
       </div>
 
