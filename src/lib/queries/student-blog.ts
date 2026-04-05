@@ -25,7 +25,7 @@ export async function getPublishedPosts(
     .select()
     .from(posts)
     .where(and(...conditions))
-    .orderBy(desc(posts.createdAt));
+    .orderBy(desc(posts.featured), desc(posts.createdAt));
 }
 
 export async function getPublishedPost(slug: string, teacherId: string) {

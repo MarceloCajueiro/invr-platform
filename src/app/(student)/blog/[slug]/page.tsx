@@ -3,7 +3,6 @@ import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { getStudent } from "@/lib/auth/get-student";
 import { getPublishedPost } from "@/lib/queries/student-blog";
-import { incrementViewCount } from "@/lib/actions/student-posts";
 import { Badge, type BadgeVariant } from "@/components/ui/badge";
 import { RichContent } from "@/components/ui/rich-content";
 
@@ -31,8 +30,6 @@ export default async function BlogPostPage({
 
   const post = await getPublishedPost(slug, student.teacherId);
   if (!post) redirect("/blog");
-
-  incrementViewCount(post.id);
 
   return (
     <div className="animate-fade-in">
