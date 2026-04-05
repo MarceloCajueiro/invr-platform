@@ -124,9 +124,6 @@ export const students = sqliteTable(
     teacherId: text("teacher_id")
       .notNull()
       .references(() => teachers.id),
-    xp: integer("xp").notNull().default(0),
-    currentStreak: integer("current_streak").notNull().default(0),
-    longestStreak: integer("longest_streak").notNull().default(0),
     lastActivityAt: integer("last_activity_at", { mode: "timestamp" }),
     createdAt: integer("created_at", { mode: "timestamp" })
       .notNull()
@@ -458,27 +455,3 @@ export const turmaPosts = sqliteTable(
   ],
 );
 
-export const challenges = sqliteTable("challenges", {
-  id: text("id")
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
-  teacherId: text("teacher_id")
-    .notNull()
-    .references(() => teachers.id),
-  title: text("title").notNull(),
-  description: text("description"),
-  difficulty: text("difficulty", {
-    enum: ["easy", "medium", "hard"],
-  }).notNull(),
-  xpReward: integer("xp_reward").notNull().default(10),
-  badgeEmoji: text("badge_emoji"),
-  status: text("status", { enum: ["draft", "published"] })
-    .notNull()
-    .default("draft"),
-  createdAt: integer("created_at", { mode: "timestamp" })
-    .notNull()
-    .default(sql`(unixepoch())`),
-  updatedAt: integer("updated_at", { mode: "timestamp" })
-    .notNull()
-    .default(sql`(unixepoch())`),
-});

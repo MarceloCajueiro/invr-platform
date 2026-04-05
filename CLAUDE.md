@@ -192,10 +192,10 @@ Tokens defined in `src/app/globals.css` via Tailwind `@theme`.
 
 ## Database Schema
 
-17 tables. Auth tables (user, session, account, verification) managed by better-auth. App tables:
+16 tables. Auth tables (user, session, account, verification) managed by better-auth. App tables:
 
 - `teachers` — user profile extension (plan: free/pro/school)
-- `students` — linked to teacher, tracks xp/streak
+- `students` — linked to teacher
 - `invitations` — email invites with token/expiry
 - `lessons` — category enum (conversation/grammar/vocabulary/listening/culture), status (draft/published)
 - `tasks` — taskType enum (quiz/listening/fill_gaps/writing), questions as JSON text, aiGenerated flag
@@ -204,7 +204,6 @@ Tokens defined in `src/app/globals.css` via Tailwind `@theme`.
 - `posts` — slug unique, category (tips/grammar/culture/vocabulary), viewCount
 - `turmas` — inviteCode (6-char), color, notification toggles
 - `turmaStudents`, `turmaLessons`, `turmaTasks` — junction tables with cascade delete
-- `challenges` — difficulty (easy/medium/hard), xpReward, badgeEmoji
 
 ## Cloudflare Bindings
 

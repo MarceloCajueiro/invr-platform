@@ -73,7 +73,7 @@ sql(`INSERT INTO teachers (id, user_id, plan, created_at, updated_at) VALUES ('$
 console.log("Creating student...");
 sql(`INSERT INTO user (id, name, email, emailVerified, role, createdAt, updatedAt) VALUES ('${studentUserId}', 'Marcelo Aluno', 'marcelo@fluent.app', 0, 'student', ${ts}, ${ts})`);
 sql(`INSERT INTO account (id, accountId, providerId, userId, password, createdAt, updatedAt) VALUES ('${uuid()}', '${studentUserId}', 'credential', '${studentUserId}', '${passwordHash}', ${ts}, ${ts})`);
-sql(`INSERT INTO students (id, user_id, teacher_id, xp, current_streak, longest_streak, created_at, updated_at) VALUES ('${studentId}', '${studentUserId}', '${teacherId}', 250, 5, 12, ${ts}, ${ts})`);
+sql(`INSERT INTO students (id, user_id, teacher_id, created_at, updated_at) VALUES ('${studentId}', '${studentUserId}', '${teacherId}', ${ts}, ${ts})`);
 
 // ============================================================
 // Invitation (accepted)
