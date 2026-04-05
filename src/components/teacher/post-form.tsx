@@ -6,7 +6,7 @@ import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { FileUpload, type FileItem } from "@/components/ui/file-upload";
-import { RichEditor } from "@/components/ui/rich-editor/editor";
+import { BlockEditor } from "@/components/ui/block-editor";
 import { TurmaSelector } from "@/components/teacher/turma-selector";
 
 interface PostData {
@@ -152,8 +152,8 @@ export function PostForm({ post, action, turmas = [], selectedTurmaIds = [] }: P
             <h3 className="text-sm font-semibold text-text-primary">
               Conteúdo
             </h3>
-            <RichEditor
-              content={post?.content || undefined}
+            <BlockEditor
+              initialContent={post?.content || undefined}
               onChange={setContent}
             />
           </div>

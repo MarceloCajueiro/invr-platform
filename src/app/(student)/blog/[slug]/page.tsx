@@ -4,7 +4,7 @@ import Link from "next/link";
 import { getStudent } from "@/lib/auth/get-student";
 import { getPublishedPost } from "@/lib/queries/student-blog";
 import { Badge, type BadgeVariant } from "@/components/ui/badge";
-import { RichContent } from "@/components/ui/rich-content";
+import { BlockContent } from "@/components/ui/block-content";
 
 const categoryLabels: Record<string, string> = {
   tips: "Dicas",
@@ -67,7 +67,7 @@ export default async function BlogPostPage({
           {post.title}
         </h1>
 
-        {post.content && <RichContent content={post.content} />}
+        {post.content && <BlockContent content={post.content} />}
       </article>
     </div>
   );

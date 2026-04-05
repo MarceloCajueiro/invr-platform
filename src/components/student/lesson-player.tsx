@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { Check } from "lucide-react";
 import { Badge, type BadgeVariant } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { RichContent } from "@/components/ui/rich-content";
+import { BlockContent } from "@/components/ui/block-content";
 import { updateLessonProgress } from "@/lib/actions/student-progress";
 
 const categoryLabels: Record<string, string> = {
@@ -73,7 +73,7 @@ export function LessonPlayer({ lesson, initialProgress }: LessonPlayerProps) {
         </Button>
       </div>
 
-      {lesson.content && <RichContent content={lesson.content} />}
+      {lesson.content && <BlockContent content={lesson.content} />}
     </div>
   );
 }

@@ -161,7 +161,21 @@ import { Modal } from "@/components/ui/modal";       // backdrop + escape + anim
 import { Tabs } from "@/components/ui/tabs";         // tab bar with active state
 import { PageHeader } from "@/components/ui/page-header";
 import { EmptyState } from "@/components/ui/empty-state";
+import { BlockEditor } from "@/components/ui/block-editor"; // rich text editor (teacher forms), dynamic import
+import { BlockContent } from "@/components/ui/block-content"; // read-only content renderer (student pages), dynamic import
 ```
+
+### Rich Text Editor (BlockNote)
+
+Content is edited with BlockNote (`BlockEditor`) and rendered read-only with `BlockContent`. Both are client-only (dynamic import, `ssr: false`).
+
+**File upload flow (direct browser → R2, no Worker size limit):**
+1. `uploadFile` calls `POST /api/upload/presign` → gets presigned PUT URL + key
+2. Browser PUTs file directly to R2 (supports files of any size)
+3. Stores `r2://{key}` reference in BlockNote JSON content
+4. `resolveFileUrl` calls `GET /api/upload/presign?key=...` → gets presigned GET URL for display
+
+Content stored in DB as BlockNote JSON (array of blocks) in `lessons.content` and `posts.content`.
 
 ## Design System
 
