@@ -29,7 +29,7 @@ export default async function BlogPage({
   const params = await searchParams;
   const activeCategory = params.category || "all";
 
-  const posts = await getPublishedPosts(student.teacherId, {
+  const posts = await getPublishedPosts(student.teacherId, student.id, {
     category: activeCategory,
   });
 

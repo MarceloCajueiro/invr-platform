@@ -1,16 +1,38 @@
 import { getDb } from "@/lib/db";
-import { tasks, submissions } from "@/lib/db/schema";
-import { eq, and } from "drizzle-orm";
+import { tasks, submissions, turmaTasks, turmaStudents } from "@/lib/db/schema";
+import { eq, and, inArray } from "drizzle-orm";
 
 export async function getStudentTasks(teacherId: string, studentId: string) {
   const db = getDb();
 
-  // Get all published tasks from the teacher
+  // Get turma IDs the student belongs to
+  const studentTurmas = await db
+    .select({ turmaId: turmaStudents.turmaId })
+    .from(turmaStudents)
+    .where(eq(turmaStudents.studentId, studentId));
+
+  const turmaIds = studentTurmas.map((t) => t.turmaId);
+  if (turmaIds.length === 0) return [];
+
+  // Get task IDs linked to those turmas
+  const linkedTasks = await db
+    .select({ taskId: turmaTasks.taskId })
+    .from(turmaTasks)
+    .where(inArray(turmaTasks.turmaId, turmaIds));
+
+  const taskIds = [...new Set(linkedTasks.map((t) => t.taskId))];
+  if (taskIds.length === 0) return [];
+
+  // Get published tasks filtered by turma membership
   const publishedTasks = await db
     .select()
     .from(tasks)
     .where(
-      and(eq(tasks.teacherId, teacherId), eq(tasks.status, "published")),
+      and(
+        eq(tasks.teacherId, teacherId),
+        eq(tasks.status, "published"),
+        inArray(tasks.id, taskIds),
+      ),
     );
 
   if (publishedTasks.length === 0) return [];

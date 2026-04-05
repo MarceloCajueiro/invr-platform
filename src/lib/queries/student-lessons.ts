@@ -1,15 +1,37 @@
 import { getDb } from "@/lib/db";
-import { lessons, lessonProgresses } from "@/lib/db/schema";
-import { eq, and, asc } from "drizzle-orm";
+import { lessons, lessonProgresses, turmaLessons, turmaStudents } from "@/lib/db/schema";
+import { eq, and, asc, inArray } from "drizzle-orm";
 
-export async function getStudentLessons(teacherId: string) {
+export async function getStudentLessons(teacherId: string, studentId: string) {
   const db = getDb();
+
+  // Get turma IDs the student belongs to
+  const studentTurmas = await db
+    .select({ turmaId: turmaStudents.turmaId })
+    .from(turmaStudents)
+    .where(eq(turmaStudents.studentId, studentId));
+
+  const turmaIds = studentTurmas.map((t) => t.turmaId);
+  if (turmaIds.length === 0) return [];
+
+  // Get lesson IDs linked to those turmas
+  const linkedLessons = await db
+    .select({ lessonId: turmaLessons.lessonId })
+    .from(turmaLessons)
+    .where(inArray(turmaLessons.turmaId, turmaIds));
+
+  const lessonIds = [...new Set(linkedLessons.map((l) => l.lessonId))];
+  if (lessonIds.length === 0) return [];
 
   return db
     .select()
     .from(lessons)
     .where(
-      and(eq(lessons.teacherId, teacherId), eq(lessons.status, "published")),
+      and(
+        eq(lessons.teacherId, teacherId),
+        eq(lessons.status, "published"),
+        inArray(lessons.id, lessonIds),
+      ),
     )
     .orderBy(asc(lessons.position));
 }

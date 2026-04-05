@@ -26,7 +26,7 @@ export default async function LessonsPage({
   searchParams: Promise<{ category?: string }>;
 }) {
   const { student } = await getStudent();
-  const lessons = await getStudentLessons(student.teacherId);
+  const lessons = await getStudentLessons(student.teacherId, student.id);
 
   const db = getDb();
   const progresses = await db
