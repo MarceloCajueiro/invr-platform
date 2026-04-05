@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { deleteLesson, toggleLessonStatus } from "@/lib/actions/lessons";
 import { DeleteButton } from "@/components/teacher/delete-button";
+import { TurmaBadges } from "@/components/teacher/turma-badges";
 import type { BadgeVariant } from "@/components/ui/badge";
 
 interface Lesson {
@@ -15,6 +16,7 @@ interface Lesson {
   status: "draft" | "published";
   durationMinutes: number | null;
   createdAt: Date;
+  turmas: { id: string; name: string; color: string | null }[];
 }
 
 interface LessonListProps {
@@ -75,12 +77,22 @@ export function LessonList({ lessons }: LessonListProps) {
                   {statusLabels[lesson.status]}
                 </Badge>
               </div>
-              {lesson.durationMinutes && (
-                <div className="flex items-center gap-1 text-xs text-text-muted">
-                  <Clock size={12} />
-                  <span>{lesson.durationMinutes} min</span>
-                </div>
-              )}
+              <div className="flex items-center gap-2">
+                {lesson.durationMinutes && (
+                  <div className="flex items-center gap-1 text-xs text-text-muted">
+                    <Clock size={12} />
+                    <span>{lesson.durationMinutes} min</span>
+                  </div>
+                )}
+                {lesson.turmas.length > 0 && (
+                  <>
+                    {lesson.durationMinutes && (
+                      <span className="text-border">·</span>
+                    )}
+                    <TurmaBadges turmas={lesson.turmas} />
+                  </>
+                )}
+              </div>
             </div>
 
             <div className="flex items-center gap-2 shrink-0">

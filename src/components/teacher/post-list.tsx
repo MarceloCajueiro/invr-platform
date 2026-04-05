@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { deletePost, togglePostStatus } from "@/lib/actions/posts";
 import { DeleteButton } from "@/components/teacher/delete-button";
+import { TurmaBadges } from "@/components/teacher/turma-badges";
 import type { BadgeVariant } from "@/components/ui/badge";
 
 interface Post {
@@ -16,6 +17,7 @@ interface Post {
   featured: boolean;
   viewCount: number;
   createdAt: Date;
+  turmas: { id: string; name: string; color: string | null }[];
 }
 
 interface PostListProps {
@@ -88,6 +90,12 @@ export function PostList({ posts }: PostListProps) {
                 <span>
                   {post.createdAt.toLocaleDateString("pt-BR")}
                 </span>
+                {post.turmas.length > 0 && (
+                  <>
+                    <span className="text-border">·</span>
+                    <TurmaBadges turmas={post.turmas} />
+                  </>
+                )}
               </div>
             </div>
 

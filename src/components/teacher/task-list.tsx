@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { deleteTask, toggleTaskStatus } from "@/lib/actions/tasks";
 import { DeleteButton } from "@/components/teacher/delete-button";
+import { TurmaBadges } from "@/components/teacher/turma-badges";
 import type { BadgeVariant } from "@/components/ui/badge";
 import type { LucideIcon } from "lucide-react";
 
@@ -17,6 +18,7 @@ interface Task {
   status: "draft" | "published";
   questions: string | null;
   createdAt: Date;
+  turmas: { id: string; name: string; color: string | null }[];
 }
 
 interface TaskListProps {
@@ -107,11 +109,17 @@ export function TaskList({ tasks }: TaskListProps) {
                     {statusLabels[task.status]}
                   </Badge>
                 </div>
-                <div className="flex items-center gap-1 text-xs text-text-muted">
+                <div className="flex items-center gap-2 text-xs text-text-muted">
                   <span>
                     {questionCount}{" "}
                     {questionCount === 1 ? "questão" : "questões"}
                   </span>
+                  {task.turmas.length > 0 && (
+                    <>
+                      <span className="text-border">·</span>
+                      <TurmaBadges turmas={task.turmas} />
+                    </>
+                  )}
                 </div>
               </div>
 

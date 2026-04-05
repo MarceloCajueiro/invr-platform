@@ -19,7 +19,11 @@ const categoryOptions = [
   { value: "culture", label: "Cultura" },
 ];
 
-export function LessonFilters() {
+interface LessonFiltersProps {
+  turmas: { id: string; name: string; color: string | null }[];
+}
+
+export function LessonFilters({ turmas }: LessonFiltersProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -36,6 +40,11 @@ export function LessonFilters() {
     [router, searchParams],
   );
 
+  const turmaOptions = [
+    { value: "all", label: "Todas as turmas" },
+    ...turmas.map((t) => ({ value: t.id, label: t.name })),
+  ];
+
   return (
     <div className="flex gap-3 mb-6">
       <Select
@@ -48,6 +57,13 @@ export function LessonFilters() {
         defaultValue={searchParams.get("category") || "all"}
         onChange={(e) => updateFilter("category", e.target.value)}
       />
+      {turmas.length > 0 && (
+        <Select
+          options={turmaOptions}
+          defaultValue={searchParams.get("turmaId") || "all"}
+          onChange={(e) => updateFilter("turmaId", e.target.value)}
+        />
+      )}
     </div>
   );
 }

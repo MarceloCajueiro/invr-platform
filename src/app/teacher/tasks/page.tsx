@@ -2,19 +2,23 @@ import Link from "next/link";
 import { Plus } from "lucide-react";
 import { getTeacher } from "@/lib/auth/get-teacher";
 import { getTasks } from "@/lib/queries/tasks";
+import { getTurmasForSelector } from "@/lib/queries/turmas";
 import { PageHeader } from "@/components/ui/page-header";
 import { Button } from "@/components/ui/button";
 import { TaskFilters } from "@/components/teacher/task-filters";
 import { TaskList } from "@/components/teacher/task-list";
 
 interface TasksPageProps {
-  searchParams: Promise<{ status?: string; taskType?: string }>;
+  searchParams: Promise<{ status?: string; taskType?: string; turmaId?: string }>;
 }
 
 export default async function TasksPage({ searchParams }: TasksPageProps) {
   const { teacher } = await getTeacher();
   const filters = await searchParams;
-  const tasks = await getTasks(teacher.id, filters);
+  const [tasks, turmasOptions] = await Promise.all([
+    getTasks(teacher.id, filters),
+    getTurmasForSelector(teacher.id),
+  ]);
 
   return (
     <div className="animate-fade-in">
@@ -31,7 +35,7 @@ export default async function TasksPage({ searchParams }: TasksPageProps) {
         }
       />
 
-      <TaskFilters />
+      <TaskFilters turmas={turmasOptions} />
 
       <TaskList tasks={tasks} />
     </div>

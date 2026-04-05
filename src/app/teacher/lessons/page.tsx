@@ -2,19 +2,23 @@ import Link from "next/link";
 import { Plus } from "lucide-react";
 import { getTeacher } from "@/lib/auth/get-teacher";
 import { getLessons } from "@/lib/queries/lessons";
+import { getTurmasForSelector } from "@/lib/queries/turmas";
 import { PageHeader } from "@/components/ui/page-header";
 import { Button } from "@/components/ui/button";
 import { LessonFilters } from "@/components/teacher/lesson-filters";
 import { LessonList } from "@/components/teacher/lesson-list";
 
 interface LessonsPageProps {
-  searchParams: Promise<{ status?: string; category?: string }>;
+  searchParams: Promise<{ status?: string; category?: string; turmaId?: string }>;
 }
 
 export default async function LessonsPage({ searchParams }: LessonsPageProps) {
   const { teacher } = await getTeacher();
   const filters = await searchParams;
-  const lessons = await getLessons(teacher.id, filters);
+  const [lessons, turmasOptions] = await Promise.all([
+    getLessons(teacher.id, filters),
+    getTurmasForSelector(teacher.id),
+  ]);
 
   return (
     <div className="animate-fade-in">
@@ -31,7 +35,7 @@ export default async function LessonsPage({ searchParams }: LessonsPageProps) {
         }
       />
 
-      <LessonFilters />
+      <LessonFilters turmas={turmasOptions} />
 
       <LessonList lessons={lessons} />
     </div>
