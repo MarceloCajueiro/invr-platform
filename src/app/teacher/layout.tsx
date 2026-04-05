@@ -26,7 +26,7 @@ export default async function TeacherLayout({
   return (
     <div className="flex min-h-screen">
       <Sidebar role="teacher" userName={session.user.name} />
-      <main className="flex-1 max-w-6xl px-4 md:px-8 py-6 md:py-8 pb-16 md:pb-8">
+      <main className="flex-1 px-4 md:px-8 lg:px-12 py-6 md:py-8 pb-16 md:pb-8">
         {children}
       </main>
       <MobileNav role="teacher" />
