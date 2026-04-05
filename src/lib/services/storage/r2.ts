@@ -33,7 +33,6 @@ export async function generatePresignedUrl({
   const signed = await client.sign(
     new Request(`${r2Url}?X-Amz-Expires=${expiresIn}`, {
       method: "PUT",
-      headers: { "Content-Type": contentType },
     }),
     { aws: { signQuery: true } }
   );

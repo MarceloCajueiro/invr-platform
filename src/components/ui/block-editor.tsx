@@ -34,7 +34,6 @@ async function uploadToR2(file: File): Promise<string> {
   const upload = await fetch(uploadUrl, {
     method: "PUT",
     body: file,
-    headers: { "Content-Type": file.type },
   });
 
   if (!upload.ok) throw new Error("Falha no upload do arquivo");
