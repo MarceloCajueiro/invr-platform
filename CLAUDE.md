@@ -152,7 +152,7 @@ export async function createLesson(formData: FormData) {
 All in `src/components/ui/`. Use `cn()` from `@/lib/utils` for class merging.
 
 ```typescript
-import { Button } from "@/components/ui/button";    // variants: primary, secondary, danger, ghost
+import { Button } from "@/components/ui/button";    // variants: primary, secondary, success, danger, ghost
 import { Badge } from "@/components/ui/badge";       // variants: aulas, tarefas, fora, challenges, draft, published, beginner, intermediate, advanced
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";       // with label, error, icon
@@ -165,6 +165,15 @@ import { EmptyState } from "@/components/ui/empty-state";
 
 ## Design System
 
+**IMPORTANT — Design System First:**
+- **NEVER** use raw `<button>`, `<input>`, `<span>` with ad-hoc Tailwind classes when a DS component exists. Always use `Button`, `Badge`, `Input`, `Card`, etc.
+- **NEVER** use arbitrary color values (e.g. `text-red-500`, `bg-green-400`). Only use DS tokens: `text-success`, `bg-aulas`, `text-error`, `bg-fora-bg`, etc.
+- **Before creating any visual element**, check if an existing DS component or variant covers the need.
+- **If no existing component/variant fits**, extend the DS — add a new variant to the existing component following the same patterns (variant map, shadow map, glow class). Do NOT create one-off inline styles.
+- **After extending the DS**, update this CLAUDE.md to reflect the new variant/component so future work stays consistent.
+
+**Sources of truth:** `src/components/ui/` (components), `src/app/globals.css` (tokens/animations), `docs/06-design-system.md` (spec).
+
 Tokens defined in `src/app/globals.css` via Tailwind `@theme`.
 
 **Channel colors** (4 content pillars):
@@ -172,6 +181,8 @@ Tokens defined in `src/app/globals.css` via Tailwind `@theme`.
 - Tarefas (tasks): `bg-tarefas` (#00b894 green), `bg-tarefas-light`, `bg-tarefas-bg`
 - Fora da Aula (blog): `bg-fora` (#e17055 coral), `bg-fora-light`, `bg-fora-bg`
 - Challenges: `bg-challenges` (#fdcb6e gold), `bg-challenges-light`, `bg-challenges-bg`
+
+**Semantic colors:** `success` (#00b894), `warning` (#fdcb6e), `error` (#e17055), `info` (#0984e3)
 
 **Fonts:** Bricolage Grotesque (display/headings), Outfit (body), JetBrains Mono (code)
 

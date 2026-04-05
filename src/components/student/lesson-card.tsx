@@ -80,7 +80,7 @@ export function LessonCard({ lesson, progress = 0, index = 0 }: LessonCardProps)
           </div>
 
           {/* Content */}
-          <div className="flex-1 min-w-0 p-4 flex flex-col justify-center gap-1.5">
+          <div className="flex-1 min-w-0 p-4 flex flex-col justify-center gap-1.5 items-start">
             <Badge variant={categoryBadgeVariant[lesson.category] || "default"}>
               {categoryLabels[lesson.category] || lesson.category}
             </Badge>

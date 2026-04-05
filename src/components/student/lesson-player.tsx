@@ -38,10 +38,11 @@ export function LessonPlayer({ lesson, initialProgress }: LessonPlayerProps) {
   const [progress, setProgress] = useState(initialProgress);
   const [isPending, startTransition] = useTransition();
 
-  function handleMarkWatched() {
+  function handleToggleWatched() {
+    const newProgress = progress >= 100 ? 0 : 100;
     startTransition(async () => {
-      await updateLessonProgress(lesson.id, 100);
-      setProgress(100);
+      await updateLessonProgress(lesson.id, newProgress);
+      setProgress(newProgress);
     });
   }
 
@@ -60,23 +61,16 @@ export function LessonPlayer({ lesson, initialProgress }: LessonPlayerProps) {
           )}
         </div>
 
-        {progress < 100 ? (
-          <Button
-            onClick={handleMarkWatched}
-            loading={isPending}
-            variant="primary"
-            size="sm"
-            className="shrink-0"
-          >
-            <Check size={14} />
-            Marcar como assistida
-          </Button>
-        ) : (
-          <div className="flex items-center gap-1.5 text-success text-sm font-medium shrink-0">
-            <Check size={14} />
-            Assistida
-          </div>
-        )}
+        <Button
+          onClick={handleToggleWatched}
+          loading={isPending}
+          variant={progress >= 100 ? "success" : "primary"}
+          size="sm"
+          className="shrink-0"
+        >
+          <Check size={14} />
+          {progress >= 100 ? "Assistida" : "Marcar como assistida"}
+        </Button>
       </div>
 
       {lesson.content && <RichContent content={lesson.content} />}

@@ -6,6 +6,8 @@ const variantStyles = {
     "bg-aulas text-white btn-3d glow-aulas transition-all",
   secondary:
     "border-2 border-aulas text-aulas hover:bg-aulas-bg transition-colors",
+  success:
+    "bg-success text-white btn-3d glow-tarefas transition-all",
   danger:
     "bg-fora text-white hover:opacity-90 transition-all",
   ghost:
@@ -15,6 +17,7 @@ const variantStyles = {
 /** 3D box-shadow per variant (darker shade beneath the button) */
 const variantShadow: Record<string, string> = {
   primary: "0 4px 0 #4a3fa5",
+  success: "0 4px 0 #007d63",
   danger: "0 4px 0 #b34d37",
 };
 
@@ -55,7 +58,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         disabled={disabled || loading}
         className={cn(
-          "rounded-md font-semibold flex items-center justify-center gap-2",
+          "rounded-md font-semibold flex items-center justify-center gap-2 cursor-pointer",
           variantStyles[variant],
           sizeStyles[size],
           (disabled || loading) && "opacity-50 cursor-not-allowed",

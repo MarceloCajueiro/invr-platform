@@ -22,7 +22,7 @@ export async function updateLessonProgress(lessonId: string, progress: number) {
       .update(lessonProgresses)
       .set({
         progress,
-        ...(watchedAt ? { watchedAt } : {}),
+        watchedAt,
         updatedAt: new Date(),
       })
       .where(
