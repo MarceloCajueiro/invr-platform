@@ -36,6 +36,7 @@ const studentNav: NavItem[] = [
   { label: "Aulas", href: "/lessons", icon: BookOpen, color: "aulas" },
   { label: "Tarefas", href: "/tasks", icon: ClipboardList, color: "tarefas" },
   { label: "Blog", href: "/blog", icon: FileText, color: "fora" },
+  { label: "Turmas", href: "/turmas", icon: Users },
 ];
 
 type SidebarProps = {
@@ -97,9 +98,18 @@ export function Sidebar({ role, userName }: SidebarProps) {
 
       {/* User / Sign Out */}
       <div className="border-t border-white/10 px-6 py-4 flex items-center gap-3">
-        <span className="text-sm text-white/80 truncate flex-1 min-w-0">
-          {userName}
-        </span>
+        {role === "student" ? (
+          <Link
+            href="/profile"
+            className="text-sm text-white/80 truncate flex-1 min-w-0 hover:text-white transition-colors"
+          >
+            {userName}
+          </Link>
+        ) : (
+          <span className="text-sm text-white/80 truncate flex-1 min-w-0">
+            {userName}
+          </span>
+        )}
         <button
           onClick={handleSignOut}
           className="text-white/40 hover:text-white transition-colors cursor-pointer"
