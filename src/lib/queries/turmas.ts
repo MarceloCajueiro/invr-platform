@@ -9,8 +9,9 @@ import {
   user,
   lessons,
   tasks,
+  invitations,
 } from "@/lib/db/schema";
-import { eq, and, desc, count, notInArray, inArray } from "drizzle-orm";
+import { eq, and, desc, count, notInArray, inArray, isNull, gt } from "drizzle-orm";
 
 export async function getTurmas(teacherId: string) {
   const db = getDb();
@@ -201,4 +202,56 @@ export async function getPostTurmaIds(postId: string) {
     .from(turmaPosts)
     .where(eq(turmaPosts.postId, postId));
   return rows.map((r) => r.turmaId);
+}
+
+export async function getPendingInvites(turmaId: string) {
+  const db = getDb();
+  const now = new Date();
+
+  return db
+    .select({
+      id: invitations.id,
+      email: invitations.email,
+      expiresAt: invitations.expiresAt,
+      createdAt: invitations.createdAt,
+    })
+    .from(invitations)
+    .where(
+      and(
+        eq(invitations.turmaId, turmaId),
+        isNull(invitations.acceptedAt),
+        gt(invitations.expiresAt, now),
+      ),
+    )
+    .orderBy(desc(invitations.createdAt));
+}
+
+export async function getAvailableStudentsForTurma(
+  turmaId: string,
+  teacherId: string,
+) {
+  const db = getDb();
+
+  const inTurma = await db
+    .select({ studentId: turmaStudents.studentId })
+    .from(turmaStudents)
+    .where(eq(turmaStudents.turmaId, turmaId));
+
+  const inTurmaIds = inTurma.map((r) => r.studentId);
+
+  const conditions = [eq(students.teacherId, teacherId)];
+  if (inTurmaIds.length > 0) {
+    conditions.push(notInArray(students.id, inTurmaIds));
+  }
+
+  return db
+    .select({
+      id: students.id,
+      name: user.name,
+      email: user.email,
+    })
+    .from(students)
+    .innerJoin(user, eq(students.userId, user.id))
+    .where(and(...conditions))
+    .orderBy(user.name);
 }
