@@ -6,7 +6,7 @@ import { Resend } from "resend";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { createAuth } from "@/lib/auth/server";
 import { getDb } from "@/lib/db";
-import { invitations, students, teachers, turmas as turmasTable, user } from "@/lib/db/schema";
+import { invitations, students, teachers, turmas as turmasTable, turmaStudents, user } from "@/lib/db/schema";
 
 export async function createInvitation(email: string, turmaId: string) {
   const auth = await createAuth();
@@ -135,6 +135,22 @@ export async function acceptInvitation(
     .update(invitations)
     .set({ acceptedAt: new Date() })
     .where(eq(invitations.id, invitation.id));
+
+  if (invitation.turmaId) {
+    const student = await db.query.students.findFirst({
+      where: (s, { eq: e }) => e(s.userId, signUpResult.user.id),
+    });
+    if (student) {
+      try {
+        await db.insert(turmaStudents).values({
+          turmaId: invitation.turmaId,
+          studentId: student.id,
+        });
+      } catch {
+        // Turma may have been deleted
+      }
+    }
+  }
 
   await auth.api.signInEmail({
     body: {
