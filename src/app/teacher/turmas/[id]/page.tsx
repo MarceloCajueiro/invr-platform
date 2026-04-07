@@ -8,6 +8,8 @@ import {
   getTurmaTasks,
   getAvailableLessons,
   getAvailableTasks,
+  getPendingInvites,
+  getAvailableStudentsForTurma,
 } from "@/lib/queries/turmas";
 import { PageHeader } from "@/components/ui/page-header";
 import { Badge } from "@/components/ui/badge";
@@ -33,13 +35,15 @@ export default async function TurmaDetailPage({
   const turma = await getTurma(id, teacher.id);
   if (!turma) redirect("/teacher/turmas");
 
-  const [members, linkedLessons, linkedTasks, availableLessons, availableTasks] =
+  const [members, linkedLessons, linkedTasks, availableLessons, availableTasks, pendingInvites, availableStudents] =
     await Promise.all([
       getTurmaMembers(turma.id),
       getTurmaLessons(turma.id, teacher.id),
       getTurmaTasks(turma.id, teacher.id),
       getAvailableLessons(teacher.id, turma.id),
       getAvailableTasks(teacher.id, turma.id),
+      getPendingInvites(turma.id),
+      getAvailableStudentsForTurma(turma.id, teacher.id),
     ]);
 
   return (
@@ -60,6 +64,8 @@ export default async function TurmaDetailPage({
       <TurmaDetail
         turmaId={turma.id}
         members={members}
+        pendingInvites={pendingInvites}
+        availableStudents={availableStudents}
         linkedLessons={linkedLessons}
         linkedTasks={linkedTasks}
         availableLessons={availableLessons}

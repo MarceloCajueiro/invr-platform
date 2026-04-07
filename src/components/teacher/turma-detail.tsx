@@ -13,6 +13,19 @@ interface Member {
   joinedAt: Date;
 }
 
+interface PendingInvite {
+  id: string;
+  email: string;
+  expiresAt: Date;
+  createdAt: Date;
+}
+
+interface AvailableStudent {
+  id: string;
+  name: string;
+  email: string;
+}
+
 interface LinkedLesson {
   id: string;
   title: string;
@@ -42,6 +55,8 @@ interface TurmaSettingsData {
 interface TurmaDetailProps {
   turmaId: string;
   members: Member[];
+  pendingInvites: PendingInvite[];
+  availableStudents: AvailableStudent[];
   linkedLessons: LinkedLesson[];
   linkedTasks: LinkedTask[];
   availableLessons: AvailableItem[];
@@ -59,6 +74,8 @@ const tabs = [
 export function TurmaDetail({
   turmaId,
   members,
+  pendingInvites,
+  availableStudents,
   linkedLessons,
   linkedTasks,
   availableLessons,
@@ -70,7 +87,12 @@ export function TurmaDetail({
   return (
     <Tabs tabs={tabs} activeTab={activeTab} onTabChange={setActiveTab}>
       {activeTab === "membros" && (
-        <TurmaMembers turmaId={turmaId} members={members} />
+        <TurmaMembers
+          turmaId={turmaId}
+          members={members}
+          pendingInvites={pendingInvites}
+          availableStudents={availableStudents}
+        />
       )}
       {activeTab === "aulas" && (
         <TurmaContent
