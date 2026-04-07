@@ -144,6 +144,7 @@ export const invitations = sqliteTable("invitations", {
   teacherId: text("teacher_id")
     .notNull()
     .references(() => teachers.id),
+  turmaId: text("turma_id").references(() => turmas.id),
   expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
   acceptedAt: integer("accepted_at", { mode: "timestamp" }),
   createdAt: integer("created_at", { mode: "timestamp" })

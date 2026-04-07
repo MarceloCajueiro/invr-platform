@@ -1,0 +1,1 @@
+ALTER TABLE `invitations` ADD `turma_id` text REFERENCES turmas(id);
