@@ -265,7 +265,7 @@ test.describe.serial("Student Interface", () => {
     test("deve mostrar dados do aluno, professor e turma", async ({ page }) => {
       await page.goto("/profile");
       // Student name and email
-      await expect(page.getByText("Marcelo Cajueiro")).toBeVisible();
+      await expect(page.getByText("Marcelo Aluno").first()).toBeVisible();
       await expect(page.getByText("marcelo@fluent.app")).toBeVisible();
       // Teacher name
       await expect(page.getByText("Franciely Silva")).toBeVisible();
