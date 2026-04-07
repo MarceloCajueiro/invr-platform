@@ -10,6 +10,7 @@ import {
   turmaStudents,
   turmaLessons,
   turmaTasks,
+  students,
 } from "@/lib/db/schema";
 import { createTurmaSchema, updateTurmaSchema } from "@/lib/validations/turmas";
 
@@ -166,6 +167,35 @@ export async function unlinkTask(formData: FormData) {
     .where(
       and(eq(turmaTasks.turmaId, turmaId), eq(turmaTasks.taskId, taskId)),
     );
+
+  revalidatePath(`/teacher/turmas/${turmaId}`);
+}
+
+export async function addStudentToTurma(formData: FormData) {
+  const { teacher } = await getTeacher();
+  const turmaId = formData.get("turmaId") as string;
+  const studentId = formData.get("studentId") as string;
+
+  if (!turmaId || !studentId)
+    throw new Error("IDs da turma e aluno são obrigatórios");
+
+  const db = getDb();
+
+  // Validate turma belongs to teacher
+  const turma = await db.query.turmas.findFirst({
+    where: (t, { eq: e, and: a }) =>
+      a(e(t.id, turmaId), e(t.teacherId, teacher.id)),
+  });
+  if (!turma) throw new Error("Turma não encontrada");
+
+  // Validate student belongs to teacher
+  const student = await db.query.students.findFirst({
+    where: (s, { eq: e, and: a }) =>
+      a(e(s.id, studentId), e(s.teacherId, teacher.id)),
+  });
+  if (!student) throw new Error("Aluno não encontrado");
+
+  await db.insert(turmaStudents).values({ turmaId, studentId });
 
   revalidatePath(`/teacher/turmas/${turmaId}`);
 }
