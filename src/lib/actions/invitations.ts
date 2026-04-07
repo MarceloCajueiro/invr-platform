@@ -1,14 +1,14 @@
 "use server";
 
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { headers } from "next/headers";
 import { Resend } from "resend";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { createAuth } from "@/lib/auth/server";
 import { getDb } from "@/lib/db";
-import { invitations, students, teachers, user } from "@/lib/db/schema";
+import { invitations, students, teachers, turmas as turmasTable, user } from "@/lib/db/schema";
 
-export async function createInvitation(email: string) {
+export async function createInvitation(email: string, turmaId: string) {
   const auth = await createAuth();
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -32,6 +32,11 @@ export async function createInvitation(email: string) {
     throw new Error("Perfil de professor não encontrado");
   }
 
+  const turma = await db.query.turmas.findFirst({
+    where: (t, { eq: e, and: a }) => a(e(t.id, turmaId), e(t.teacherId, teacher.id)),
+  });
+  if (!turma) throw new Error("Turma não encontrada");
+
   const token = crypto.randomUUID();
   const expiresAt = new Date(Date.now() + 48 * 60 * 60 * 1000);
 
@@ -39,6 +44,7 @@ export async function createInvitation(email: string) {
     email,
     token,
     teacherId: teacher.id,
+    turmaId,
     expiresAt,
   });
 
