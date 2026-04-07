@@ -122,6 +122,7 @@ test.describe.serial("Student Interface", () => {
         { name: /^aulas$/i, url: "/lessons" },
         { name: /^tarefas$/i, url: "/tasks" },
         { name: /^blog$/i, url: "/blog" },
+        { name: /^turmas$/i, url: "/turmas" },
         { name: /^home$/i, url: "/home" },
       ];
 
@@ -256,6 +257,43 @@ test.describe.serial("Student Interface", () => {
       // Teacher layout redirects non-teachers to /home
       await page.waitForURL("**/home", { timeout: 10000 });
       await expect(page).toHaveURL(/\/home/);
+    });
+  });
+
+  // ---- Profile ----
+  test.describe("CT-49: Profile page", () => {
+    test("deve mostrar dados do aluno, professor e turma", async ({ page }) => {
+      await page.goto("/profile");
+      // Student name and email
+      await expect(page.getByText("Marcelo Cajueiro")).toBeVisible();
+      await expect(page.getByText("marcelo@fluent.app")).toBeVisible();
+      // Teacher name
+      await expect(page.getByText("Franciely Silva")).toBeVisible();
+      // Turma
+      await expect(page.getByText("Turma Iniciante 2026")).toBeVisible();
+      // Logout button
+      await expect(page.getByRole("button", { name: /sair/i })).toBeVisible();
+    });
+  });
+
+  test.describe("CT-50: Sidebar has Turmas link", () => {
+    test("deve mostrar link de Turmas na sidebar do aluno", async ({ page }) => {
+      await page.goto("/home");
+      const sidebar = page.locator("aside");
+      const turmasLink = sidebar.getByRole("link", { name: /^turmas$/i });
+      await expect(turmasLink).toBeVisible();
+      await turmasLink.click();
+      await page.waitForURL("**/turmas", { timeout: 5000 });
+    });
+  });
+
+  test.describe("CT-51: Sidebar username links to profile", () => {
+    test("deve navegar para perfil ao clicar no nome na sidebar", async ({ page }) => {
+      await page.goto("/home");
+      const sidebar = page.locator("aside");
+      await sidebar.getByRole("link", { name: /marcelo/i }).click();
+      await page.waitForURL("**/profile", { timeout: 5000 });
+      await expect(page.getByText("Meu Perfil")).toBeVisible();
     });
   });
 });
