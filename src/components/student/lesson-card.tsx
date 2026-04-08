@@ -50,7 +50,7 @@ export function LessonCard({ lesson, progress = 0, index = 0 }: LessonCardProps)
       >
         <div className="flex">
           {/* Thumbnail */}
-          <div className="relative w-40 min-h-24 shrink-0">
+          <div className="relative w-24 sm:w-40 min-h-24 shrink-0">
             {lesson.coverImageUrl ? (
               <img
                 src={lesson.coverImageUrl}
