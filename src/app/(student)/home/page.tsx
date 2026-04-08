@@ -32,7 +32,7 @@ export default async function HomePage() {
   return (
     <div className="animate-fade-in space-y-6">
       {/* Greeting + Progress */}
-      <div className="flex items-center gap-6">
+      <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
         <ProgressRing percentage={progressPercent} />
         <div>
           <h1 className="text-2xl font-bold text-text-primary font-display">

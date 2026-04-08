@@ -55,7 +55,7 @@ export function Sidebar({ role, userName }: SidebarProps) {
   }
 
   return (
-    <aside className="hidden md:flex flex-col w-60 bg-bg-dark text-white min-h-screen">
+    <aside className="hidden md:flex flex-col w-48 lg:w-60 bg-bg-dark text-white min-h-screen">
       {/* Logo */}
       <div className="px-6 py-6">
         <span className="text-xl font-bold font-display">Fluent</span>
@@ -75,7 +75,7 @@ export function Sidebar({ role, userName }: SidebarProps) {
               className={`flex items-center gap-3 px-3 py-2.5 rounded-[var(--radius-sm)] text-sm transition-colors relative ${
                 isActive
                   ? "bg-white/10 text-white"
-                  : "text-white/60 hover:text-white hover:bg-white/5"
+                  : "text-sidebar-muted hover:text-white hover:bg-white/5"
               }`}
             >
               {isActive && (
@@ -112,7 +112,7 @@ export function Sidebar({ role, userName }: SidebarProps) {
         )}
         <button
           onClick={handleSignOut}
-          className="text-white/40 hover:text-white transition-colors cursor-pointer"
+          className="text-sidebar-muted hover:text-white transition-colors cursor-pointer"
           aria-label="Sign out"
         >
           <LogOut size={18} />

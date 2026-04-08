@@ -11,6 +11,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ label, error, icon: Icon, className, id, ...rest }, ref) => {
     const inputId = id || label?.toLowerCase().replace(/\s+/g, "-");
+    const errorId = error ? `${inputId}-error` : undefined;
 
     return (
       <div className="space-y-1.5">
@@ -32,8 +33,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           <input
             ref={ref}
             id={inputId}
+            aria-describedby={errorId}
+            aria-invalid={error ? true : undefined}
+            aria-required={rest.required}
             className={cn(
-              "w-full px-4 py-2.5 rounded-md bg-[#f8f9fb] border border-border text-text-primary placeholder:text-text-muted focus:outline-none focus:border-aulas focus:ring-2 focus:ring-aulas/20 transition-colors",
+              "w-full px-4 py-2.5 rounded-md bg-input-bg border border-border text-text-primary placeholder:text-text-muted focus:outline-none focus:border-aulas focus:ring-2 focus:ring-aulas/20 transition-colors",
               Icon && "pl-9",
               error &&
                 "border-fora ring-2 ring-fora/20 focus:border-fora focus:ring-fora/20",
@@ -42,7 +46,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             {...rest}
           />
         </div>
-        {error && <p className="text-xs text-error mt-1">{error}</p>}
+        {error && (
+          <p id={errorId} className="text-xs text-error mt-1">{error}</p>
+        )}
       </div>
     );
   },

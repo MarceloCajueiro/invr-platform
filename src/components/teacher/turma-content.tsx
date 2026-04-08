@@ -93,7 +93,7 @@ export function TurmaContent({
                 value={selectedId}
                 onChange={(e) => setSelectedId(e.target.value)}
                 required
-                className="w-full px-3 py-2.5 rounded-[var(--radius-sm)] bg-[#f8f9fb] border border-border text-text-primary focus:outline-none focus:border-aulas transition-colors appearance-none"
+                className="w-full px-3 py-2.5 rounded-[var(--radius-sm)] bg-input-bg border border-border text-text-primary focus:outline-none focus:border-aulas transition-colors appearance-none"
               >
                 <option value="" disabled>
                   Escolha uma {label.toLowerCase()}...

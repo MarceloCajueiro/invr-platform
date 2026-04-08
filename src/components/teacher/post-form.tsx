@@ -88,7 +88,7 @@ export function PostForm({ post, action, turmas = [], selectedTurmaIds = [] }: P
                 value={slug}
                 onChange={(e) => setSlug(e.target.value)}
                 placeholder="ex: 10-dicas-para-melhorar-seu-ingles"
-                className="flex-1 px-3 py-2.5 rounded-[var(--radius-sm)] bg-[#f8f9fb] border border-border text-text-primary placeholder:text-text-muted focus:outline-none focus:border-aulas transition-colors"
+                className="flex-1 px-3 py-2.5 rounded-[var(--radius-sm)] bg-input-bg border border-border text-text-primary placeholder:text-text-muted focus:outline-none focus:border-aulas transition-colors"
                 required
               />
               <Button

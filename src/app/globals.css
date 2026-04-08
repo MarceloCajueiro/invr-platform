@@ -7,8 +7,9 @@
   --color-bg-card: #ffffff;
   --color-text-primary: #2d3436;
   --color-text-secondary: #636e72;
-  --color-text-muted: #9aa3b8;
+  --color-text-muted: #6b7280;
   --color-border: #e8ecf4;
+  --color-sidebar-muted: #a8b2c1;
 
   /* ── Colors: Channel Aulas ── */
   --color-aulas: #6c5ce7;
@@ -33,6 +34,15 @@
   --color-challenges-light: #ffeaa7;
   --color-challenges-bg: #fffcf0;
   --color-challenges-glow: rgba(253, 203, 110, 0.3);
+
+  /* ── Colors: Channel Shadows (3D button) ── */
+  --color-aulas-shadow: #4a3fa5;
+  --color-tarefas-shadow: #007d63;
+  --color-fora-shadow: #b34d37;
+  --color-challenges-shadow: #c9981f;
+
+  /* ── Colors: Surfaces ── */
+  --color-input-bg: #f8f9fb;
 
   /* ── Colors: Semantic ── */
   --color-success: #00b894;
@@ -60,9 +70,9 @@
   /* ── Animations ── */
   --animate-fade-in: fade-in 0.5s ease-out;
   --animate-slide-up: slide-up 0.5s ease-out;
-  --animate-pop-in: pop-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --animate-pop-in: pop-in 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
   --animate-bar-grow: bar-grow 0.8s ease-out;
-  --animate-splash-bounce: splash-bounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --animate-splash-bounce: splash-bounce 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
   --animate-glow-pulse: glow-pulse 2s ease-in-out infinite;
 }
 
@@ -153,6 +163,32 @@ body::after {
   background-size: 256px 256px;
 }
 
+/* ── Focus Indicators ── */
+
+:focus-visible {
+  outline: 2px solid var(--color-aulas);
+  outline-offset: 2px;
+}
+
+/* Form inputs use their own ring styles */
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: none;
+}
+
+/* Reduced motion: respect user preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* ── Scrollbar ── */
 
 ::-webkit-scrollbar {
@@ -180,26 +216,26 @@ body::after {
 }
 
 .btn-3d:active:not(:disabled) {
-  transform: translateY(2px);
-  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2) !important;
+  transform: translateY(1px);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.15) !important;
 }
 
 /* ── Button Glow Hover ── */
 
 .glow-aulas:hover:not(:disabled) {
-  box-shadow: 0 8px 32px var(--color-aulas-glow), 0 4px 0 #4a3fa5;
+  box-shadow: 0 4px 16px var(--color-aulas-glow), 0 4px 0 var(--color-aulas-shadow);
 }
 
 .glow-tarefas:hover:not(:disabled) {
-  box-shadow: 0 8px 32px var(--color-tarefas-glow), 0 4px 0 #007d63;
+  box-shadow: 0 4px 16px var(--color-tarefas-glow), 0 4px 0 var(--color-tarefas-shadow);
 }
 
 .glow-fora:hover:not(:disabled) {
-  box-shadow: 0 8px 32px var(--color-fora-glow), 0 4px 0 #b34d37;
+  box-shadow: 0 4px 16px var(--color-fora-glow), 0 4px 0 var(--color-fora-shadow);
 }
 
 .glow-challenges:hover:not(:disabled) {
-  box-shadow: 0 8px 32px var(--color-challenges-glow), 0 4px 0 #c9981f;
+  box-shadow: 0 4px 16px var(--color-challenges-glow), 0 4px 0 var(--color-challenges-shadow);
 }
 
 /* ── Nav Link Pending Indicator ── */

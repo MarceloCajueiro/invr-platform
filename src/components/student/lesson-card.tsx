@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Clock, PlayCircle } from "lucide-react";
 import { Badge, type BadgeVariant } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -50,12 +51,15 @@ export function LessonCard({ lesson, progress = 0, index = 0 }: LessonCardProps)
       >
         <div className="flex">
           {/* Thumbnail */}
-          <div className="relative w-40 min-h-24 shrink-0">
+          <div className="relative w-24 sm:w-40 min-h-24 shrink-0">
             {lesson.coverImageUrl ? (
-              <img
+              <Image
                 src={lesson.coverImageUrl}
                 alt={lesson.title}
-                className="w-full h-full object-cover"
+                fill
+                unoptimized
+                className="object-cover"
+                sizes="(max-width: 640px) 96px, 160px"
               />
             ) : (
               <div

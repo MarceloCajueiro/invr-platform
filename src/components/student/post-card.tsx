@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { FileText, Star } from "lucide-react";
 import { Badge, type BadgeVariant } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -67,10 +68,13 @@ export function PostCard({ post }: PostCardProps) {
         {/* Cover image — fixed 16:9 aspect ratio */}
         <div className="aspect-video relative">
           {post.coverImageUrl ? (
-            <img
+            <Image
               src={post.coverImageUrl}
               alt={post.title}
-              className="w-full h-full object-cover"
+              fill
+              unoptimized
+              className="object-cover"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
           ) : (
             <div

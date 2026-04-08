@@ -17,6 +17,7 @@ export interface SelectProps
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(
   ({ label, error, options, placeholder, className, id, ...rest }, ref) => {
     const selectId = id || label?.toLowerCase().replace(/\s+/g, "-");
+    const errorId = error ? `${selectId}-error` : undefined;
 
     return (
       <div className="space-y-1.5">
@@ -31,8 +32,11 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
         <select
           ref={ref}
           id={selectId}
+          aria-describedby={errorId}
+          aria-invalid={error ? true : undefined}
+          aria-required={rest.required}
           className={cn(
-            "w-full px-4 py-2.5 rounded-md bg-[#f8f9fb] border border-border text-text-primary focus:outline-none focus:border-aulas focus:ring-2 focus:ring-aulas/20 transition-colors appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%239aa3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:16px] bg-[position:right_12px_center] bg-no-repeat pr-10",
+            "w-full px-4 py-2.5 rounded-md bg-input-bg border border-border text-text-primary focus:outline-none focus:border-aulas focus:ring-2 focus:ring-aulas/20 transition-colors appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%239aa3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:16px] bg-[position:right_12px_center] bg-no-repeat pr-10",
             error &&
               "border-fora ring-2 ring-fora/20 focus:border-fora focus:ring-fora/20",
             className,
@@ -50,7 +54,9 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             </option>
           ))}
         </select>
-        {error && <p className="text-xs text-error mt-1">{error}</p>}
+        {error && (
+          <p id={errorId} className="text-xs text-error mt-1">{error}</p>
+        )}
       </div>
     );
   },

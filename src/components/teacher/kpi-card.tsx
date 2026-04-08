@@ -3,22 +3,18 @@ import { Card, CardContent } from "@/components/ui/card";
 
 const colorMap = {
   aulas: {
-    border: "border-l-aulas",
     bg: "bg-aulas-bg",
     text: "text-aulas",
   },
   tarefas: {
-    border: "border-l-tarefas",
     bg: "bg-tarefas-bg",
     text: "text-tarefas",
   },
   fora: {
-    border: "border-l-fora",
     bg: "bg-fora-bg",
     text: "text-fora",
   },
   challenges: {
-    border: "border-l-challenges",
     bg: "bg-challenges-bg",
     text: "text-challenges",
   },
@@ -37,17 +33,13 @@ export function KpiCard({ title, value, icon: Icon, color }: KpiCardProps) {
   const colors = colorMap[color];
 
   return (
-    <Card className={`border-l-4 ${colors.border}`}>
-      <CardContent className="flex items-center gap-4 py-5">
-        <div
-          className={`flex items-center justify-center w-12 h-12 rounded-[var(--radius-md)] ${colors.bg}`}
-        >
-          <Icon size={24} className={colors.text} />
+    <Card className={colors.bg}>
+      <CardContent className="py-5 px-5">
+        <div className="flex items-center gap-1.5 mb-1">
+          <Icon size={16} className={colors.text} />
+          <p className="text-sm font-medium text-text-secondary">{title}</p>
         </div>
-        <div>
-          <p className="text-3xl font-bold text-text-primary">{value}</p>
-          <p className="text-sm text-text-secondary">{title}</p>
-        </div>
+        <p className="text-3xl font-bold font-display text-text-primary">{value}</p>
       </CardContent>
     </Card>
   );

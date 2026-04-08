@@ -41,7 +41,7 @@ export function BrandPanel() {
           >
             Fluent
           </h1>
-          <p className="mt-3 text-white/60 text-lg">
+          <p className="mt-3 text-sidebar-muted text-lg">
             Plataforma inteligente de ensino de inglês
           </p>
         </div>

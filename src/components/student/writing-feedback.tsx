@@ -109,7 +109,7 @@ export function WritingFeedback({ feedback }: WritingFeedbackProps) {
                   <div className="flex items-center gap-2 mb-2">
                     <span
                       className={cn(
-                        "text-[10px] font-semibold uppercase px-2 py-0.5 rounded-full",
+                        "text-xs font-semibold uppercase px-2 py-0.5 rounded-full",
                         typeBadgeColor[error.type] ?? "bg-surface-tertiary text-text-muted",
                       )}
                     >

@@ -81,8 +81,9 @@ export function NewContentModal() {
     handleClose();
   }
 
+  // TODO: Consider converting to a dropdown/popover when a Popover primitive exists in the DS
   return (
-    <Modal open={open} onClose={handleClose} title="Novo conteúdo">
+    <Modal open={open} onClose={handleClose} title="Novo conteúdo" className="max-w-sm">
       <div className="grid grid-cols-2 gap-3">
         {channels.map((channel) => {
           const Icon = channel.icon;
@@ -108,7 +109,7 @@ export function NewContentModal() {
                 </p>
               </div>
               {channel.disabled && (
-                <span className="text-[10px] font-medium uppercase tracking-wider bg-border/50 text-text-muted rounded-full px-2 py-0.5">
+                <span className="text-xs font-medium uppercase tracking-wider bg-border/50 text-text-muted rounded-full px-2 py-0.5">
                   Em breve
                 </span>
               )}

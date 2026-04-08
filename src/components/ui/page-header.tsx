@@ -15,7 +15,7 @@ export function PageHeader({
   className,
 }: PageHeaderProps) {
   return (
-    <div className={cn("flex items-center justify-between mb-8", className)}>
+    <div className={cn("flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-8", className)}>
       <div>
         <h1 className="text-2xl font-bold text-text-primary font-display">
           {title}

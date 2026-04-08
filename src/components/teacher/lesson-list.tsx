@@ -95,7 +95,7 @@ export function LessonList({ lessons }: LessonListProps) {
               </div>
             </div>
 
-            <div className="flex items-center gap-2 shrink-0">
+            <div className="flex items-center gap-2 shrink-0 flex-wrap">
               <form action={toggleLessonStatus}>
                 <input type="hidden" name="id" value={lesson.id} />
                 <Button variant="ghost" size="sm" type="submit">

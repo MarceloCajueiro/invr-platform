@@ -443,7 +443,7 @@ function ListeningEditor({
       )}
 
       {data.audioUrl && (
-        <div className="rounded-[var(--radius-sm)] bg-[#f8f9fb] border border-border p-4 space-y-2">
+        <div className="rounded-[var(--radius-sm)] bg-input-bg border border-border p-4 space-y-2">
           <p className="text-xs font-medium text-text-secondary">
             Prévia do áudio gerado
           </p>
@@ -452,7 +452,7 @@ function ListeningEditor({
       )}
 
       {!data.audioUrl && !generatingAudio && (
-        <div className="rounded-[var(--radius-sm)] bg-[#f8f9fb] border border-border p-4">
+        <div className="rounded-[var(--radius-sm)] bg-input-bg border border-border p-4">
           <p className="text-sm text-text-muted">
             Selecione uma voz e clique em &quot;Gerar Áudio&quot; para criar o
             áudio a partir do texto acima.

@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import Image from "next/image";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { getStudent } from "@/lib/auth/get-student";
@@ -43,11 +44,16 @@ export default async function BlogPostPage({
 
       <article className="max-w-2xl">
         {post.coverImageUrl && (
-          <img
-            src={post.coverImageUrl}
-            alt={post.title}
-            className="w-full rounded-[var(--radius-md)] mb-6 object-cover max-h-80"
-          />
+          <div className="relative w-full max-h-80 aspect-video mb-6 rounded-[var(--radius-md)] overflow-hidden">
+            <Image
+              src={post.coverImageUrl}
+              alt={post.title}
+              fill
+              unoptimized
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 672px"
+            />
+          </div>
         )}
 
         <div className="flex items-center gap-2 mb-3">
