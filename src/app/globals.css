@@ -153,6 +153,32 @@ body::after {
   background-size: 256px 256px;
 }
 
+/* ── Focus Indicators ── */
+
+:focus-visible {
+  outline: 2px solid var(--color-aulas);
+  outline-offset: 2px;
+}
+
+/* Form inputs use their own ring styles */
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: none;
+}
+
+/* Reduced motion: respect user preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* ── Scrollbar ── */
 
 ::-webkit-scrollbar {
