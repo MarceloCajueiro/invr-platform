@@ -47,19 +47,19 @@ export function RecentSubmissions({ submissions }: RecentSubmissionsProps) {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-border text-left">
-                  <th className="px-6 py-3 text-text-secondary font-medium">
+                  <th className="px-3 sm:px-6 py-3 text-text-secondary font-medium">
                     Aluno
                   </th>
-                  <th className="px-6 py-3 text-text-secondary font-medium">
+                  <th className="px-3 sm:px-6 py-3 text-text-secondary font-medium">
                     Tarefa
                   </th>
-                  <th className="px-6 py-3 text-text-secondary font-medium">
+                  <th className="px-3 sm:px-6 py-3 text-text-secondary font-medium">
                     Nota
                   </th>
-                  <th className="px-6 py-3 text-text-secondary font-medium">
+                  <th className="px-3 sm:px-6 py-3 text-text-secondary font-medium">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-text-secondary font-medium">
+                  <th className="px-3 sm:px-6 py-3 text-text-secondary font-medium hidden sm:table-cell">
                     Data
                   </th>
                 </tr>
@@ -72,19 +72,19 @@ export function RecentSubmissions({ submissions }: RecentSubmissionsProps) {
                       key={sub.id}
                       className="border-b border-border last:border-b-0 hover:bg-bg-light transition-colors"
                     >
-                      <td className="px-6 py-3 text-text-primary font-medium">
+                      <td className="px-3 sm:px-6 py-3 text-text-primary font-medium">
                         {sub.studentName}
                       </td>
-                      <td className="px-6 py-3 text-text-secondary">
+                      <td className="px-3 sm:px-6 py-3 text-text-secondary">
                         {sub.taskTitle}
                       </td>
-                      <td className="px-6 py-3 text-text-primary">
+                      <td className="px-3 sm:px-6 py-3 text-text-primary">
                         {sub.score !== null ? `${sub.score}%` : "-"}
                       </td>
-                      <td className="px-6 py-3">
+                      <td className="px-3 sm:px-6 py-3">
                         <Badge variant={status.variant}>{status.label}</Badge>
                       </td>
-                      <td className="px-6 py-3 text-text-secondary">
+                      <td className="px-3 sm:px-6 py-3 text-text-secondary hidden sm:table-cell">
                         {formatDate(sub.createdAt)}
                       </td>
                     </tr>
