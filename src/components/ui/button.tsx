@@ -16,9 +16,9 @@ const variantStyles = {
 
 /** 3D box-shadow per variant (darker shade beneath the button) */
 const variantShadow: Record<string, string> = {
-  primary: "0 4px 0 #4a3fa5",
-  success: "0 4px 0 #007d63",
-  danger: "0 4px 0 #b34d37",
+  primary: "0 4px 0 var(--color-aulas-shadow)",
+  success: "0 4px 0 var(--color-tarefas-shadow)",
+  danger: "0 4px 0 var(--color-fora-shadow)",
 };
 
 const sizeStyles = {

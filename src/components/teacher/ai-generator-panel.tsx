@@ -66,7 +66,7 @@ export function AiGeneratorPanel({
         type="button"
         onClick={() => setOpen(!open)}
         className="flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium border transition-colors bg-challenges-bg/50 border-challenges/30 text-challenges-light hover:bg-challenges-bg hover:border-challenges/50"
-        style={{ color: "#c9981f" }}
+        style={{ color: "var(--color-challenges-shadow)" }}
       >
         <Sparkles size={16} className="text-challenges" />
         {open ? "Fechar gerador IA" : "Gerar com IA"}
@@ -105,7 +105,7 @@ export function AiGeneratorPanel({
               disabled={isLoading || !prompt.trim()}
               loading={isLoading}
               className="bg-challenges text-white glow-challenges"
-              style={{ boxShadow: "0 4px 0 #c9981f" }}
+              style={{ boxShadow: "0 4px 0 var(--color-challenges-shadow)" }}
             >
               {!isLoading && <Sparkles size={14} />}
               {isLoading ? "Gerando questões..." : "Gerar"}

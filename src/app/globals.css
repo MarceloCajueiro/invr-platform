@@ -223,19 +223,19 @@ textarea:focus-visible {
 /* ── Button Glow Hover ── */
 
 .glow-aulas:hover:not(:disabled) {
-  box-shadow: 0 8px 32px var(--color-aulas-glow), 0 4px 0 #4a3fa5;
+  box-shadow: 0 8px 32px var(--color-aulas-glow), 0 4px 0 var(--color-aulas-shadow);
 }
 
 .glow-tarefas:hover:not(:disabled) {
-  box-shadow: 0 8px 32px var(--color-tarefas-glow), 0 4px 0 #007d63;
+  box-shadow: 0 8px 32px var(--color-tarefas-glow), 0 4px 0 var(--color-tarefas-shadow);
 }
 
 .glow-fora:hover:not(:disabled) {
-  box-shadow: 0 8px 32px var(--color-fora-glow), 0 4px 0 #b34d37;
+  box-shadow: 0 8px 32px var(--color-fora-glow), 0 4px 0 var(--color-fora-shadow);
 }
 
 .glow-challenges:hover:not(:disabled) {
-  box-shadow: 0 8px 32px var(--color-challenges-glow), 0 4px 0 #c9981f;
+  box-shadow: 0 8px 32px var(--color-challenges-glow), 0 4px 0 var(--color-challenges-shadow);
 }
 
 /* ── Nav Link Pending Indicator ── */
