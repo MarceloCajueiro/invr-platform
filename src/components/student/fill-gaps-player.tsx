@@ -142,7 +142,7 @@ export function FillGapsPlayer({
                         disabled={checked}
                         placeholder="Sua resposta..."
                         className={cn(
-                          "px-3 py-2 rounded-[var(--radius-sm)] bg-[#f8f9fb] border text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-aulas transition-colors w-48",
+                          "px-3 py-2 rounded-[var(--radius-sm)] bg-input-bg border text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-aulas transition-colors w-48",
                           checked &&
                             isCorrect &&
                             "border-success bg-tarefas-bg text-success font-medium",

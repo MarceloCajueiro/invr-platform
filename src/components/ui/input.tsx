@@ -37,7 +37,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             aria-invalid={error ? true : undefined}
             aria-required={rest.required}
             className={cn(
-              "w-full px-4 py-2.5 rounded-md bg-[#f8f9fb] border border-border text-text-primary placeholder:text-text-muted focus:outline-none focus:border-aulas focus:ring-2 focus:ring-aulas/20 transition-colors",
+              "w-full px-4 py-2.5 rounded-md bg-input-bg border border-border text-text-primary placeholder:text-text-muted focus:outline-none focus:border-aulas focus:ring-2 focus:ring-aulas/20 transition-colors",
               Icon && "pl-9",
               error &&
                 "border-fora ring-2 ring-fora/20 focus:border-fora focus:ring-fora/20",

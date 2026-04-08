@@ -79,7 +79,7 @@ export default function SignInPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="seu@email.com"
-            className="w-full px-3 py-2.5 bg-[#f8f9fb] border border-border rounded-[var(--radius-sm)] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-aulas transition-colors"
+            className="w-full px-3 py-2.5 bg-input-bg border border-border rounded-[var(--radius-sm)] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-aulas transition-colors"
           />
         </div>
 
@@ -98,7 +98,7 @@ export default function SignInPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="********"
-              className="w-full px-3 py-2.5 pr-10 bg-[#f8f9fb] border border-border rounded-[var(--radius-sm)] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-aulas transition-colors"
+              className="w-full px-3 py-2.5 pr-10 bg-input-bg border border-border rounded-[var(--radius-sm)] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-aulas transition-colors"
             />
             <button
               type="button"
