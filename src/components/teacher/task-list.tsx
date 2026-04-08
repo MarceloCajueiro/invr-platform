@@ -123,7 +123,7 @@ export function TaskList({ tasks }: TaskListProps) {
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 shrink-0">
+              <div className="flex items-center gap-2 shrink-0 flex-wrap">
                 <form action={toggleTaskStatus}>
                   <input type="hidden" name="id" value={task.id} />
                   <Button variant="ghost" size="sm" type="submit">
