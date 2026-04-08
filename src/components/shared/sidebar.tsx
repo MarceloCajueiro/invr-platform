@@ -55,7 +55,7 @@ export function Sidebar({ role, userName }: SidebarProps) {
   }
 
   return (
-    <aside className="hidden md:flex flex-col w-60 bg-bg-dark text-white min-h-screen">
+    <aside className="hidden md:flex flex-col w-48 lg:w-60 bg-bg-dark text-white min-h-screen">
       {/* Logo */}
       <div className="px-6 py-6">
         <span className="text-xl font-bold font-display">Fluent</span>
