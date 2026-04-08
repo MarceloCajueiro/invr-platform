@@ -108,7 +108,7 @@ export function NewContentModal() {
                 </p>
               </div>
               {channel.disabled && (
-                <span className="text-[10px] font-medium uppercase tracking-wider bg-border/50 text-text-muted rounded-full px-2 py-0.5">
+                <span className="text-xs font-medium uppercase tracking-wider bg-border/50 text-text-muted rounded-full px-2 py-0.5">
                   Em breve
                 </span>
               )}

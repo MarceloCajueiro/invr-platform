@@ -60,7 +60,7 @@ export function MobileNav({ role }: MobileNavProps) {
             }`}
           >
             <Icon size={20} />
-            <span className="text-[10px]">{item.label}</span>
+            <span className="text-xs">{item.label}</span>
             <NavLinkPendingMobile />
           </Link>
         );
