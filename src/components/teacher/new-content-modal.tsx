@@ -81,8 +81,8 @@ export function NewContentModal() {
     handleClose();
   }
 
+  // TODO: Consider converting to a dropdown/popover when a Popover primitive exists in the DS
   return (
-    {/* TODO: Consider converting to a dropdown/popover when a Popover primitive exists in the DS */}
     <Modal open={open} onClose={handleClose} title="Novo conteúdo" className="max-w-sm">
       <div className="grid grid-cols-2 gap-3">
         {channels.map((channel) => {
