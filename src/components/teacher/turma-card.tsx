@@ -48,7 +48,7 @@ export function TurmaCard({ turma }: TurmaCardProps) {
       <Card hoverable className="overflow-hidden">
         <div
           className="h-[3px]"
-          style={{ backgroundColor: turma.color || "#636e72" }}
+          style={{ backgroundColor: turma.color || "#6c5ce7" }}
         />
         <CardContent className="pt-4">
           <div className="flex items-start justify-between gap-2 mb-2">
