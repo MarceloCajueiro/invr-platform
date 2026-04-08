@@ -10,6 +10,7 @@ export interface TextareaProps
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ label, error, className, id, rows = 4, ...rest }, ref) => {
     const textareaId = id || label?.toLowerCase().replace(/\s+/g, "-");
+    const errorId = error ? `${textareaId}-error` : undefined;
 
     return (
       <div className="space-y-1.5">
@@ -25,6 +26,9 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           ref={ref}
           id={textareaId}
           rows={rows}
+          aria-describedby={errorId}
+          aria-invalid={error ? true : undefined}
+          aria-required={rest.required}
           className={cn(
             "w-full px-4 py-2.5 rounded-md bg-[#f8f9fb] border border-border text-text-primary placeholder:text-text-muted focus:outline-none focus:border-aulas focus:ring-2 focus:ring-aulas/20 transition-colors resize-y",
             error &&
@@ -33,7 +37,9 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           )}
           {...rest}
         />
-        {error && <p className="text-xs text-error mt-1">{error}</p>}
+        {error && (
+          <p id={errorId} className="text-xs text-error mt-1">{error}</p>
+        )}
       </div>
     );
   },
