@@ -35,6 +35,15 @@
   --color-challenges-bg: #fffcf0;
   --color-challenges-glow: rgba(253, 203, 110, 0.3);
 
+  /* ── Colors: Channel Shadows (3D button) ── */
+  --color-aulas-shadow: #4a3fa5;
+  --color-tarefas-shadow: #007d63;
+  --color-fora-shadow: #b34d37;
+  --color-challenges-shadow: #c9981f;
+
+  /* ── Colors: Surfaces ── */
+  --color-input-bg: #f8f9fb;
+
   /* ── Colors: Semantic ── */
   --color-success: #00b894;
   --color-warning: #fdcb6e;
