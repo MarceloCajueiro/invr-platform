@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   LayoutDashboard,
   BookOpen,
@@ -39,6 +39,8 @@ const studentNav: NavItem[] = [
   { label: "Turmas", href: "/turmas", icon: Users },
 ];
 
+const PREVIEW_PAGES = new Set(["/teacher/lessons", "/teacher/tasks", "/teacher/posts"]);
+
 type SidebarProps = {
   role: "teacher" | "student";
   userName: string;
@@ -47,7 +49,16 @@ type SidebarProps = {
 export function Sidebar({ role, userName }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const isPreview = searchParams.get("preview") === "student";
   const items = role === "teacher" ? teacherNav : studentNav;
+
+  function getHref(item: NavItem): string {
+    if (isPreview && PREVIEW_PAGES.has(item.href)) {
+      return `${item.href}?preview=student`;
+    }
+    return item.href;
+  }
 
   async function handleSignOut() {
     await signOut();
@@ -70,7 +81,7 @@ export function Sidebar({ role, userName }: SidebarProps) {
           return (
             <Link
               key={item.href}
-              href={item.href}
+              href={getHref(item)}
               prefetch={false}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-[var(--radius-sm)] text-sm transition-colors relative ${
                 isActive
