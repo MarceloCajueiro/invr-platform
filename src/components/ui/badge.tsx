@@ -11,6 +11,7 @@ const variantStyles = {
   beginner: "bg-tarefas-bg text-tarefas",
   intermediate: "bg-aulas-bg text-aulas",
   advanced: "bg-fora-bg text-fora",
+  info: "bg-info/10 text-info",
   default: "bg-gray-100 text-text-secondary",
 } as const;
 

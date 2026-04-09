@@ -1,9 +1,11 @@
+import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { createAuth } from "@/lib/auth/server";
 import { Sidebar } from "@/components/shared/sidebar";
 import { MobileNav } from "@/components/shared/mobile-nav";
 import { NewContentModal } from "@/components/teacher/new-content-modal";
+import { PreviewToggle } from "@/components/teacher/preview-toggle";
 
 export default async function TeacherLayout({
   children,
@@ -33,6 +35,9 @@ export default async function TeacherLayout({
       </a>
       <Sidebar role="teacher" userName={session.user.name} />
       <main id="main-content" className="flex-1 px-4 md:px-8 lg:px-12 py-6 md:py-8 pb-16 md:pb-8">
+        <Suspense>
+          <PreviewToggle />
+        </Suspense>
         {children}
       </main>
       <MobileNav role="teacher" />
