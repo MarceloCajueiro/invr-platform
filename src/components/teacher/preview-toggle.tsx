@@ -4,7 +4,7 @@ import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { Eye, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const PREVIEW_PAGES = ["/teacher/lessons", "/teacher/tasks", "/teacher/posts"];
+const PREVIEW_PAGES = ["/teacher/lessons", "/teacher/tasks", "/teacher/posts", "/teacher/challenges"];
 
 export function PreviewToggle() {
   const searchParams = useSearchParams();

@@ -42,7 +42,7 @@ const studentNav: NavItem[] = [
   { label: "Turmas", href: "/turmas", icon: Users },
 ];
 
-const PREVIEW_PAGES = new Set(["/teacher/lessons", "/teacher/tasks", "/teacher/posts"]);
+const PREVIEW_PAGES = new Set(["/teacher/lessons", "/teacher/tasks", "/teacher/posts", "/teacher/challenges"]);
 
 type SidebarProps = {
   role: "teacher" | "student";

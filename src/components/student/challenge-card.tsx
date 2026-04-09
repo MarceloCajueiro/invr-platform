@@ -11,6 +11,7 @@ interface ChallengeCardProps {
     responded: boolean;
   };
   index: number;
+  href?: string;
 }
 
 function formatDueDate(date: Date | null): string | null {
@@ -23,11 +24,11 @@ function isOverdue(date: Date | null): boolean {
   return date.getTime() < Date.now();
 }
 
-export function ChallengeCard({ challenge, index }: ChallengeCardProps) {
+export function ChallengeCard({ challenge, index, href }: ChallengeCardProps) {
   const overdue = isOverdue(challenge.dueDate);
 
   return (
-    <Link href={`/challenges/${challenge.id}`}>
+    <Link href={href ?? `/challenges/${challenge.id}`}>
       <Card
         className="hover:shadow-md transition-shadow cursor-pointer"
         style={{ animationDelay: `${index * 60}ms` }}
