@@ -43,6 +43,8 @@ const lessonIds = [uuid(), uuid(), uuid(), uuid(), uuid()];
 const taskIds = [uuid(), uuid(), uuid(), uuid()];
 const postIds = [uuid(), uuid(), uuid()];
 const submissionIds = [uuid(), uuid()];
+const challengeIds = [uuid(), uuid()];
+const challengeResponseId = uuid();
 
 const ts = now();
 
@@ -346,6 +348,35 @@ postsData.forEach((p, i) => {
 });
 
 // ============================================================
+// Challenges
+// ============================================================
+console.log("Creating challenges...");
+
+const challengeDesc1 = JSON.stringify({
+  type: "doc",
+  content: [
+    { type: "paragraph", content: [{ type: "text", text: "Escreva sobre a sua rotina diária em inglês e anexe uma foto do seu dia!" }] },
+    { type: "paragraph", content: [{ type: "text", text: "Use Present Simple e inclua pelo menos 5 verbos diferentes." }] },
+  ],
+});
+
+const challengeDesc2 = JSON.stringify({
+  type: "doc",
+  content: [
+    { type: "paragraph", content: [{ type: "text", text: "Grave um áudio de 30 segundos desejando Feliz Natal em inglês para um amigo." }] },
+    { type: "paragraph", content: [{ type: "text", text: "Tente usar expressões como: Merry Christmas, Happy Holidays, Season's Greetings." }] },
+  ],
+});
+
+const futureDue = ts + 7 * 86400; // 7 days from now
+
+sql(`INSERT INTO challenges (id, teacher_id, title, description, cover_image_url, due_date, status, created_at, updated_at) VALUES ('${challengeIds[0]}', '${teacherId}', 'My Daily Routine', '${challengeDesc1.replace(/'/g, "''")}', NULL, ${futureDue}, 'published', ${ts - 2 * 86400}, ${ts})`);
+sql(`INSERT INTO challenges (id, teacher_id, title, description, cover_image_url, due_date, status, created_at, updated_at) VALUES ('${challengeIds[1]}', '${teacherId}', 'Merry Christmas Audio', '${challengeDesc2.replace(/'/g, "''")}', NULL, NULL, 'draft', ${ts - 86400}, ${ts})`);
+
+// Challenge response from student
+sql(`INSERT INTO challenge_responses (id, challenge_id, student_id, content, attachments, created_at, updated_at) VALUES ('${challengeResponseId}', '${challengeIds[0]}', '${studentId}', 'Every day I wake up at 7 AM. I have breakfast and then I go to work. I usually eat lunch at noon. In the evening I watch TV and go to bed at 11 PM.', NULL, ${ts - 86400}, ${ts - 86400})`);
+
+// ============================================================
 // Turma
 // ============================================================
 console.log("Creating turma...");
@@ -365,6 +396,8 @@ taskIds.slice(0, 2).forEach(tid => {
 postIds.forEach(pid => {
   sql(`INSERT INTO turma_posts (id, turma_id, post_id, created_at) VALUES ('${uuid()}', '${turmaId}', '${pid}', ${ts})`);
 });
+// Link challenges to turma
+sql(`INSERT INTO turma_challenges (id, turma_id, challenge_id, created_at) VALUES ('${uuid()}', '${turmaId}', '${challengeIds[0]}', ${ts})`);
 
 // ============================================================
 // Done!
