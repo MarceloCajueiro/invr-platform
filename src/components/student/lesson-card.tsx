@@ -39,11 +39,12 @@ interface LessonCardProps {
   };
   progress?: number;
   index?: number;
+  href?: string;
 }
 
-export function LessonCard({ lesson, progress = 0, index = 0 }: LessonCardProps) {
+export function LessonCard({ lesson, progress = 0, index = 0, href }: LessonCardProps) {
   return (
-    <Link href={`/lessons/${lesson.id}`}>
+    <Link href={href ?? `/lessons/${lesson.id}`}>
       <Card
         hoverable
         className="animate-slide-up overflow-hidden"

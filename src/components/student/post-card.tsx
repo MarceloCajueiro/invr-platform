@@ -17,6 +17,7 @@ interface PostCardProps {
     featured: boolean;
     createdAt: Date;
   };
+  href?: string;
 }
 
 const categoryLabels: Record<PostCategory, string> = {
@@ -58,9 +59,9 @@ function getExcerpt(content: string | null): string {
   }
 }
 
-export function PostCard({ post }: PostCardProps) {
+export function PostCard({ post, href }: PostCardProps) {
   return (
-    <Link href={`/blog/${post.slug}`}>
+    <Link href={href ?? `/blog/${post.slug}`}>
       <Card
         hoverable
         className={`overflow-hidden ${post.featured ? "ring-2 ring-fora/40 bg-fora-bg/30" : ""}`}

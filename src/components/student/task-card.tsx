@@ -45,6 +45,7 @@ interface TaskCardProps {
     status: string;
   };
   index?: number;
+  href?: string;
 }
 
 function ScoreDisplay({ score }: { score: number }) {
@@ -68,7 +69,7 @@ function ScoreDisplay({ score }: { score: number }) {
   );
 }
 
-export function TaskCard({ task, submission, index = 0 }: TaskCardProps) {
+export function TaskCard({ task, submission, index = 0, href }: TaskCardProps) {
   const config = taskTypeConfig[task.taskType] || taskTypeConfig.quiz;
   const Icon = config.icon;
 
@@ -76,7 +77,7 @@ export function TaskCard({ task, submission, index = 0 }: TaskCardProps) {
   const isSubmitted = submission?.status === "submitted";
 
   return (
-    <Link href={`/tasks/${task.id}`}>
+    <Link href={href ?? `/tasks/${task.id}`}>
       <Card
         hoverable
         className="animate-slide-up overflow-hidden"
