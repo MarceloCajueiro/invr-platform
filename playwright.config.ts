@@ -25,7 +25,7 @@ export default defineConfig({
     },
     {
       name: "teacher",
-      testMatch: /teacher\.spec\.ts/,
+      testMatch: /teacher\.spec\.ts|preview-mode\.spec\.ts/,
       use: {
         browserName: "chromium",
         storageState: "e2e/.auth/teacher.json",
