@@ -1,12 +1,12 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, ImageIcon, Film, Music, FileText } from "lucide-react";
+import { ArrowLeft, FileText } from "lucide-react";
 import { getTeacher } from "@/lib/auth/get-teacher";
 import { getChallenge, getChallengeResponses } from "@/lib/queries/challenges";
 import { PageHeader } from "@/components/ui/page-header";
 import { Card, CardContent } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
-import { Badge } from "@/components/ui/badge";
+import { AttachmentRenderer } from "@/components/ui/attachment-renderer";
 
 interface ResponsesPageProps {
   params: Promise<{ id: string }>;
@@ -16,13 +16,6 @@ interface Attachment {
   type: string;
   url: string;
   name: string;
-}
-
-function AttachmentIcon({ type }: { type: string }) {
-  if (type === "image") return <ImageIcon size={14} />;
-  if (type === "video") return <Film size={14} />;
-  if (type === "audio") return <Music size={14} />;
-  return <FileText size={14} />;
 }
 
 export default async function ResponsesPage({ params }: ResponsesPageProps) {
@@ -86,14 +79,7 @@ export default async function ResponsesPage({ params }: ResponsesPageProps) {
                   )}
 
                   {attachments.length > 0 && (
-                    <div className="flex flex-wrap gap-2">
-                      {attachments.map((att, i) => (
-                        <Badge key={i} variant="challenges">
-                          <AttachmentIcon type={att.type} />
-                          <span className="ml-1">{att.name}</span>
-                        </Badge>
-                      ))}
-                    </div>
+                    <AttachmentRenderer attachments={attachments} />
                   )}
                 </CardContent>
               </Card>

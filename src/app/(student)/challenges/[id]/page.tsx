@@ -11,15 +11,10 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { BlockContent } from "@/components/ui/block-content";
 import { ChallengeResponseForm } from "@/components/student/challenge-response-form";
+import { ChallengeResponseSection } from "@/components/student/challenge-response-section";
 
 interface ChallengeDetailPageProps {
   params: Promise<{ id: string }>;
-}
-
-interface Attachment {
-  type: string;
-  url: string;
-  name: string;
 }
 
 export default async function ChallengeDetailPage({
@@ -85,35 +80,11 @@ export default async function ChallengeDetailPage({
 
         {/* Response section */}
         {response ? (
-          <Card>
-            <CardContent className="pt-6">
-              <h3 className="text-sm font-semibold text-text-primary mb-3">
-                Sua Resposta
-              </h3>
-              {response.content && (
-                <p className="text-sm text-text-secondary whitespace-pre-wrap mb-3">
-                  {response.content}
-                </p>
-              )}
-              {response.attachments && (
-                <div className="flex flex-wrap gap-2">
-                  {(JSON.parse(response.attachments) as Attachment[]).map((att, i) => (
-                    <Badge key={i} variant="challenges">
-                      {att.name}
-                    </Badge>
-                  ))}
-                </div>
-              )}
-              <p className="text-xs text-text-muted mt-3">
-                Enviado em {response.createdAt.toLocaleDateString("pt-BR", {
-                  day: "numeric",
-                  month: "long",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-              </p>
-            </CardContent>
-          </Card>
+          <ChallengeResponseSection
+            response={response}
+            challengeId={challenge.id}
+            isOverdue={!!isOverdue}
+          />
         ) : isOverdue ? (
           <Card>
             <CardContent className="pt-6 text-center">

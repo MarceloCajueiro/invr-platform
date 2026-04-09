@@ -180,7 +180,7 @@ export async function submitChallengeResponse(
   });
 
   if (existing) {
-    throw new Error("Você já respondeu este desafio");
+    throw new Error("Você já respondeu este desafio. Use a opção de editar.");
   }
 
   await db.insert(challengeResponses).values({
@@ -192,4 +192,46 @@ export async function submitChallengeResponse(
 
   revalidatePath("/challenges");
   revalidatePath(`/challenges/${challengeId}`);
+}
+
+export async function updateChallengeResponse(
+  responseId: string,
+  content: string,
+  attachments: string,
+) {
+  const { student } = await getStudent();
+  const db = getDb();
+
+  // Verify response belongs to this student
+  const existing = await db.query.challengeResponses.findFirst({
+    where: (r, { eq: e, and: a }) =>
+      a(e(r.id, responseId), e(r.studentId, student.id)),
+  });
+
+  if (!existing) {
+    throw new Error("Resposta não encontrada");
+  }
+
+  // Enforce due date server-side
+  const challenge = await db.query.challenges.findFirst({
+    where: (c, { eq: e }) => e(c.id, existing.challengeId),
+  });
+
+  if (challenge?.dueDate && challenge.dueDate.getTime() < Date.now()) {
+    throw new Error("O prazo para este desafio já encerrou");
+  }
+
+  await db
+    .update(challengeResponses)
+    .set({
+      content: content || null,
+      attachments: attachments || null,
+      updatedAt: new Date(),
+    })
+    .where(
+      and(eq(challengeResponses.id, responseId), eq(challengeResponses.studentId, student.id)),
+    );
+
+  revalidatePath("/challenges");
+  revalidatePath(`/challenges/${existing.challengeId}`);
 }

@@ -1,24 +1,36 @@
 "use client";
 
 import { useState } from "react";
-import { Send } from "lucide-react";
+import { Send, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { FileUpload, type FileItem } from "@/components/ui/file-upload";
-import { submitChallengeResponse } from "@/lib/actions/challenges";
+import { submitChallengeResponse, updateChallengeResponse } from "@/lib/actions/challenges";
 
 interface ChallengeResponseFormProps {
   challengeId: string;
+  initialContent?: string;
+  initialAttachments?: FileItem[];
+  responseId?: string;
+  onCancel?: () => void;
 }
 
 const MB = 1024 * 1024;
 const GB = 1024 * MB;
 
-export function ChallengeResponseForm({ challengeId }: ChallengeResponseFormProps) {
-  const [content, setContent] = useState("");
-  const [attachments, setAttachments] = useState<FileItem[]>([]);
+export function ChallengeResponseForm({
+  challengeId,
+  initialContent = "",
+  initialAttachments,
+  responseId,
+  onCancel,
+}: ChallengeResponseFormProps) {
+  const [content, setContent] = useState(initialContent);
+  const [attachments, setAttachments] = useState<FileItem[]>(initialAttachments ?? []);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const isEditing = !!responseId;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -38,11 +50,13 @@ export function ChallengeResponseForm({ challengeId }: ChallengeResponseFormProp
         name: f.name,
       }));
 
-      await submitChallengeResponse(
-        challengeId,
-        content,
-        JSON.stringify(attachmentData),
-      );
+      const attachmentsJson = JSON.stringify(attachmentData);
+
+      if (isEditing) {
+        await updateChallengeResponse(responseId, content, attachmentsJson);
+      } else {
+        await submitChallengeResponse(challengeId, content, attachmentsJson);
+      }
     } catch (err) {
       setError((err as Error).message);
       setSubmitting(false);
@@ -53,7 +67,7 @@ export function ChallengeResponseForm({ challengeId }: ChallengeResponseFormProp
     <Card>
       <CardContent className="pt-6">
         <h3 className="text-sm font-semibold text-text-primary mb-4">
-          Sua Resposta
+          {isEditing ? "Editar Resposta" : "Sua Resposta"}
         </h3>
         <form onSubmit={handleSubmit} className="space-y-4">
           <textarea
@@ -74,6 +88,7 @@ export function ChallengeResponseForm({ challengeId }: ChallengeResponseFormProp
               folder="challenge-responses"
               label="Anexos"
               description="Imagem, vídeo ou áudio. Máximo 5 arquivos."
+              existingFiles={initialAttachments}
               onChange={setAttachments}
             />
           </div>
@@ -82,10 +97,18 @@ export function ChallengeResponseForm({ challengeId }: ChallengeResponseFormProp
             <p className="text-error text-sm">{error}</p>
           )}
 
-          <div className="flex justify-end">
+          <div className="flex justify-end gap-2">
+            {onCancel && (
+              <Button type="button" variant="ghost" onClick={onCancel}>
+                <X size={16} />
+                Cancelar
+              </Button>
+            )}
             <Button type="submit" disabled={submitting}>
               <Send size={16} />
-              {submitting ? "Enviando..." : "Enviar Resposta"}
+              {submitting
+                ? isEditing ? "Salvando..." : "Enviando..."
+                : isEditing ? "Salvar Alterações" : "Enviar Resposta"}
             </Button>
           </div>
         </form>
