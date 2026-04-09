@@ -228,4 +228,66 @@ test.describe.serial("Student Preview Mode", () => {
       await expect(page.getByText(/visualizando como aluno/i)).toBeHidden();
     });
   });
+
+  // ---- Round-trip: preview → exit → edit ----
+  test.describe("PM-13: Exit preview then edit works correctly", () => {
+    test.setTimeout(60000);
+
+    test("should open edit form after exiting preview mode", async ({ page }) => {
+      // Step 1: Go to lessons and activate preview
+      await page.goto("/teacher/lessons");
+      await page.getByRole("button", { name: /ver como aluno/i }).click();
+      await expect(page).toHaveURL(/preview=student/);
+      await expect(page.getByText(/visualizando como aluno/i)).toBeVisible();
+
+      // Step 2: Exit preview
+      await page.getByText(/sair do preview/i).click();
+      await expect(page).not.toHaveURL(/preview=student/);
+      await expect(page.getByText(/visualizando como aluno/i)).toBeHidden();
+
+      // Step 3: Click Edit on the first lesson
+      await page.getByRole("link", { name: /editar/i }).first().click();
+      await page.waitForURL(/teacher\/lessons\/.*\/edit/, { timeout: 15000 });
+
+      // Should see the edit form, NOT the preview player
+      await expect(page.getByRole("heading", { name: /editar aula/i })).toBeVisible({ timeout: 5000 });
+      await expect(page.getByLabel(/título/i)).toBeVisible();
+    });
+
+    test("should open edit form for tasks after exiting preview mode", async ({ page }) => {
+      // Step 1: Activate preview on tasks
+      await page.goto("/teacher/tasks");
+      await page.getByRole("button", { name: /ver como aluno/i }).click();
+      await expect(page).toHaveURL(/preview=student/);
+
+      // Step 2: Exit preview
+      await page.getByText(/sair do preview/i).click();
+      await expect(page).not.toHaveURL(/preview=student/);
+
+      // Step 3: Click Edit on the first task
+      await page.getByRole("link", { name: /editar/i }).first().click();
+      await page.waitForURL(/teacher\/tasks\/.*\/edit/, { timeout: 15000 });
+
+      // Should see the edit form
+      await expect(page.getByRole("heading", { name: /editar tarefa/i })).toBeVisible({ timeout: 5000 });
+    });
+
+    test("should open edit form for posts after exiting preview mode", async ({ page }) => {
+      // Step 1: Activate preview on posts
+      await page.goto("/teacher/posts");
+      await page.getByRole("button", { name: /ver como aluno/i }).click();
+      await expect(page).toHaveURL(/preview=student/);
+
+      // Step 2: Exit preview
+      await page.getByText(/sair do preview/i).click();
+      await expect(page).not.toHaveURL(/preview=student/);
+
+      // Step 3: Click Edit on the first post
+      await page.getByRole("link", { name: /editar/i }).first().click();
+      await page.waitForURL(/teacher\/posts\/.*\/edit/, { timeout: 15000 });
+
+      // Should see the edit form
+      await expect(page.getByRole("heading", { name: /editar post/i })).toBeVisible({ timeout: 10000 });
+    });
+  });
 });

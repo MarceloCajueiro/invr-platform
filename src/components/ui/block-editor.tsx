@@ -63,7 +63,9 @@ function BlockEditorInner({ initialContent, onChange, editable = true }: BlockEd
   let parsed: Block[] | undefined;
   if (initialContent) {
     try {
-      parsed = JSON.parse(initialContent);
+      const data = JSON.parse(initialContent);
+      // BlockNote expects an array of blocks; skip tiptap/ProseMirror format ({ type: "doc", ... })
+      parsed = Array.isArray(data) ? data : undefined;
     } catch {
       parsed = undefined;
     }
