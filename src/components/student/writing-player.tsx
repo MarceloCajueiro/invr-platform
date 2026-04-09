@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Send, CheckCircle2, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { submitAnswers } from "@/lib/actions/student-submissions";
@@ -17,6 +18,7 @@ interface WritingPlayerProps {
     description?: string | null;
     questions?: string | null;
   };
+  readOnly?: boolean;
   existingSubmission?: {
     answers: string | null;
     score: number | null;
@@ -25,7 +27,7 @@ interface WritingPlayerProps {
   };
 }
 
-export function WritingPlayer({ task, existingSubmission }: WritingPlayerProps) {
+export function WritingPlayer({ task, readOnly, existingSubmission }: WritingPlayerProps) {
   const [text, setText] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -110,6 +112,51 @@ export function WritingPlayer({ task, existingSubmission }: WritingPlayerProps) 
             </p>
           </CardContent>
         </Card>
+      </div>
+    );
+  }
+
+  // Read-only preview mode for teachers
+  if (readOnly) {
+    const promptData = task.questions ? JSON.parse(task.questions) : null;
+
+    return (
+      <div className="space-y-6">
+        {(promptData || task.description) && (
+          <Card>
+            <CardContent>
+              <h3 className="font-medium text-text-primary mb-2">Instruções</h3>
+              {promptData?.prompt && (
+                <p className="text-sm text-text-primary whitespace-pre-wrap">
+                  {promptData.prompt}
+                </p>
+              )}
+              {promptData?.instructions && (
+                <p className="text-sm text-text-secondary mt-2 whitespace-pre-wrap">
+                  {promptData.instructions}
+                </p>
+              )}
+              {!promptData && task.description && (
+                <p className="text-sm text-text-primary whitespace-pre-wrap">
+                  {task.description}
+                </p>
+              )}
+            </CardContent>
+          </Card>
+        )}
+
+        <Textarea
+          label="Sua redação"
+          rows={6}
+          disabled
+          placeholder="Área de escrita do aluno..."
+        />
+
+        <div className="flex justify-center">
+          <Badge variant="info" className="text-sm px-4 py-1.5">
+            Modo preview — interação desabilitada
+          </Badge>
+        </div>
       </div>
     );
   }

@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { submitAnswers } from "@/lib/actions/student-submissions";
 import type { QuizQuestion } from "@/lib/validations/tasks";
@@ -21,6 +22,7 @@ interface ListeningPlayerProps {
     id: string;
     questions?: string | null;
   };
+  readOnly?: boolean;
   existingSubmission?: {
     answers: string | null;
     score: number | null;
@@ -37,6 +39,7 @@ interface ListeningData {
 
 export function ListeningPlayer({
   task,
+  readOnly,
   existingSubmission,
 }: ListeningPlayerProps) {
   const parsed: ListeningData = task.questions
@@ -132,6 +135,50 @@ export function ListeningPlayer({
               </Card>
             );
           })}
+        </div>
+      </div>
+    );
+  }
+
+  // Read-only preview mode for teachers
+  if (readOnly) {
+    return (
+      <div className="space-y-6">
+        {audioUrl && (
+          <Card>
+            <CardContent>
+              <AudioSection audioUrl={audioUrl} text={parsed.text} />
+            </CardContent>
+          </Card>
+        )}
+        {questions.length > 0 && (
+          <div className="space-y-4">
+            {questions.map((q) => (
+              <Card key={q.number}>
+                <CardContent>
+                  <p className="font-medium text-text-primary mb-3">
+                    {q.number}. {q.text}
+                  </p>
+                  <div className="space-y-2">
+                    {q.options.map((opt) => (
+                      <div
+                        key={opt.letter}
+                        className="px-4 py-2.5 rounded-[var(--radius-sm)] border border-border text-sm text-text-secondary"
+                      >
+                        <span className="font-medium mr-2">{opt.letter})</span>
+                        {opt.text}
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
+        <div className="flex justify-center">
+          <Badge variant="info" className="text-sm px-4 py-1.5">
+            Modo preview — interação desabilitada
+          </Badge>
         </div>
       </div>
     );

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { CheckCircle2, XCircle, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { submitAnswers } from "@/lib/actions/student-submissions";
 import type { FillGapQuestion } from "@/lib/validations/tasks";
@@ -12,6 +13,7 @@ import type { FillGapQuestion } from "@/lib/validations/tasks";
 interface FillGapsPlayerProps {
   questions: FillGapQuestion[];
   taskId: string;
+  readOnly?: boolean;
   existingSubmission?: {
     answers: string | null;
     score: number | null;
@@ -23,6 +25,7 @@ interface FillGapsPlayerProps {
 export function FillGapsPlayer({
   questions,
   taskId,
+  readOnly,
   existingSubmission,
 }: FillGapsPlayerProps) {
   const [answers, setAnswers] = useState<Record<number, string>>({});
@@ -93,6 +96,41 @@ export function FillGapsPlayer({
               </Card>
             );
           })}
+        </div>
+      </div>
+    );
+  }
+
+  // Read-only preview mode for teachers
+  if (readOnly) {
+    return (
+      <div className="space-y-6">
+        <div className="space-y-4">
+          {questions.map((q) => (
+            <Card key={q.number}>
+              <CardContent>
+                <div className="flex items-start gap-3">
+                  <span className="text-xs font-medium text-text-muted mt-1 shrink-0">
+                    {q.number}.
+                  </span>
+                  <div className="flex-1 space-y-2">
+                    <p className="text-text-primary">{q.text}</p>
+                    <input
+                      type="text"
+                      disabled
+                      placeholder="Resposta do aluno..."
+                      className="px-3 py-2 rounded-[var(--radius-sm)] bg-input-bg border border-border text-sm text-text-muted w-48 cursor-not-allowed"
+                    />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+        <div className="flex justify-center">
+          <Badge variant="info" className="text-sm px-4 py-1.5">
+            Modo preview — interação desabilitada
+          </Badge>
         </div>
       </div>
     );
