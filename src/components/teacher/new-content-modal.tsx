@@ -51,8 +51,7 @@ const channels: ChannelCard[] = [
     bgClass: "bg-challenges/10",
     hoverClass: "hover:bg-challenges/20",
     iconColorClass: "text-challenges",
-    href: null,
-    disabled: true,
+    href: "/teacher/challenges/new",
   },
 ];
 

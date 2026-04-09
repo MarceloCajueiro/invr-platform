@@ -4,6 +4,8 @@ import {
   tasks,
   submissions,
   lessonProgresses,
+  challenges,
+  challengeResponses,
 } from "@/lib/db/schema";
 import { eq, and, count, inArray, desc, or } from "drizzle-orm";
 
@@ -42,11 +44,25 @@ export async function getHomeStats(studentId: string, teacherId: string) {
       ),
     );
 
+  const [totalChallenges] = await db
+    .select({ count: count() })
+    .from(challenges)
+    .where(
+      and(eq(challenges.teacherId, teacherId), eq(challenges.status, "published")),
+    );
+
+  const [respondedChallenges] = await db
+    .select({ count: count() })
+    .from(challengeResponses)
+    .where(eq(challengeResponses.studentId, studentId));
+
   return {
     totalLessons: totalLessons.count,
     watchedLessons: watchedLessons.count,
     totalTasks: totalTasks.count,
     completedTasks: completedTasks.count,
+    totalChallenges: totalChallenges.count,
+    respondedChallenges: respondedChallenges.count,
   };
 }
 
