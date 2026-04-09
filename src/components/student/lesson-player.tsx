@@ -32,9 +32,10 @@ interface LessonPlayerProps {
     durationMinutes?: number | null;
   };
   initialProgress: number;
+  readOnly?: boolean;
 }
 
-export function LessonPlayer({ lesson, initialProgress }: LessonPlayerProps) {
+export function LessonPlayer({ lesson, initialProgress, readOnly }: LessonPlayerProps) {
   const [progress, setProgress] = useState(initialProgress);
   const [isPending, startTransition] = useTransition();
 
@@ -61,16 +62,18 @@ export function LessonPlayer({ lesson, initialProgress }: LessonPlayerProps) {
           )}
         </div>
 
-        <Button
-          onClick={handleToggleWatched}
-          loading={isPending}
-          variant={progress >= 100 ? "success" : "primary"}
-          size="sm"
-          className="shrink-0"
-        >
-          <Check size={14} />
-          {progress >= 100 ? "Assistida" : "Marcar como assistida"}
-        </Button>
+        {!readOnly && (
+          <Button
+            onClick={handleToggleWatched}
+            loading={isPending}
+            variant={progress >= 100 ? "success" : "primary"}
+            size="sm"
+            className="shrink-0"
+          >
+            <Check size={14} />
+            {progress >= 100 ? "Assistida" : "Marcar como assistida"}
+          </Button>
+        )}
       </div>
 
       {lesson.content && <BlockContent content={lesson.content} />}
