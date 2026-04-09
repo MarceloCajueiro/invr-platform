@@ -124,6 +124,7 @@ export async function deleteChallenge(formData: FormData) {
     .where(and(eq(challenges.id, id), eq(challenges.teacherId, teacher.id)));
 
   revalidatePath("/teacher/challenges");
+  revalidatePath("/challenges");
 }
 
 export async function toggleChallengeStatus(formData: FormData) {
@@ -142,6 +143,7 @@ export async function toggleChallengeStatus(formData: FormData) {
     .where(and(eq(challenges.id, id), eq(challenges.teacherId, teacher.id)));
 
   revalidatePath("/teacher/challenges");
+  revalidatePath("/challenges");
 }
 
 export async function submitChallengeResponse(
@@ -164,6 +166,11 @@ export async function submitChallengeResponse(
 
   if (!challenge) {
     throw new Error("Desafio não encontrado");
+  }
+
+  // Enforce due date server-side
+  if (challenge.dueDate && challenge.dueDate.getTime() < Date.now()) {
+    throw new Error("O prazo para este desafio já encerrou");
   }
 
   // Check if already responded
