@@ -1,12 +1,14 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Trophy, Calendar, CheckCircle } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
 
 interface ChallengeCardProps {
   challenge: {
     id: string;
     title: string;
+    coverImageUrl?: string | null;
     dueDate: Date | null;
     responded: boolean;
   };
@@ -30,39 +32,61 @@ export function ChallengeCard({ challenge, index, href }: ChallengeCardProps) {
   return (
     <Link href={href ?? `/challenges/${challenge.id}`}>
       <Card
-        className="hover:shadow-md transition-shadow cursor-pointer"
-        style={{ animationDelay: `${index * 60}ms` }}
+        hoverable
+        className="animate-slide-up overflow-hidden"
+        style={{ animationDelay: `${index * 60}ms`, animationFillMode: "both" }}
       >
-        <CardContent className="pt-6">
-          <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-[var(--radius-sm)] bg-challenges/10 flex items-center justify-center shrink-0">
-              <Trophy size={20} className="text-challenges" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <h3 className="text-sm font-semibold text-text-primary truncate">
-                {challenge.title}
-              </h3>
-              <div className="flex items-center gap-2 mt-1.5">
-                {challenge.responded ? (
-                  <Badge variant="tarefas">
-                    <CheckCircle size={10} className="mr-1" />
-                    Respondido
-                  </Badge>
-                ) : overdue ? (
-                  <Badge variant="fora">Encerrado</Badge>
-                ) : (
-                  <Badge variant="challenges">Pendente</Badge>
-                )}
-                {challenge.dueDate && (
-                  <span className="text-xs text-text-muted flex items-center gap-1">
-                    <Calendar size={12} />
-                    {formatDueDate(challenge.dueDate)}
-                  </span>
-                )}
+        <div className="flex">
+          {/* Thumbnail */}
+          <div className="relative w-24 sm:w-40 min-h-24 shrink-0">
+            {challenge.coverImageUrl ? (
+              <Image
+                src={challenge.coverImageUrl}
+                alt={challenge.title}
+                fill
+                unoptimized
+                className="object-cover"
+                sizes="(max-width: 640px) 96px, 160px"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-challenges-light to-challenges-bg">
+                <Trophy size={32} className="text-text-muted opacity-50" />
               </div>
-            </div>
+            )}
+            {challenge.responded && (
+              <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+                <span className="text-white text-xs font-medium bg-success px-2 py-0.5 rounded-full">
+                  Respondido
+                </span>
+              </div>
+            )}
           </div>
-        </CardContent>
+
+          {/* Content */}
+          <div className="flex-1 min-w-0 p-4 flex flex-col justify-center gap-1.5 items-start">
+            <div className="flex items-center gap-2">
+              {challenge.responded ? (
+                <Badge variant="tarefas">
+                  <CheckCircle size={10} className="mr-1" />
+                  Respondido
+                </Badge>
+              ) : overdue ? (
+                <Badge variant="fora">Encerrado</Badge>
+              ) : (
+                <Badge variant="challenges">Pendente</Badge>
+              )}
+            </div>
+            <h3 className="font-medium text-text-primary line-clamp-2">
+              {challenge.title}
+            </h3>
+            {challenge.dueDate && (
+              <div className="flex items-center gap-1 text-xs text-text-muted">
+                <Calendar size={12} />
+                <span>Prazo: {formatDueDate(challenge.dueDate)}</span>
+              </div>
+            )}
+          </div>
+        </div>
       </Card>
     </Link>
   );

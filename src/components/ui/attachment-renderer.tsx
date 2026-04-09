@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { FileText } from "lucide-react";
 
 interface Attachment {
@@ -15,16 +14,12 @@ function SingleAttachment({ att }: { att: Attachment }) {
   if (att.type === "image") {
     return (
       <a href={att.url} target="_blank" rel="noopener noreferrer" className="block">
-        <div className="relative w-full max-w-md aspect-video rounded-[var(--radius-sm)] overflow-hidden bg-bg-light">
-          <Image
-            src={att.url}
-            alt={att.name}
-            fill
-            unoptimized
-            className="object-cover hover:opacity-90 transition-opacity"
-            sizes="(max-width: 768px) 100vw, 448px"
-          />
-        </div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={att.url}
+          alt={att.name}
+          className="max-w-full max-h-80 rounded-[var(--radius-sm)] bg-bg-light object-contain hover:opacity-90 transition-opacity"
+        />
         <span className="text-xs text-text-muted mt-1 block">{att.name}</span>
       </a>
     );
