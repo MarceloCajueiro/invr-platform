@@ -5,6 +5,7 @@ import {
   turmaLessons,
   turmaTasks,
   turmaPosts,
+  turmaChallenges,
   students,
   user,
   lessons,
@@ -201,6 +202,15 @@ export async function getPostTurmaIds(postId: string) {
     .select({ turmaId: turmaPosts.turmaId })
     .from(turmaPosts)
     .where(eq(turmaPosts.postId, postId));
+  return rows.map((r) => r.turmaId);
+}
+
+export async function getChallengeTurmaIds(challengeId: string) {
+  const db = getDb();
+  const rows = await db
+    .select({ turmaId: turmaChallenges.turmaId })
+    .from(turmaChallenges)
+    .where(eq(turmaChallenges.challengeId, challengeId));
   return rows.map((r) => r.turmaId);
 }
 

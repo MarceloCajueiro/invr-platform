@@ -456,3 +456,86 @@ export const turmaPosts = sqliteTable(
   ],
 );
 
+export const challenges = sqliteTable(
+  "challenges",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    teacherId: text("teacher_id")
+      .notNull()
+      .references(() => teachers.id),
+    title: text("title").notNull(),
+    description: text("description"), // BlockNote JSON
+    coverImageUrl: text("cover_image_url"),
+    dueDate: integer("due_date", { mode: "timestamp" }),
+    status: text("status", { enum: ["draft", "published"] })
+      .notNull()
+      .default("draft"),
+    createdAt: integer("created_at", { mode: "timestamp" })
+      .notNull()
+      .default(sql`(unixepoch())`),
+    updatedAt: integer("updated_at", { mode: "timestamp" })
+      .notNull()
+      .default(sql`(unixepoch())`),
+  },
+  (table) => [
+    index("challenges_teacher_id_status_idx").on(table.teacherId, table.status),
+  ],
+);
+
+export const challengeResponses = sqliteTable(
+  "challenge_responses",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    challengeId: text("challenge_id")
+      .notNull()
+      .references(() => challenges.id, { onDelete: "cascade" }),
+    studentId: text("student_id")
+      .notNull()
+      .references(() => students.id, { onDelete: "cascade" }),
+    content: text("content"),
+    attachments: text("attachments"), // JSON: [{type, url, name}]
+    createdAt: integer("created_at", { mode: "timestamp" })
+      .notNull()
+      .default(sql`(unixepoch())`),
+    updatedAt: integer("updated_at", { mode: "timestamp" })
+      .notNull()
+      .default(sql`(unixepoch())`),
+  },
+  (table) => [
+    uniqueIndex("challenge_responses_challenge_student_idx").on(
+      table.challengeId,
+      table.studentId,
+    ),
+    index("challenge_responses_challenge_id_idx").on(table.challengeId),
+    index("challenge_responses_student_id_idx").on(table.studentId),
+  ],
+);
+
+export const turmaChallenges = sqliteTable(
+  "turma_challenges",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    turmaId: text("turma_id")
+      .notNull()
+      .references(() => turmas.id, { onDelete: "cascade" }),
+    challengeId: text("challenge_id")
+      .notNull()
+      .references(() => challenges.id, { onDelete: "cascade" }),
+    createdAt: integer("created_at", { mode: "timestamp" })
+      .notNull()
+      .default(sql`(unixepoch())`),
+  },
+  (table) => [
+    uniqueIndex("turma_challenges_turma_challenge_idx").on(
+      table.turmaId,
+      table.challengeId,
+    ),
+  ],
+);
+

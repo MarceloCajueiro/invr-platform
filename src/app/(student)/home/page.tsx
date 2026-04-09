@@ -1,4 +1,4 @@
-import { BookOpen, ClipboardList, FileText } from "lucide-react";
+import { BookOpen, ClipboardList, FileText, Trophy } from "lucide-react";
 import { getStudent } from "@/lib/auth/get-student";
 import {
   getHomeStats,
@@ -46,7 +46,7 @@ export default async function HomePage() {
       </div>
 
       {/* Channel Cards Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <ChannelCard
           channel="aulas"
           title="Aulas"
@@ -70,6 +70,14 @@ export default async function HomePage() {
           subtitle="Dicas e conteúdo"
           href="/blog"
           icon={FileText}
+        />
+        <ChannelCard
+          channel="challenges"
+          title="Challenges"
+          count={stats.totalChallenges}
+          subtitle={`${stats.respondedChallenges} respondidos`}
+          href="/challenges"
+          icon={Trophy}
         />
       </div>
 

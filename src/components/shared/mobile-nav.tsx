@@ -11,6 +11,7 @@ import {
   Home,
   FileText,
   User,
+  Trophy,
 } from "lucide-react";
 import { NavLinkPendingMobile } from "@/components/shared/nav-progress";
 
@@ -24,6 +25,7 @@ const teacherMobileNav: MobileNavItem[] = [
   { label: "Dashboard", href: "/teacher/dashboard", icon: LayoutDashboard },
   { label: "Aulas", href: "/teacher/lessons", icon: BookOpen },
   { label: "Tarefas", href: "/teacher/tasks", icon: ClipboardList },
+  { label: "Challenges", href: "/teacher/challenges", icon: Trophy },
   { label: "Turmas", href: "/teacher/turmas", icon: Users },
   { label: "Alunos", href: "/teacher/students", icon: GraduationCap },
 ];
@@ -33,6 +35,7 @@ const studentMobileNav: MobileNavItem[] = [
   { label: "Aulas", href: "/lessons", icon: BookOpen },
   { label: "Tarefas", href: "/tasks", icon: ClipboardList },
   { label: "Blog", href: "/blog", icon: FileText },
+  { label: "Challenges", href: "/challenges", icon: Trophy },
   { label: "Perfil", href: "/profile", icon: User },
 ];
 

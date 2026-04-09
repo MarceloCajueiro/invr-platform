@@ -11,6 +11,7 @@ import {
   GraduationCap,
   Home,
   LogOut,
+  Trophy,
 } from "lucide-react";
 import { signOut } from "@/lib/auth/client";
 import { NavLinkPending } from "@/components/shared/nav-progress";
@@ -27,6 +28,7 @@ const teacherNav: NavItem[] = [
   { label: "Aulas", href: "/teacher/lessons", icon: BookOpen, color: "aulas" },
   { label: "Tarefas", href: "/teacher/tasks", icon: ClipboardList, color: "tarefas" },
   { label: "Posts", href: "/teacher/posts", icon: FileText, color: "fora" },
+  { label: "Challenges", href: "/teacher/challenges", icon: Trophy, color: "challenges" },
   { label: "Turmas", href: "/teacher/turmas", icon: Users },
   { label: "Alunos", href: "/teacher/students", icon: GraduationCap },
 ];
@@ -36,6 +38,7 @@ const studentNav: NavItem[] = [
   { label: "Aulas", href: "/lessons", icon: BookOpen, color: "aulas" },
   { label: "Tarefas", href: "/tasks", icon: ClipboardList, color: "tarefas" },
   { label: "Blog", href: "/blog", icon: FileText, color: "fora" },
+  { label: "Challenges", href: "/challenges", icon: Trophy, color: "challenges" },
   { label: "Turmas", href: "/turmas", icon: Users },
 ];
 

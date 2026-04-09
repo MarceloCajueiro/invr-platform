@@ -26,8 +26,14 @@ interface BlockContentProps {
 function BlockContentInner({ content }: BlockContentProps) {
   let parsed: Block[] | undefined;
   try {
-    parsed = JSON.parse(content);
+    const raw = JSON.parse(content);
+    // Handle both BlockNote array format and ProseMirror {type:"doc",content:[...]} format
+    parsed = Array.isArray(raw) ? raw : undefined;
   } catch {
+    return <p className="text-text-secondary">{content}</p>;
+  }
+
+  if (!parsed || parsed.length === 0) {
     return <p className="text-text-secondary">{content}</p>;
   }
 
