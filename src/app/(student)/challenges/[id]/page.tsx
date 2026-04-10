@@ -41,21 +41,8 @@ export default async function ChallengeDetailPage({
       </Link>
 
       <article className="max-w-2xl space-y-6">
-        {challenge.coverImageUrl && (
-          <div className="relative w-full max-h-80 aspect-video rounded-[var(--radius-md)] overflow-hidden">
-            <Image
-              src={challenge.coverImageUrl}
-              alt={challenge.title}
-              fill
-              unoptimized
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 672px"
-            />
-          </div>
-        )}
-
         <div>
-          <div className="flex items-center gap-2 mb-3">
+          <div className="flex items-center gap-2 mb-2">
             <Badge variant="challenges">Challenge</Badge>
             {challenge.dueDate && (
               <span className="text-xs text-text-muted flex items-center gap-1">
@@ -71,9 +58,22 @@ export default async function ChallengeDetailPage({
             )}
           </div>
 
-          <h1 className="text-2xl font-bold text-text-primary font-display mb-4">
+          <h1 className="text-xl font-bold text-text-primary font-display mb-4">
             {challenge.title}
           </h1>
+
+          {challenge.coverImageUrl && (
+            <div className="relative w-full max-h-64 aspect-video mb-4 rounded-[var(--radius-md)] overflow-hidden">
+              <Image
+                src={challenge.coverImageUrl}
+                alt={challenge.title}
+                fill
+                unoptimized
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 672px"
+              />
+            </div>
+          )}
 
           {challenge.description && <BlockContent content={challenge.description} />}
         </div>
