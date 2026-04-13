@@ -2,10 +2,15 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { updateTurmaSettings, deleteTurma } from "@/lib/actions/turmas";
+import { TurmaForm } from "@/components/teacher/turma-form";
+import { updateTurma, updateTurmaSettings, deleteTurma } from "@/lib/actions/turmas";
 
 interface TurmaSettingsData {
   id: string;
+  name: string;
+  description: string | null;
+  color: string | null;
+  level: "beginner" | "intermediate" | "advanced" | null;
   notifyNewLesson: boolean;
   notifyNewTask: boolean;
 }
@@ -15,16 +20,28 @@ interface TurmaSettingsProps {
 }
 
 export function TurmaSettings({ settings }: TurmaSettingsProps) {
-  const updateWithId = updateTurmaSettings.bind(null, settings.id);
+  const updateWithId = updateTurma.bind(null, settings.id);
+  const updateSettingsWithId = updateTurmaSettings.bind(null, settings.id);
 
   return (
     <div className="space-y-6">
+      <TurmaForm
+        turma={{
+          id: settings.id,
+          name: settings.name,
+          description: settings.description,
+          color: settings.color,
+          level: settings.level,
+        }}
+        action={updateWithId}
+      />
+
       <Card>
         <CardContent className="pt-6">
           <h3 className="text-sm font-semibold text-text-primary mb-4">
             Notificações
           </h3>
-          <form action={updateWithId} className="space-y-4">
+          <form action={updateSettingsWithId} className="space-y-4">
             <label className="flex items-center gap-3 cursor-pointer">
               <input
                 type="checkbox"

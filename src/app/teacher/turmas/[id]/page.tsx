@@ -72,6 +72,10 @@ export default async function TurmaDetailPage({
         availableTasks={availableTasks}
         settings={{
           id: turma.id,
+          name: turma.name,
+          description: turma.description,
+          color: turma.color,
+          level: turma.level,
           notifyNewLesson: turma.notifyNewLesson,
           notifyNewTask: turma.notifyNewTask,
         }}

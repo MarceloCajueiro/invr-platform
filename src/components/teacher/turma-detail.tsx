@@ -48,6 +48,10 @@ interface AvailableItem {
 
 interface TurmaSettingsData {
   id: string;
+  name: string;
+  description: string | null;
+  color: string | null;
+  level: "beginner" | "intermediate" | "advanced" | null;
   notifyNewLesson: boolean;
   notifyNewTask: boolean;
 }
