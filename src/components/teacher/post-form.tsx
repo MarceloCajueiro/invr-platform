@@ -17,6 +17,7 @@ interface PostData {
   coverImageUrl: string | null;
   category: "tips" | "grammar" | "culture" | "vocabulary";
   featured: boolean;
+  publishedAt: Date | null;
 }
 
 interface PostFormProps {
@@ -47,6 +48,11 @@ function generateSlug(title: string): string {
 function coverUrlToFileItems(url: string | null | undefined): FileItem[] {
   if (!url) return [];
   return [{ url, name: url.split("/").pop() ?? "cover", size: 0 }];
+}
+
+function toInputDate(date: Date | null | undefined): string {
+  if (!date) return new Date().toISOString().split("T")[0];
+  return new Date(date).toISOString().split("T")[0];
 }
 
 export function PostForm({ post, action, turmas = [], selectedTurmaIds = [] }: PostFormProps) {
@@ -146,6 +152,18 @@ export function PostForm({ post, action, turmas = [], selectedTurmaIds = [] }: P
             >
               Destacado
             </label>
+          </div>
+
+          <div className="space-y-1.5">
+            <Input
+              label="Data de publicação"
+              name="publishedAt"
+              type="date"
+              defaultValue={toInputDate(post?.publishedAt)}
+            />
+            <p className="text-xs text-text-muted">
+              Pode agendar para o futuro — alunos só veem a partir dessa data.
+            </p>
           </div>
 
           <div className="space-y-1.5">
