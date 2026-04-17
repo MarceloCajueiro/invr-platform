@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FileText, Pencil, Eye, Star } from "lucide-react";
+import { FileText, Pencil, Eye, Star, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -14,10 +14,25 @@ interface Post {
   title: string;
   category: "tips" | "grammar" | "culture" | "vocabulary";
   status: "draft" | "published";
+  publishedAt: Date | null;
   featured: boolean;
   viewCount: number;
   createdAt: Date;
   turmas: { id: string; name: string; color: string | null }[];
+}
+
+function isScheduled(publishedAt: Date | null | undefined): boolean {
+  if (!publishedAt) return false;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return new Date(publishedAt).getTime() > today.getTime();
+}
+
+function formatScheduledDate(date: Date): string {
+  return new Date(date).toLocaleDateString("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+  });
 }
 
 interface PostListProps {
@@ -72,9 +87,16 @@ export function PostList({ posts }: PostListProps) {
                 <Badge variant={categoryBadgeVariant[post.category]}>
                   {categoryLabels[post.category]}
                 </Badge>
-                <Badge variant={post.status}>
-                  {statusLabels[post.status]}
-                </Badge>
+                {post.status === "published" && isScheduled(post.publishedAt) ? (
+                  <Badge variant="scheduled">
+                    <Clock size={10} className="mr-1" />
+                    Agendado · {formatScheduledDate(post.publishedAt!)}
+                  </Badge>
+                ) : (
+                  <Badge variant={post.status}>
+                    {statusLabels[post.status]}
+                  </Badge>
+                )}
                 {post.featured && (
                   <Badge variant="default">
                     <Star size={10} className="mr-1" />

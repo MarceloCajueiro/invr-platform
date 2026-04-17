@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { HelpCircle, Headphones, PenLine, FileEdit, Pencil } from "lucide-react";
+import { HelpCircle, Headphones, PenLine, FileEdit, Pencil, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -16,9 +16,24 @@ interface Task {
   taskType: "quiz" | "listening" | "fill_gaps" | "writing";
   level: "beginner" | "intermediate" | "advanced";
   status: "draft" | "published";
+  publishedAt: Date | null;
   questions: string | null;
   createdAt: Date;
   turmas: { id: string; name: string; color: string | null }[];
+}
+
+function isScheduled(publishedAt: Date | null | undefined): boolean {
+  if (!publishedAt) return false;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return new Date(publishedAt).getTime() > today.getTime();
+}
+
+function formatScheduledDate(date: Date): string {
+  return new Date(date).toLocaleDateString("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+  });
 }
 
 interface TaskListProps {
@@ -105,9 +120,16 @@ export function TaskList({ tasks }: TaskListProps) {
                   <Badge variant={task.level}>
                     {levelLabels[task.level]}
                   </Badge>
-                  <Badge variant={task.status}>
-                    {statusLabels[task.status]}
-                  </Badge>
+                  {task.status === "published" && isScheduled(task.publishedAt) ? (
+                    <Badge variant="scheduled">
+                      <Clock size={10} className="mr-1" />
+                      Agendado · {formatScheduledDate(task.publishedAt!)}
+                    </Badge>
+                  ) : (
+                    <Badge variant={task.status}>
+                      {statusLabels[task.status]}
+                    </Badge>
+                  )}
                 </div>
                 <div className="flex items-center gap-2 text-xs text-text-muted">
                   <span>

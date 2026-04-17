@@ -14,9 +14,24 @@ interface Lesson {
   title: string;
   category: "conversation" | "grammar" | "vocabulary" | "listening" | "culture";
   status: "draft" | "published";
+  publishedAt: Date | null;
   durationMinutes: number | null;
   createdAt: Date;
   turmas: { id: string; name: string; color: string | null }[];
+}
+
+function isScheduled(publishedAt: Date | null | undefined): boolean {
+  if (!publishedAt) return false;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return new Date(publishedAt).getTime() > today.getTime();
+}
+
+function formatScheduledDate(date: Date): string {
+  return new Date(date).toLocaleDateString("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+  });
 }
 
 interface LessonListProps {
@@ -73,9 +88,16 @@ export function LessonList({ lessons }: LessonListProps) {
                 <Badge variant={categoryBadgeVariant[lesson.category]}>
                   {categoryLabels[lesson.category]}
                 </Badge>
-                <Badge variant={lesson.status}>
-                  {statusLabels[lesson.status]}
-                </Badge>
+                {lesson.status === "published" && isScheduled(lesson.publishedAt) ? (
+                  <Badge variant="scheduled">
+                    <Clock size={10} className="mr-1" />
+                    Agendado · {formatScheduledDate(lesson.publishedAt!)}
+                  </Badge>
+                ) : (
+                  <Badge variant={lesson.status}>
+                    {statusLabels[lesson.status]}
+                  </Badge>
+                )}
               </div>
               <div className="flex items-center gap-2">
                 {lesson.durationMinutes && (
