@@ -14,6 +14,7 @@ interface ChallengeData {
   description: string | null;
   coverImageUrl: string | null;
   dueDate: Date | null;
+  publishedAt: Date | null;
 }
 
 interface ChallengeFormProps {
@@ -73,6 +74,21 @@ export function ChallengeForm({
             type="date"
             defaultValue={formatDateForInput(challenge?.dueDate)}
           />
+
+          <div className="space-y-1.5">
+            <Input
+              label="Data de publicação"
+              name="publishedAt"
+              type="date"
+              defaultValue={
+                formatDateForInput(challenge?.publishedAt) ||
+                new Date().toISOString().split("T")[0]
+              }
+            />
+            <p className="text-xs text-text-muted">
+              Pode agendar para o futuro — alunos só veem a partir dessa data.
+            </p>
+          </div>
 
           <div className="space-y-1.5">
             <h3 className="text-sm font-semibold text-text-primary">
