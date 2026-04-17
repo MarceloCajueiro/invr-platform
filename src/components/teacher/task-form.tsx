@@ -22,6 +22,7 @@ interface TaskData {
   taskType: TaskType;
   level: Level;
   questions: string | null;
+  publishedAt: Date | null;
 }
 
 interface TaskFormProps {
@@ -43,6 +44,11 @@ const levelOptions = [
   { value: "intermediate", label: "Intermediário" },
   { value: "advanced", label: "Avançado" },
 ];
+
+function toInputDate(date: Date | null | undefined): string {
+  if (!date) return new Date().toISOString().split("T")[0];
+  return new Date(date).toISOString().split("T")[0];
+}
 
 export function TaskForm({ task, action, turmas = [], selectedTurmaIds = [] }: TaskFormProps) {
   const isEdit = !!task;
@@ -103,6 +109,18 @@ export function TaskForm({ task, action, turmas = [], selectedTurmaIds = [] }: T
             rows={4}
             defaultValue={task?.description ?? ""}
           />
+
+          <div className="space-y-1.5">
+            <Input
+              label="Data de publicação"
+              name="publishedAt"
+              type="date"
+              defaultValue={toInputDate(task?.publishedAt)}
+            />
+            <p className="text-xs text-text-muted">
+              Pode agendar para o futuro — alunos só veem a partir dessa data.
+            </p>
+          </div>
 
           {AI_SUPPORTED_TYPES.includes(taskType) && (
             <AiGeneratorPanel
