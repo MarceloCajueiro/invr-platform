@@ -36,6 +36,7 @@ interface LessonCardProps {
     category: string;
     coverImageUrl?: string | null;
     durationMinutes?: number | null;
+    publishedAt?: Date | null;
   };
   progress?: number;
   index?: number;
@@ -96,6 +97,11 @@ export function LessonCard({ lesson, progress = 0, index = 0, href }: LessonCard
               <div className="flex items-center gap-1 text-xs text-text-muted">
                 <Clock size={12} />
                 <span>{lesson.durationMinutes} min</span>
+              </div>
+            )}
+            {lesson.publishedAt && (
+              <div className="text-xs text-text-muted">
+                {new Date(lesson.publishedAt).toLocaleDateString("pt-BR")}
               </div>
             )}
           </div>
