@@ -8,6 +8,7 @@ const variantStyles = {
   challenges: "bg-challenges-bg text-challenges",
   draft: "bg-gray-100 text-text-muted",
   published: "bg-tarefas-bg text-tarefas",
+  scheduled: "bg-challenges-bg text-challenges",
   beginner: "bg-tarefas-bg text-tarefas",
   intermediate: "bg-aulas-bg text-aulas",
   advanced: "bg-fora-bg text-fora",
