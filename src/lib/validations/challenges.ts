@@ -5,6 +5,7 @@ export const createChallengeSchema = z.object({
   description: z.string().optional(),
   coverImageUrl: z.string().optional(),
   dueDate: z.coerce.date().optional(),
+  publishedAt: z.coerce.date().optional(),
 });
 
 export const updateChallengeSchema = createChallengeSchema.partial();
