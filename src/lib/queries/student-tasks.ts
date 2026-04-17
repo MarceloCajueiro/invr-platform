@@ -1,6 +1,6 @@
 import { getDb } from "@/lib/db";
 import { tasks, submissions, turmaTasks, turmaStudents } from "@/lib/db/schema";
-import { eq, and, inArray } from "drizzle-orm";
+import { eq, and, inArray, lte } from "drizzle-orm";
 
 export async function getStudentTasks(teacherId: string, studentId: string) {
   const db = getDb();
@@ -32,6 +32,7 @@ export async function getStudentTasks(teacherId: string, studentId: string) {
         eq(tasks.teacherId, teacherId),
         eq(tasks.status, "published"),
         inArray(tasks.id, taskIds),
+        lte(tasks.publishedAt, new Date()),
       ),
     );
 
@@ -62,8 +63,8 @@ export async function getStudentTask(taskId: string, teacherId: string) {
   const db = getDb();
 
   return db.query.tasks.findFirst({
-    where: (t, { eq: e, and: a }) =>
-      a(e(t.id, taskId), e(t.teacherId, teacherId), e(t.status, "published")),
+    where: (t, { eq: e, and: a, lte: lt }) =>
+      a(e(t.id, taskId), e(t.teacherId, teacherId), e(t.status, "published"), lt(t.publishedAt, new Date())),
   });
 }
 
