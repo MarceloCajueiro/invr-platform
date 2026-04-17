@@ -41,6 +41,7 @@ export const createTaskSchema = z.object({
   level: z.enum(["beginner", "intermediate", "advanced"]),
   lessonId: z.string().optional(),
   questions: z.string().optional(), // JSON string, validated per type
+  publishedAt: z.coerce.date().optional(),
 });
 
 export const updateTaskSchema = createTaskSchema.partial();
