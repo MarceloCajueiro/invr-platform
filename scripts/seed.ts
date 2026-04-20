@@ -181,7 +181,8 @@ const lessonsData = [
 ];
 
 lessonsData.forEach((l, i) => {
-  sql(`INSERT INTO lessons (id, teacher_id, title, content, category, duration_minutes, status, position, created_at, updated_at) VALUES ('${lessonIds[i]}', '${teacherId}', '${l.title}', '${l.content.replace(/'/g, "''")}', '${l.category}', ${l.duration}, '${l.status}', ${l.pos}, ${ts - (5 - i) * 86400}, ${ts})`);
+  const lessonCreatedAt = ts - (5 - i) * 86400;
+  sql(`INSERT INTO lessons (id, teacher_id, title, content, category, duration_minutes, status, position, published_at, created_at, updated_at) VALUES ('${lessonIds[i]}', '${teacherId}', '${l.title}', '${l.content.replace(/'/g, "''")}', '${l.category}', ${l.duration}, '${l.status}', ${l.pos}, ${lessonCreatedAt}, ${lessonCreatedAt}, ${ts})`);
 });
 
 // ============================================================
@@ -220,10 +221,10 @@ const listeningData = JSON.stringify({
   ],
 });
 
-sql(`INSERT INTO tasks (id, teacher_id, title, description, task_type, questions, level, status, ai_generated, created_at, updated_at) VALUES ('${taskIds[0]}', '${teacherId}', 'Present Simple Quiz', 'Test your knowledge of Present Simple tense.', 'quiz', '${quizQuestions.replace(/'/g, "''")}', 'beginner', 'published', 0, ${ts - 3 * 86400}, ${ts})`);
-sql(`INSERT INTO tasks (id, teacher_id, title, description, task_type, questions, level, status, ai_generated, created_at, updated_at) VALUES ('${taskIds[1]}', '${teacherId}', 'Daily Routine - Fill the Gaps', 'Complete the sentences about daily routines.', 'fill_gaps', '${fillGapQuestions.replace(/'/g, "''")}', 'beginner', 'published', 0, ${ts - 2 * 86400}, ${ts})`);
-sql(`INSERT INTO tasks (id, teacher_id, title, description, task_type, questions, level, status, ai_generated, created_at, updated_at) VALUES ('${taskIds[2]}', '${teacherId}', 'Describe Your Morning', 'Write about your morning routine.', 'writing', '${writingPrompt.replace(/'/g, "''")}', 'beginner', 'published', 0, ${ts - 86400}, ${ts})`);
-sql(`INSERT INTO tasks (id, teacher_id, title, description, task_type, questions, level, status, ai_generated, created_at, updated_at) VALUES ('${taskIds[3]}', '${teacherId}', 'Weather Forecast Listening', 'Listen and answer questions about the weather.', 'listening', '${listeningData.replace(/'/g, "''")}', 'intermediate', 'published', 0, ${ts}, ${ts})`);
+sql(`INSERT INTO tasks (id, teacher_id, title, description, task_type, questions, level, status, ai_generated, published_at, created_at, updated_at) VALUES ('${taskIds[0]}', '${teacherId}', 'Present Simple Quiz', 'Test your knowledge of Present Simple tense.', 'quiz', '${quizQuestions.replace(/'/g, "''")}', 'beginner', 'published', 0, ${ts - 3 * 86400}, ${ts - 3 * 86400}, ${ts})`);
+sql(`INSERT INTO tasks (id, teacher_id, title, description, task_type, questions, level, status, ai_generated, published_at, created_at, updated_at) VALUES ('${taskIds[1]}', '${teacherId}', 'Daily Routine - Fill the Gaps', 'Complete the sentences about daily routines.', 'fill_gaps', '${fillGapQuestions.replace(/'/g, "''")}', 'beginner', 'published', 0, ${ts - 2 * 86400}, ${ts - 2 * 86400}, ${ts})`);
+sql(`INSERT INTO tasks (id, teacher_id, title, description, task_type, questions, level, status, ai_generated, published_at, created_at, updated_at) VALUES ('${taskIds[2]}', '${teacherId}', 'Describe Your Morning', 'Write about your morning routine.', 'writing', '${writingPrompt.replace(/'/g, "''")}', 'beginner', 'published', 0, ${ts - 86400}, ${ts - 86400}, ${ts})`);
+sql(`INSERT INTO tasks (id, teacher_id, title, description, task_type, questions, level, status, ai_generated, published_at, created_at, updated_at) VALUES ('${taskIds[3]}', '${teacherId}', 'Weather Forecast Listening', 'Listen and answer questions about the weather.', 'listening', '${listeningData.replace(/'/g, "''")}', 'intermediate', 'published', 0, ${ts}, ${ts}, ${ts})`);
 
 // ============================================================
 // Submissions (student completed quiz and fill-gaps)
@@ -344,7 +345,8 @@ const postsData = [
 ];
 
 postsData.forEach((p, i) => {
-  sql(`INSERT INTO posts (id, teacher_id, title, slug, content, category, featured, status, view_count, created_at, updated_at) VALUES ('${postIds[i]}', '${teacherId}', '${p.title}', '${p.slug}', '${p.content.replace(/'/g, "''")}', '${p.category}', ${p.featured ? 1 : 0}, 'published', ${p.views}, ${ts - (3 - i) * 86400}, ${ts})`);
+  const postCreatedAt = ts - (3 - i) * 86400;
+  sql(`INSERT INTO posts (id, teacher_id, title, slug, content, category, featured, status, view_count, published_at, created_at, updated_at) VALUES ('${postIds[i]}', '${teacherId}', '${p.title}', '${p.slug}', '${p.content.replace(/'/g, "''")}', '${p.category}', ${p.featured ? 1 : 0}, 'published', ${p.views}, ${postCreatedAt}, ${postCreatedAt}, ${ts})`);
 });
 
 // ============================================================
@@ -370,8 +372,8 @@ const challengeDesc2 = JSON.stringify({
 
 const futureDue = ts + 7 * 86400; // 7 days from now
 
-sql(`INSERT INTO challenges (id, teacher_id, title, description, cover_image_url, due_date, status, created_at, updated_at) VALUES ('${challengeIds[0]}', '${teacherId}', 'My Daily Routine', '${challengeDesc1.replace(/'/g, "''")}', NULL, ${futureDue}, 'published', ${ts - 2 * 86400}, ${ts})`);
-sql(`INSERT INTO challenges (id, teacher_id, title, description, cover_image_url, due_date, status, created_at, updated_at) VALUES ('${challengeIds[1]}', '${teacherId}', 'Merry Christmas Audio', '${challengeDesc2.replace(/'/g, "''")}', NULL, NULL, 'draft', ${ts - 86400}, ${ts})`);
+sql(`INSERT INTO challenges (id, teacher_id, title, description, cover_image_url, due_date, status, published_at, created_at, updated_at) VALUES ('${challengeIds[0]}', '${teacherId}', 'My Daily Routine', '${challengeDesc1.replace(/'/g, "''")}', NULL, ${futureDue}, 'published', ${ts - 2 * 86400}, ${ts - 2 * 86400}, ${ts})`);
+sql(`INSERT INTO challenges (id, teacher_id, title, description, cover_image_url, due_date, status, published_at, created_at, updated_at) VALUES ('${challengeIds[1]}', '${teacherId}', 'Merry Christmas Audio', '${challengeDesc2.replace(/'/g, "''")}', NULL, NULL, 'draft', ${ts - 86400}, ${ts - 86400}, ${ts})`);
 
 // Challenge response from student
 sql(`INSERT INTO challenge_responses (id, challenge_id, student_id, content, attachments, created_at, updated_at) VALUES ('${challengeResponseId}', '${challengeIds[0]}', '${studentId}', 'Every day I wake up at 7 AM. I have breakfast and then I go to work. I usually eat lunch at noon. In the evening I watch TV and go to bed at 11 PM.', NULL, ${ts - 86400}, ${ts - 86400})`);
