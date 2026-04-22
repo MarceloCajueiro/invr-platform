@@ -86,6 +86,7 @@ export async function createPost(formData: FormData) {
   }
 
   revalidatePath("/teacher/posts");
+  revalidatePath("/blog");
   redirect("/teacher/posts");
 }
 
@@ -120,7 +121,6 @@ export async function updatePost(id: string, formData: FormData) {
       content: parsed.content || null,
       coverImageUrl: parsed.coverImageUrl || null,
       featured: parsed.featured ?? false,
-      publishedAt: parsed.publishedAt ?? undefined,
       updatedAt: new Date(),
     })
     .where(and(eq(posts.id, id), eq(posts.teacherId, teacher.id)));
@@ -136,6 +136,7 @@ export async function updatePost(id: string, formData: FormData) {
   }
 
   revalidatePath("/teacher/posts");
+  revalidatePath("/blog");
   redirect("/teacher/posts");
 }
 
@@ -151,6 +152,7 @@ export async function deletePost(formData: FormData) {
     .where(and(eq(posts.id, id), eq(posts.teacherId, teacher.id)));
 
   revalidatePath("/teacher/posts");
+  revalidatePath("/blog");
 }
 
 export async function togglePostStatus(formData: FormData) {
@@ -169,4 +171,5 @@ export async function togglePostStatus(formData: FormData) {
     .where(and(eq(posts.id, id), eq(posts.teacherId, teacher.id)));
 
   revalidatePath("/teacher/posts");
+  revalidatePath("/blog");
 }

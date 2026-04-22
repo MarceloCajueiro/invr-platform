@@ -72,6 +72,7 @@ export async function createChallenge(formData: FormData) {
   }
 
   revalidatePath("/teacher/challenges");
+  revalidatePath("/challenges");
   redirect("/teacher/challenges");
 }
 
@@ -101,7 +102,6 @@ export async function updateChallenge(id: string, formData: FormData) {
       ...parsed,
       coverImageUrl: parsed.coverImageUrl || null,
       dueDate: parsed.dueDate || null,
-      publishedAt: parsed.publishedAt ?? undefined,
       updatedAt: new Date(),
     })
     .where(and(eq(challenges.id, id), eq(challenges.teacherId, teacher.id)));
@@ -117,6 +117,7 @@ export async function updateChallenge(id: string, formData: FormData) {
   }
 
   revalidatePath("/teacher/challenges");
+  revalidatePath("/challenges");
   redirect("/teacher/challenges");
 }
 
