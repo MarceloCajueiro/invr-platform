@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { FileUpload, type FileItem } from "@/components/ui/file-upload";
 import { BlockEditor } from "@/components/ui/block-editor";
 import { TurmaSelector } from "@/components/teacher/turma-selector";
+import { toInputDate } from "@/lib/utils";
 
 interface LessonData {
   id: string;
@@ -16,6 +17,7 @@ interface LessonData {
   category: "conversation" | "grammar" | "vocabulary" | "listening" | "culture";
   coverImageUrl: string | null;
   durationMinutes: number | null;
+  publishedAt: Date | null;
 }
 
 interface LessonFormProps {
@@ -87,6 +89,20 @@ export function LessonForm({ lesson, action, turmas = [], selectedTurmaIds = [] 
             description="JPG, PNG, WebP. Máximo 5MB"
             existingFiles={existingCover}
           />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardContent className="pt-6 space-y-1.5">
+          <Input
+            label="Data de publicação"
+            name="publishedAt"
+            type="date"
+            defaultValue={toInputDate(lesson?.publishedAt)}
+          />
+          <p className="text-xs text-text-muted">
+            Pode agendar para o futuro — alunos só veem a partir dessa data.
+          </p>
         </CardContent>
       </Card>
 

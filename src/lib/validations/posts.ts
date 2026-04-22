@@ -10,6 +10,7 @@ export const createPostSchema = z.object({
   coverImageUrl: z.string().optional(),
   category: z.enum(["tips", "grammar", "culture", "vocabulary"]),
   featured: z.boolean().optional(),
+  publishedAt: z.coerce.date().optional(),
 });
 
 export const updatePostSchema = createPostSchema.partial();

@@ -46,5 +46,11 @@ export default defineConfig({
       testMatch: /auth\.spec\.ts/,
       use: { browserName: "chromium" },
     },
+    {
+      name: "scheduled",
+      testMatch: /scheduled-publishing\.spec\.ts/,
+      use: { browserName: "chromium" },
+      dependencies: ["setup"],
+    },
   ],
 });

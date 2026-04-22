@@ -43,12 +43,15 @@ export async function createLesson(formData: FormData) {
     formData.get("coverImageFile") as string | null
   );
 
+  const publishedAtRaw = formData.get("publishedAt") as string | null;
+
   const raw = {
     title: formData.get("title"),
     content: formData.get("content") || undefined,
     category: formData.get("category"),
     coverImageUrl: coverImageUrl ?? undefined,
     durationMinutes: formData.get("durationMinutes") || undefined,
+    publishedAt: publishedAtRaw || new Date().toISOString().split("T")[0],
   };
 
   const parsed = createLessonSchema.parse(raw);
@@ -62,6 +65,7 @@ export async function createLesson(formData: FormData) {
     coverImageUrl: parsed.coverImageUrl || null,
     durationMinutes: parsed.durationMinutes || null,
     status: "draft",
+    publishedAt: parsed.publishedAt ?? new Date(),
   }).returning({ id: lessons.id });
 
   const turmaIds = parseTurmaIds(formData);
@@ -73,6 +77,7 @@ export async function createLesson(formData: FormData) {
   }
 
   revalidatePath("/teacher/lessons");
+  revalidatePath("/lessons");
   redirect("/teacher/lessons");
 }
 
@@ -83,12 +88,15 @@ export async function updateLesson(id: string, formData: FormData) {
     formData.get("coverImageFile") as string | null
   );
 
+  const publishedAtRaw = formData.get("publishedAt") as string | null;
+
   const raw = {
     title: formData.get("title"),
     content: formData.get("content") || undefined,
     category: formData.get("category"),
     coverImageUrl: coverImageUrl ?? undefined,
     durationMinutes: formData.get("durationMinutes") || undefined,
+    publishedAt: publishedAtRaw || undefined,
   };
 
   const parsed = updateLessonSchema.parse(raw);
@@ -115,6 +123,7 @@ export async function updateLesson(id: string, formData: FormData) {
   }
 
   revalidatePath("/teacher/lessons");
+  revalidatePath("/lessons");
   redirect("/teacher/lessons");
 }
 
@@ -130,6 +139,7 @@ export async function deleteLesson(formData: FormData) {
     .where(and(eq(lessons.id, id), eq(lessons.teacherId, teacher.id)));
 
   revalidatePath("/teacher/lessons");
+  revalidatePath("/lessons");
 }
 
 export async function toggleLessonStatus(formData: FormData) {
@@ -148,4 +158,5 @@ export async function toggleLessonStatus(formData: FormData) {
     .where(and(eq(lessons.id, id), eq(lessons.teacherId, teacher.id)));
 
   revalidatePath("/teacher/lessons");
+  revalidatePath("/lessons");
 }

@@ -13,6 +13,7 @@ export const createLessonSchema = z.object({
   coverImageUrl: z.string().optional(),
   durationMinutes: z.coerce.number().min(0).optional(),
   position: z.coerce.number().min(0).optional(),
+  publishedAt: z.coerce.date().optional(),
 });
 
 export const updateLessonSchema = createLessonSchema.partial();

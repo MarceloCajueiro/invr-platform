@@ -15,6 +15,7 @@ interface PostCardProps {
     coverImageUrl: string | null;
     category: PostCategory;
     featured: boolean;
+    publishedAt: Date | null;
     createdAt: Date;
   };
   href?: string;
@@ -108,7 +109,9 @@ export function PostCard({ post, href }: PostCardProps) {
           )}
 
           <div className="text-xs text-text-muted">
-            <span>{post.createdAt.toLocaleDateString("pt-BR")}</span>
+            <span>
+              {new Date(post.publishedAt ?? post.createdAt).toLocaleDateString("pt-BR")}
+            </span>
           </div>
         </div>
       </Card>

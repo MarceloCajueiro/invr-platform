@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { FileUpload, type FileItem } from "@/components/ui/file-upload";
 import { BlockEditor } from "@/components/ui/block-editor";
 import { TurmaSelector } from "@/components/teacher/turma-selector";
+import { toInputDate } from "@/lib/utils";
 
 interface PostData {
   id: string;
@@ -17,6 +18,7 @@ interface PostData {
   coverImageUrl: string | null;
   category: "tips" | "grammar" | "culture" | "vocabulary";
   featured: boolean;
+  publishedAt: Date | null;
 }
 
 interface PostFormProps {
@@ -146,6 +148,18 @@ export function PostForm({ post, action, turmas = [], selectedTurmaIds = [] }: P
             >
               Destacado
             </label>
+          </div>
+
+          <div className="space-y-1.5">
+            <Input
+              label="Data de publicação"
+              name="publishedAt"
+              type="date"
+              defaultValue={toInputDate(post?.publishedAt)}
+            />
+            <p className="text-xs text-text-muted">
+              Pode agendar para o futuro — alunos só veem a partir dessa data.
+            </p>
           </div>
 
           <div className="space-y-1.5">

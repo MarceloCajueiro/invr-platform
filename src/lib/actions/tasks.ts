@@ -22,6 +22,8 @@ function parseTurmaIds(formData: FormData): string[] {
 export async function createTask(formData: FormData) {
   const { teacher } = await getTeacher();
 
+  const publishedAtRaw = formData.get("publishedAt") as string | null;
+
   const raw = {
     title: formData.get("title"),
     description: formData.get("description"),
@@ -29,6 +31,7 @@ export async function createTask(formData: FormData) {
     level: formData.get("level"),
     lessonId: formData.get("lessonId") || undefined,
     questions: formData.get("questions") || undefined,
+    publishedAt: publishedAtRaw || new Date().toISOString().split("T")[0],
   };
 
   const parsed = createTaskSchema.parse(raw);
@@ -48,6 +51,7 @@ export async function createTask(formData: FormData) {
     status: "draft",
     aiGenerated: aiGenerated,
     aiPrompt: aiPrompt || null,
+    publishedAt: parsed.publishedAt ?? new Date(),
   }).returning({ id: tasks.id });
 
   const turmaIds = parseTurmaIds(formData);
@@ -59,11 +63,14 @@ export async function createTask(formData: FormData) {
   }
 
   revalidatePath("/teacher/tasks");
+  revalidatePath("/tasks");
   redirect("/teacher/tasks");
 }
 
 export async function updateTask(id: string, formData: FormData) {
   const { teacher } = await getTeacher();
+
+  const publishedAtRaw = formData.get("publishedAt") as string | null;
 
   const raw = {
     title: formData.get("title"),
@@ -72,6 +79,7 @@ export async function updateTask(id: string, formData: FormData) {
     level: formData.get("level"),
     lessonId: formData.get("lessonId") || undefined,
     questions: formData.get("questions") || undefined,
+    publishedAt: publishedAtRaw || undefined,
   };
 
   const parsed = updateTaskSchema.parse(raw);
@@ -91,6 +99,7 @@ export async function updateTask(id: string, formData: FormData) {
       questions: parsed.questions || null,
       aiGenerated: aiGenerated,
       aiPrompt: aiPrompt || null,
+      publishedAt: parsed.publishedAt,
       updatedAt: new Date(),
     })
     .where(and(eq(tasks.id, id), eq(tasks.teacherId, teacher.id)));
@@ -106,6 +115,7 @@ export async function updateTask(id: string, formData: FormData) {
   }
 
   revalidatePath("/teacher/tasks");
+  revalidatePath("/tasks");
   redirect("/teacher/tasks");
 }
 
@@ -121,6 +131,7 @@ export async function deleteTask(formData: FormData) {
     .where(and(eq(tasks.id, id), eq(tasks.teacherId, teacher.id)));
 
   revalidatePath("/teacher/tasks");
+  revalidatePath("/tasks");
 }
 
 export async function toggleTaskStatus(formData: FormData) {
@@ -139,4 +150,5 @@ export async function toggleTaskStatus(formData: FormData) {
     .where(and(eq(tasks.id, id), eq(tasks.teacherId, teacher.id)));
 
   revalidatePath("/teacher/tasks");
+  revalidatePath("/tasks");
 }

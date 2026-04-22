@@ -7,16 +7,21 @@ import {
   challenges,
   challengeResponses,
 } from "@/lib/db/schema";
-import { eq, and, count, inArray, desc, or } from "drizzle-orm";
+import { eq, and, count, inArray, desc, or, lte } from "drizzle-orm";
 
 export async function getHomeStats(studentId: string, teacherId: string) {
   const db = getDb();
+  const now = new Date();
 
   const [totalLessons] = await db
     .select({ count: count() })
     .from(lessons)
     .where(
-      and(eq(lessons.teacherId, teacherId), eq(lessons.status, "published")),
+      and(
+        eq(lessons.teacherId, teacherId),
+        eq(lessons.status, "published"),
+        lte(lessons.publishedAt, now),
+      ),
     );
 
   const [watchedLessons] = await db
@@ -28,7 +33,11 @@ export async function getHomeStats(studentId: string, teacherId: string) {
     .select({ count: count() })
     .from(tasks)
     .where(
-      and(eq(tasks.teacherId, teacherId), eq(tasks.status, "published")),
+      and(
+        eq(tasks.teacherId, teacherId),
+        eq(tasks.status, "published"),
+        lte(tasks.publishedAt, now),
+      ),
     );
 
   const [completedTasks] = await db
@@ -48,7 +57,11 @@ export async function getHomeStats(studentId: string, teacherId: string) {
     .select({ count: count() })
     .from(challenges)
     .where(
-      and(eq(challenges.teacherId, teacherId), eq(challenges.status, "published")),
+      and(
+        eq(challenges.teacherId, teacherId),
+        eq(challenges.status, "published"),
+        lte(challenges.publishedAt, now),
+      ),
     );
 
   const [respondedChallenges] = await db

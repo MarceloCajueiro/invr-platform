@@ -40,11 +40,14 @@ export async function createChallenge(formData: FormData) {
     formData.get("coverImageFile") as string | null
   );
 
+  const publishedAtRaw = formData.get("publishedAt") as string | null;
+
   const raw = {
     title: formData.get("title"),
     description: formData.get("description") || undefined,
     coverImageUrl: coverImageUrl ?? undefined,
     dueDate: formData.get("dueDate") || undefined,
+    publishedAt: publishedAtRaw || new Date().toISOString().split("T")[0],
   };
 
   const parsed = createChallengeSchema.parse(raw);
@@ -57,6 +60,7 @@ export async function createChallenge(formData: FormData) {
     coverImageUrl: parsed.coverImageUrl || null,
     dueDate: parsed.dueDate || null,
     status: "draft",
+    publishedAt: parsed.publishedAt ?? new Date(),
   }).returning({ id: challenges.id });
 
   const turmaIds = parseTurmaIds(formData);
@@ -68,6 +72,7 @@ export async function createChallenge(formData: FormData) {
   }
 
   revalidatePath("/teacher/challenges");
+  revalidatePath("/challenges");
   redirect("/teacher/challenges");
 }
 
@@ -78,11 +83,14 @@ export async function updateChallenge(id: string, formData: FormData) {
     formData.get("coverImageFile") as string | null
   );
 
+  const publishedAtRaw = formData.get("publishedAt") as string | null;
+
   const raw = {
     title: formData.get("title"),
     description: formData.get("description") || undefined,
     coverImageUrl: coverImageUrl ?? undefined,
     dueDate: formData.get("dueDate") || undefined,
+    publishedAt: publishedAtRaw || undefined,
   };
 
   const parsed = updateChallengeSchema.parse(raw);
@@ -109,6 +117,7 @@ export async function updateChallenge(id: string, formData: FormData) {
   }
 
   revalidatePath("/teacher/challenges");
+  revalidatePath("/challenges");
   redirect("/teacher/challenges");
 }
 

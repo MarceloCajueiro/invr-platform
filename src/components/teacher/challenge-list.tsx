@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Trophy, Pencil, MessageSquare, Calendar } from "lucide-react";
+import { Trophy, Pencil, MessageSquare, Calendar, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -12,10 +12,25 @@ interface Challenge {
   id: string;
   title: string;
   status: "draft" | "published";
+  publishedAt: Date | null;
   dueDate: Date | null;
   responseCount: number;
   createdAt: Date;
   turmas: { id: string; name: string; color: string | null }[];
+}
+
+function isScheduled(publishedAt: Date | null | undefined): boolean {
+  if (!publishedAt) return false;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return new Date(publishedAt).getTime() > today.getTime();
+}
+
+function formatScheduledDate(date: Date): string {
+  return new Date(date).toLocaleDateString("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+  });
 }
 
 interface ChallengeListProps {
@@ -73,6 +88,12 @@ export function ChallengeList({ challenges }: ChallengeListProps) {
                 <Badge variant={challenge.status}>
                   {statusLabels[challenge.status]}
                 </Badge>
+                {isScheduled(challenge.publishedAt) && (
+                  <Badge variant="scheduled">
+                    <Clock size={10} className="mr-1" />
+                    Agendado · {formatScheduledDate(challenge.publishedAt!)}
+                  </Badge>
+                )}
                 {challenge.dueDate && (
                   <Badge
                     variant={

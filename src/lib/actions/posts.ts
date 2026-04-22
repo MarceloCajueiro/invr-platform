@@ -50,6 +50,8 @@ export async function createPost(formData: FormData) {
     formData.get("coverImageFile") as string | null
   );
 
+  const publishedAtRaw = formData.get("publishedAt") as string | null;
+
   const raw = {
     title,
     slug: slugRaw || generateSlug(title || ""),
@@ -57,6 +59,7 @@ export async function createPost(formData: FormData) {
     coverImageUrl: coverImageUrl ?? undefined,
     category: formData.get("category"),
     featured: formData.get("featured") === "on",
+    publishedAt: publishedAtRaw || new Date().toISOString().split("T")[0],
   };
 
   const parsed = createPostSchema.parse(raw);
@@ -71,6 +74,7 @@ export async function createPost(formData: FormData) {
     category: parsed.category,
     featured: parsed.featured ?? false,
     status: "draft",
+    publishedAt: parsed.publishedAt ?? new Date(),
   }).returning({ id: posts.id });
 
   const turmaIds = parseTurmaIds(formData);
@@ -82,6 +86,7 @@ export async function createPost(formData: FormData) {
   }
 
   revalidatePath("/teacher/posts");
+  revalidatePath("/blog");
   redirect("/teacher/posts");
 }
 
@@ -94,6 +99,8 @@ export async function updatePost(id: string, formData: FormData) {
     formData.get("coverImageFile") as string | null
   );
 
+  const publishedAtRaw = formData.get("publishedAt") as string | null;
+
   const raw = {
     title,
     slug: slugRaw || generateSlug(title || ""),
@@ -101,6 +108,7 @@ export async function updatePost(id: string, formData: FormData) {
     coverImageUrl: coverImageUrl ?? undefined,
     category: formData.get("category"),
     featured: formData.get("featured") === "on",
+    publishedAt: publishedAtRaw || undefined,
   };
 
   const parsed = updatePostSchema.parse(raw);
@@ -128,6 +136,7 @@ export async function updatePost(id: string, formData: FormData) {
   }
 
   revalidatePath("/teacher/posts");
+  revalidatePath("/blog");
   redirect("/teacher/posts");
 }
 
@@ -143,6 +152,7 @@ export async function deletePost(formData: FormData) {
     .where(and(eq(posts.id, id), eq(posts.teacherId, teacher.id)));
 
   revalidatePath("/teacher/posts");
+  revalidatePath("/blog");
 }
 
 export async function togglePostStatus(formData: FormData) {
@@ -161,4 +171,5 @@ export async function togglePostStatus(formData: FormData) {
     .where(and(eq(posts.id, id), eq(posts.teacherId, teacher.id)));
 
   revalidatePath("/teacher/posts");
+  revalidatePath("/blog");
 }

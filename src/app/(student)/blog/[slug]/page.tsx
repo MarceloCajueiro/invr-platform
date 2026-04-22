@@ -61,7 +61,7 @@ export default async function BlogPostPage({
             {categoryLabels[post.category]}
           </Badge>
           <span className="text-xs text-text-muted">
-            {post.createdAt.toLocaleDateString("pt-BR", {
+            {new Date(post.publishedAt ?? post.createdAt).toLocaleDateString("pt-BR", {
               day: "numeric",
               month: "long",
               year: "numeric",

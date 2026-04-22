@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { FileUpload, type FileItem } from "@/components/ui/file-upload";
 import { BlockEditor } from "@/components/ui/block-editor";
 import { TurmaSelector } from "@/components/teacher/turma-selector";
+import { toInputDate } from "@/lib/utils";
 
 interface ChallengeData {
   id: string;
@@ -14,6 +15,7 @@ interface ChallengeData {
   description: string | null;
   coverImageUrl: string | null;
   dueDate: Date | null;
+  publishedAt: Date | null;
 }
 
 interface ChallengeFormProps {
@@ -30,13 +32,8 @@ function coverUrlToFileItems(url: string | null | undefined): FileItem[] {
   return [{ url, name: url.split("/").pop() ?? "cover", size: 0 }];
 }
 
-function formatDateForInput(date: Date | null | undefined): string {
-  if (!date) return "";
-  const d = new Date(date);
-  const year = d.getFullYear();
-  const month = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
+function optionalInputDate(date: Date | null | undefined): string {
+  return date ? toInputDate(date) : "";
 }
 
 export function ChallengeForm({
@@ -71,8 +68,20 @@ export function ChallengeForm({
             label="Prazo"
             name="dueDate"
             type="date"
-            defaultValue={formatDateForInput(challenge?.dueDate)}
+            defaultValue={optionalInputDate(challenge?.dueDate)}
           />
+
+          <div className="space-y-1.5">
+            <Input
+              label="Data de publicação"
+              name="publishedAt"
+              type="date"
+              defaultValue={toInputDate(challenge?.publishedAt)}
+            />
+            <p className="text-xs text-text-muted">
+              Pode agendar para o futuro — alunos só veem a partir dessa data.
+            </p>
+          </div>
 
           <div className="space-y-1.5">
             <h3 className="text-sm font-semibold text-text-primary">

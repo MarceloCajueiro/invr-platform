@@ -1,6 +1,6 @@
 import { getDb } from "@/lib/db";
 import { posts, turmaPosts, turmaStudents } from "@/lib/db/schema";
-import { eq, and, desc, inArray } from "drizzle-orm";
+import { eq, and, desc, inArray, lte } from "drizzle-orm";
 
 export async function getPublishedPosts(
   teacherId: string,
@@ -31,6 +31,7 @@ export async function getPublishedPosts(
     eq(posts.teacherId, teacherId),
     eq(posts.status, "published"),
     inArray(posts.id, postIds),
+    lte(posts.publishedAt, new Date()),
   ];
 
   if (filters?.category && filters.category !== "all") {
@@ -46,14 +47,14 @@ export async function getPublishedPosts(
     .select()
     .from(posts)
     .where(and(...conditions))
-    .orderBy(desc(posts.featured), desc(posts.createdAt));
+    .orderBy(desc(posts.featured), desc(posts.publishedAt));
 }
 
 export async function getPublishedPost(slug: string, teacherId: string) {
   const db = getDb();
 
   return db.query.posts.findFirst({
-    where: (p, { eq: e, and: a }) =>
-      a(e(p.slug, slug), e(p.teacherId, teacherId), e(p.status, "published")),
+    where: (p, { eq: e, and: a, lte }) =>
+      a(e(p.slug, slug), e(p.teacherId, teacherId), e(p.status, "published"), lte(p.publishedAt, new Date())),
   });
 }

@@ -5,7 +5,7 @@ import {
   turmaChallenges,
   turmaStudents,
 } from "@/lib/db/schema";
-import { eq, and, inArray } from "drizzle-orm";
+import { eq, and, inArray, lte } from "drizzle-orm";
 
 export async function getStudentChallenges(teacherId: string, studentId: string) {
   const db = getDb();
@@ -37,6 +37,7 @@ export async function getStudentChallenges(teacherId: string, studentId: string)
         eq(challenges.teacherId, teacherId),
         eq(challenges.status, "published"),
         inArray(challenges.id, challengeIds),
+        lte(challenges.publishedAt, new Date()),
       ),
     );
 
@@ -63,8 +64,8 @@ export async function getStudentChallenge(challengeId: string, teacherId: string
   const db = getDb();
 
   return db.query.challenges.findFirst({
-    where: (c, { eq: e, and: a }) =>
-      a(e(c.id, challengeId), e(c.teacherId, teacherId), e(c.status, "published")),
+    where: (c, { eq: e, and: a, lte }) =>
+      a(e(c.id, challengeId), e(c.teacherId, teacherId), e(c.status, "published"), lte(c.publishedAt, new Date())),
   });
 }
 

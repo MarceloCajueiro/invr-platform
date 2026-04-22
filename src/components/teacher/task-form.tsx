@@ -9,6 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { QuestionEditor } from "@/components/teacher/question-editor";
 import { AiGeneratorPanel } from "@/components/teacher/ai-generator-panel";
 import { TurmaSelector } from "@/components/teacher/turma-selector";
+import { toInputDate } from "@/lib/utils";
 
 type TaskType = "quiz" | "listening" | "fill_gaps" | "writing";
 type Level = "beginner" | "intermediate" | "advanced";
@@ -22,6 +23,7 @@ interface TaskData {
   taskType: TaskType;
   level: Level;
   questions: string | null;
+  publishedAt: Date | null;
 }
 
 interface TaskFormProps {
@@ -103,6 +105,18 @@ export function TaskForm({ task, action, turmas = [], selectedTurmaIds = [] }: T
             rows={4}
             defaultValue={task?.description ?? ""}
           />
+
+          <div className="space-y-1.5">
+            <Input
+              label="Data de publicação"
+              name="publishedAt"
+              type="date"
+              defaultValue={toInputDate(task?.publishedAt)}
+            />
+            <p className="text-xs text-text-muted">
+              Pode agendar para o futuro — alunos só veem a partir dessa data.
+            </p>
+          </div>
 
           {AI_SUPPORTED_TYPES.includes(taskType) && (
             <AiGeneratorPanel

@@ -172,6 +172,7 @@ export const lessons = sqliteTable(
       .notNull()
       .default("draft"),
     position: integer("position").notNull().default(0),
+    publishedAt: integer("published_at", { mode: "timestamp" }),
     createdAt: integer("created_at", { mode: "timestamp" })
       .notNull()
       .default(sql`(unixepoch())`),
@@ -212,6 +213,7 @@ export const tasks = sqliteTable(
       .notNull()
       .default(false),
     aiPrompt: text("ai_prompt"),
+    publishedAt: integer("published_at", { mode: "timestamp" }),
     createdAt: integer("created_at", { mode: "timestamp" })
       .notNull()
       .default(sql`(unixepoch())`),
@@ -310,6 +312,7 @@ export const posts = sqliteTable(
       .notNull()
       .default("draft"),
     viewCount: integer("view_count").notNull().default(0),
+    publishedAt: integer("published_at", { mode: "timestamp" }),
     createdAt: integer("created_at", { mode: "timestamp" })
       .notNull()
       .default(sql`(unixepoch())`),
@@ -472,6 +475,7 @@ export const challenges = sqliteTable(
     status: text("status", { enum: ["draft", "published"] })
       .notNull()
       .default("draft"),
+    publishedAt: integer("published_at", { mode: "timestamp" }),
     createdAt: integer("created_at", { mode: "timestamp" })
       .notNull()
       .default(sql`(unixepoch())`),

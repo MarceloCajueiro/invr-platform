@@ -11,6 +11,8 @@ interface ChallengeCardProps {
     coverImageUrl?: string | null;
     dueDate: Date | null;
     responded: boolean;
+    publishedAt?: Date | null;
+    createdAt: Date;
   };
   index: number;
   href?: string;
@@ -85,6 +87,9 @@ export function ChallengeCard({ challenge, index, href }: ChallengeCardProps) {
                 <span>Prazo: {formatDueDate(challenge.dueDate)}</span>
               </div>
             )}
+            <div className="text-xs text-text-muted">
+              Publicado em {new Date(challenge.publishedAt ?? challenge.createdAt).toLocaleDateString("pt-BR")}
+            </div>
           </div>
         </div>
       </Card>
