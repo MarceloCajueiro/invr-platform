@@ -87,14 +87,13 @@ export function PostList({ posts }: PostListProps) {
                 <Badge variant={categoryBadgeVariant[post.category]}>
                   {categoryLabels[post.category]}
                 </Badge>
-                {post.status === "published" && isScheduled(post.publishedAt) ? (
+                <Badge variant={post.status}>
+                  {statusLabels[post.status]}
+                </Badge>
+                {isScheduled(post.publishedAt) && (
                   <Badge variant="scheduled">
                     <Clock size={10} className="mr-1" />
                     Agendado · {formatScheduledDate(post.publishedAt!)}
-                  </Badge>
-                ) : (
-                  <Badge variant={post.status}>
-                    {statusLabels[post.status]}
                   </Badge>
                 )}
                 {post.featured && (

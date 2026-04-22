@@ -88,14 +88,13 @@ export function LessonList({ lessons }: LessonListProps) {
                 <Badge variant={categoryBadgeVariant[lesson.category]}>
                   {categoryLabels[lesson.category]}
                 </Badge>
-                {lesson.status === "published" && isScheduled(lesson.publishedAt) ? (
+                <Badge variant={lesson.status}>
+                  {statusLabels[lesson.status]}
+                </Badge>
+                {isScheduled(lesson.publishedAt) && (
                   <Badge variant="scheduled">
                     <Clock size={10} className="mr-1" />
                     Agendado · {formatScheduledDate(lesson.publishedAt!)}
-                  </Badge>
-                ) : (
-                  <Badge variant={lesson.status}>
-                    {statusLabels[lesson.status]}
                   </Badge>
                 )}
               </div>

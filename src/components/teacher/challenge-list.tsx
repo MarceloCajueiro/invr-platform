@@ -85,14 +85,13 @@ export function ChallengeList({ challenges }: ChallengeListProps) {
                 <h3 className="text-sm font-semibold text-text-primary truncate">
                   {challenge.title}
                 </h3>
-                {challenge.status === "published" && isScheduled(challenge.publishedAt) ? (
+                <Badge variant={challenge.status}>
+                  {statusLabels[challenge.status]}
+                </Badge>
+                {isScheduled(challenge.publishedAt) && (
                   <Badge variant="scheduled">
                     <Clock size={10} className="mr-1" />
                     Agendado · {formatScheduledDate(challenge.publishedAt!)}
-                  </Badge>
-                ) : (
-                  <Badge variant={challenge.status}>
-                    {statusLabels[challenge.status]}
                   </Badge>
                 )}
                 {challenge.dueDate && (

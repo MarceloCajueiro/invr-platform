@@ -120,14 +120,13 @@ export function TaskList({ tasks }: TaskListProps) {
                   <Badge variant={task.level}>
                     {levelLabels[task.level]}
                   </Badge>
-                  {task.status === "published" && isScheduled(task.publishedAt) ? (
+                  <Badge variant={task.status}>
+                    {statusLabels[task.status]}
+                  </Badge>
+                  {isScheduled(task.publishedAt) && (
                     <Badge variant="scheduled">
                       <Clock size={10} className="mr-1" />
                       Agendado · {formatScheduledDate(task.publishedAt!)}
-                    </Badge>
-                  ) : (
-                    <Badge variant={task.status}>
-                      {statusLabels[task.status]}
                     </Badge>
                   )}
                 </div>
