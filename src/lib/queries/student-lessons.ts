@@ -41,12 +41,12 @@ export async function getStudentLesson(lessonId: string, teacherId: string) {
   const db = getDb();
 
   return db.query.lessons.findFirst({
-    where: (l, { eq: e, and: a, lte: lt }) =>
+    where: (l, { eq: e, and: a, lte }) =>
       a(
         e(l.id, lessonId),
         e(l.teacherId, teacherId),
         e(l.status, "published"),
-        lt(l.publishedAt, new Date()),
+        lte(l.publishedAt, new Date()),
       ),
   });
 }

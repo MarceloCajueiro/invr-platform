@@ -63,8 +63,8 @@ export async function getStudentTask(taskId: string, teacherId: string) {
   const db = getDb();
 
   return db.query.tasks.findFirst({
-    where: (t, { eq: e, and: a, lte: lt }) =>
-      a(e(t.id, taskId), e(t.teacherId, teacherId), e(t.status, "published"), lt(t.publishedAt, new Date())),
+    where: (t, { eq: e, and: a, lte }) =>
+      a(e(t.id, taskId), e(t.teacherId, teacherId), e(t.status, "published"), lte(t.publishedAt, new Date())),
   });
 }
 

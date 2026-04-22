@@ -54,7 +54,7 @@ export async function getPublishedPost(slug: string, teacherId: string) {
   const db = getDb();
 
   return db.query.posts.findFirst({
-    where: (p, { eq: e, and: a, lte: lt }) =>
-      a(e(p.slug, slug), e(p.teacherId, teacherId), e(p.status, "published"), lt(p.publishedAt, new Date())),
+    where: (p, { eq: e, and: a, lte }) =>
+      a(e(p.slug, slug), e(p.teacherId, teacherId), e(p.status, "published"), lte(p.publishedAt, new Date())),
   });
 }

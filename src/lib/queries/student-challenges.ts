@@ -64,8 +64,8 @@ export async function getStudentChallenge(challengeId: string, teacherId: string
   const db = getDb();
 
   return db.query.challenges.findFirst({
-    where: (c, { eq: e, and: a, lte: lt }) =>
-      a(e(c.id, challengeId), e(c.teacherId, teacherId), e(c.status, "published"), lt(c.publishedAt, new Date())),
+    where: (c, { eq: e, and: a, lte }) =>
+      a(e(c.id, challengeId), e(c.teacherId, teacherId), e(c.status, "published"), lte(c.publishedAt, new Date())),
   });
 }
 
