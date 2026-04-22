@@ -40,6 +40,7 @@ interface TaskCardProps {
     level: string;
     description?: string | null;
     publishedAt?: Date | null;
+    createdAt: Date;
   };
   submission?: {
     score: number | null;
@@ -118,11 +119,9 @@ export function TaskCard({ task, submission, index = 0, href }: TaskCardProps) {
                 {task.description}
               </p>
             )}
-            {task.publishedAt && (
-              <p className="text-xs text-text-muted mt-0.5">
-                {new Date(task.publishedAt).toLocaleDateString("pt-BR")}
-              </p>
-            )}
+            <p className="text-xs text-text-muted mt-0.5">
+              {new Date(task.publishedAt ?? task.createdAt).toLocaleDateString("pt-BR")}
+            </p>
           </div>
 
           {/* Status / Score */}
