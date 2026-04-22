@@ -9,6 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { QuestionEditor } from "@/components/teacher/question-editor";
 import { AiGeneratorPanel } from "@/components/teacher/ai-generator-panel";
 import { TurmaSelector } from "@/components/teacher/turma-selector";
+import { toInputDate } from "@/lib/utils";
 
 type TaskType = "quiz" | "listening" | "fill_gaps" | "writing";
 type Level = "beginner" | "intermediate" | "advanced";
@@ -44,11 +45,6 @@ const levelOptions = [
   { value: "intermediate", label: "Intermediário" },
   { value: "advanced", label: "Avançado" },
 ];
-
-function toInputDate(date: Date | null | undefined): string {
-  if (!date) return new Date().toISOString().split("T")[0];
-  return new Date(date).toISOString().split("T")[0];
-}
 
 export function TaskForm({ task, action, turmas = [], selectedTurmaIds = [] }: TaskFormProps) {
   const isEdit = !!task;

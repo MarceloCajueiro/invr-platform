@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { FileUpload, type FileItem } from "@/components/ui/file-upload";
 import { BlockEditor } from "@/components/ui/block-editor";
 import { TurmaSelector } from "@/components/teacher/turma-selector";
+import { toInputDate } from "@/lib/utils";
 
 interface PostData {
   id: string;
@@ -48,11 +49,6 @@ function generateSlug(title: string): string {
 function coverUrlToFileItems(url: string | null | undefined): FileItem[] {
   if (!url) return [];
   return [{ url, name: url.split("/").pop() ?? "cover", size: 0 }];
-}
-
-function toInputDate(date: Date | null | undefined): string {
-  if (!date) return new Date().toISOString().split("T")[0];
-  return new Date(date).toISOString().split("T")[0];
 }
 
 export function PostForm({ post, action, turmas = [], selectedTurmaIds = [] }: PostFormProps) {
