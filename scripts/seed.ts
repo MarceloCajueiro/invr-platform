@@ -39,7 +39,7 @@ const studentId = uuid();
 const turmaId = uuid();
 const invitationId = uuid();
 
-const lessonIds = [uuid(), uuid(), uuid(), uuid(), uuid()];
+const lessonIds = [uuid(), uuid(), uuid(), uuid(), uuid(), uuid()];
 const taskIds = [uuid(), uuid(), uuid(), uuid()];
 const postIds = [uuid(), uuid(), uuid()];
 const submissionIds = [uuid(), uuid()];
@@ -178,11 +178,26 @@ const lessonsData = [
     status: "draft",
     pos: 5,
   },
+  {
+    title: "Future Scheduled Lesson",
+    category: "conversation",
+    content: JSON.stringify({
+      type: "doc",
+      content: [
+        { type: "paragraph", content: [{ type: "text", text: "This lesson is scheduled to go live three days from seed time." }] },
+      ],
+    }),
+    duration: 10,
+    status: "published",
+    pos: 6,
+  },
 ];
 
 lessonsData.forEach((l, i) => {
-  const lessonCreatedAt = ts - (5 - i) * 86400;
-  sql(`INSERT INTO lessons (id, teacher_id, title, content, category, duration_minutes, status, position, published_at, created_at, updated_at) VALUES ('${lessonIds[i]}', '${teacherId}', '${l.title}', '${l.content.replace(/'/g, "''")}', '${l.category}', ${l.duration}, '${l.status}', ${l.pos}, ${lessonCreatedAt}, ${lessonCreatedAt}, ${ts})`);
+  const isFuture = i === 5;
+  const lessonCreatedAt = isFuture ? ts : ts - (5 - i) * 86400;
+  const lessonPublishedAt = isFuture ? ts + 3 * 86400 : lessonCreatedAt;
+  sql(`INSERT INTO lessons (id, teacher_id, title, content, category, duration_minutes, status, position, published_at, created_at, updated_at) VALUES ('${lessonIds[i]}', '${teacherId}', '${l.title}', '${l.content.replace(/'/g, "''")}', '${l.category}', ${l.duration}, '${l.status}', ${l.pos}, ${lessonPublishedAt}, ${lessonCreatedAt}, ${ts})`);
 });
 
 // ============================================================
