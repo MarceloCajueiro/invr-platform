@@ -163,7 +163,10 @@ import { PageHeader } from "@/components/ui/page-header";
 import { EmptyState } from "@/components/ui/empty-state";
 import { BlockEditor } from "@/components/ui/block-editor"; // rich text editor (teacher forms), dynamic import
 import { BlockContent } from "@/components/ui/block-content"; // read-only content renderer (student pages), dynamic import
+import { DateBadge } from "@/components/ui/date-badge"; // agenda-style date card. channels: aulas, tarefas, fora, challenges, neutral
 ```
+
+**DateBadge** — card vertical estilo agenda (dia grande, mês abreviado, ano). Usado à esquerda dos cards de listagem (LessonCard, TaskCard, PostCard, ChallengeCard) para destacar a data de publicação. Cor estática definida pelo canal (categoria do conteúdo). Dentro de um `<Link>` com `flex items-stretch gap-3`.
 
 ### Rich Text Editor (BlockNote)
 
