@@ -57,6 +57,13 @@
       "when": 1776460488495,
       "tag": "0007_magical_gladiator",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1776954936286,
+      "tag": "0008_superb_pretty_boy",
+      "breakpoints": true
     }
   ]
 }
