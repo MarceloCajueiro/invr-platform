@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Trophy, Calendar, CheckCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { DateBadge } from "@/components/ui/date-badge";
 
 interface ChallengeCardProps {
   challenge: {
@@ -32,12 +33,16 @@ export function ChallengeCard({ challenge, index, href }: ChallengeCardProps) {
   const overdue = isOverdue(challenge.dueDate);
 
   return (
-    <Link href={href ?? `/challenges/${challenge.id}`}>
-      <Card
-        hoverable
-        className="animate-slide-up overflow-hidden"
-        style={{ animationDelay: `${index * 60}ms`, animationFillMode: "both" }}
-      >
+    <Link
+      href={href ?? `/challenges/${challenge.id}`}
+      className="flex items-stretch gap-3 animate-slide-up"
+      style={{ animationDelay: `${index * 60}ms`, animationFillMode: "both" }}
+    >
+      <DateBadge
+        date={challenge.publishedAt ?? challenge.createdAt}
+        channel="challenges"
+      />
+      <Card hoverable className="flex-1 overflow-hidden">
         <div className="flex">
           {/* Thumbnail */}
           <div className="relative w-24 sm:w-40 min-h-24 shrink-0">
@@ -87,9 +92,6 @@ export function ChallengeCard({ challenge, index, href }: ChallengeCardProps) {
                 <span>Prazo: {formatDueDate(challenge.dueDate)}</span>
               </div>
             )}
-            <div className="text-xs text-text-muted">
-              Publicado em {new Date(challenge.publishedAt ?? challenge.createdAt).toLocaleDateString("pt-BR")}
-            </div>
           </div>
         </div>
       </Card>
