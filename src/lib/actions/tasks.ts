@@ -82,7 +82,9 @@ export async function updateTask(id: string, formData: FormData) {
     lessonId: formData.get("lessonId") || undefined,
     questions: formData.get("questions") || undefined,
     publishedAt: publishedAtRaw || undefined,
-    isHomework: formData.get("isHomework") === "on",
+    isHomework: formData.has("isHomework")
+      ? formData.get("isHomework") === "on"
+      : undefined,
   };
 
   const parsed = updateTaskSchema.parse(raw);
@@ -103,7 +105,7 @@ export async function updateTask(id: string, formData: FormData) {
       aiGenerated: aiGenerated,
       aiPrompt: aiPrompt || null,
       publishedAt: parsed.publishedAt,
-      isHomework: parsed.isHomework ?? false,
+      ...(parsed.isHomework !== undefined && { isHomework: parsed.isHomework }),
       updatedAt: new Date(),
     })
     .where(and(eq(tasks.id, id), eq(tasks.teacherId, teacher.id)));
