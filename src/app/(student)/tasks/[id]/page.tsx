@@ -8,6 +8,7 @@ import { FillGapsPlayer } from "@/components/student/fill-gaps-player";
 import { WritingPlayer } from "@/components/student/writing-player";
 import { ListeningPlayer } from "@/components/student/listening-player";
 import { Badge, type BadgeVariant } from "@/components/ui/badge";
+import { HomeworkBadge } from "@/components/ui/homework-badge";
 import type { QuizQuestion, FillGapQuestion } from "@/lib/validations/tasks";
 
 const levelLabels: Record<string, string> = {
@@ -65,6 +66,7 @@ export default async function TaskDetailPage({
           <Badge variant="default">
             {typeLabels[task.taskType] || task.taskType}
           </Badge>
+          {task.isHomework && <HomeworkBadge />}
         </div>
         <h1 className="text-2xl font-bold text-text-primary font-display">
           {task.title}
