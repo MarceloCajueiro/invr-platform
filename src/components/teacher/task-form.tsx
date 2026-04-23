@@ -9,6 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { QuestionEditor } from "@/components/teacher/question-editor";
 import { AiGeneratorPanel } from "@/components/teacher/ai-generator-panel";
 import { TurmaSelector } from "@/components/teacher/turma-selector";
+import { HomeworkBadge } from "@/components/ui/homework-badge";
 import { toInputDate } from "@/lib/utils";
 
 type TaskType = "quiz" | "listening" | "fill_gaps" | "writing";
@@ -24,6 +25,7 @@ interface TaskData {
   level: Level;
   questions: string | null;
   publishedAt: Date | null;
+  isHomework: boolean;
 }
 
 interface TaskFormProps {
@@ -140,6 +142,26 @@ export function TaskForm({ task, action, turmas = [], selectedTurmaIds = [] }: T
             value={generatedQuestions ? "true" : "false"}
           />
           <input type="hidden" name="aiPrompt" value={aiPrompt} />
+
+          <label className="flex items-start gap-3 cursor-pointer pt-2 border-t border-border">
+            <input
+              type="checkbox"
+              name="isHomework"
+              defaultChecked={task?.isHomework ?? false}
+              className="mt-1 w-4 h-4 rounded border-border text-challenges focus:ring-challenges"
+            />
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <span className="font-medium text-text-primary">
+                  Marcar como <em>homework</em>
+                </span>
+                <HomeworkBadge />
+              </div>
+              <p className="text-sm text-text-muted mt-0.5">
+                Sinaliza para o aluno que esta tarefa deve estar pronta para a próxima aula.
+              </p>
+            </div>
+          </label>
 
           {turmas.length > 0 && (
             <TurmaSelector turmas={turmas} selectedIds={selectedTurmaIds} />

@@ -7,6 +7,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { deleteTask, toggleTaskStatus } from "@/lib/actions/tasks";
 import { DeleteButton } from "@/components/teacher/delete-button";
 import { TurmaBadges } from "@/components/teacher/turma-badges";
+import { HomeworkBadge } from "@/components/ui/homework-badge";
 import type { BadgeVariant } from "@/components/ui/badge";
 import type { LucideIcon } from "lucide-react";
 
@@ -19,6 +20,7 @@ interface Task {
   publishedAt: Date | null;
   questions: string | null;
   createdAt: Date;
+  isHomework: boolean;
   turmas: { id: string; name: string; color: string | null }[];
 }
 
@@ -129,6 +131,7 @@ export function TaskList({ tasks }: TaskListProps) {
                       Agendado · {formatScheduledDate(task.publishedAt!)}
                     </Badge>
                   )}
+                  {task.isHomework && <HomeworkBadge />}
                 </div>
                 <div className="flex items-center gap-2 text-xs text-text-muted">
                   <span>
