@@ -11,6 +11,7 @@ function ResetPasswordForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
+  const linkError = searchParams.get("error");
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -19,6 +20,7 @@ function ResetPasswordForm() {
   const [loading, setLoading] = useState(false);
 
   if (!token) {
+    const expired = linkError === "INVALID_TOKEN";
     return (
       <div className="animate-fade-in">
         <div className="mb-8">
@@ -26,10 +28,12 @@ function ResetPasswordForm() {
             className="text-3xl font-extrabold text-text-primary tracking-tight"
             style={{ fontFamily: "'Bricolage Grotesque Variable', serif" }}
           >
-            Link inválido
+            {expired ? "Link expirado" : "Link inválido"}
           </h1>
           <p className="mt-2 text-text-secondary">
-            Este link de redefinição é inválido ou está incompleto.
+            {expired
+              ? "Este link de redefinição expirou. Solicite um novo para continuar."
+              : "Este link de redefinição é inválido ou está incompleto."}
           </p>
         </div>
         <Link
@@ -90,7 +94,10 @@ function ResetPasswordForm() {
       </div>
 
       {error && (
-        <div className="mb-6 rounded-[var(--radius-sm)] bg-fora-bg px-4 py-3 text-sm text-fora">
+        <div
+          role="alert"
+          className="mb-6 rounded-[var(--radius-sm)] bg-fora-bg px-4 py-3 text-sm text-fora"
+        >
           {error}
         </div>
       )}

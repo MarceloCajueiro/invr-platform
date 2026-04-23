@@ -82,7 +82,10 @@ export default function ForgotPasswordPage() {
       </div>
 
       {error && (
-        <div className="mb-6 rounded-[var(--radius-sm)] bg-fora-bg px-4 py-3 text-sm text-fora">
+        <div
+          role="alert"
+          className="mb-6 rounded-[var(--radius-sm)] bg-fora-bg px-4 py-3 text-sm text-fora"
+        >
           {error}
         </div>
       )}

@@ -4,11 +4,15 @@ interface ResetPasswordEmailProps {
 }
 
 export function renderResetPasswordEmail({ url, name }: ResetPasswordEmailProps): string {
+  const trimmedName = name.trim();
+  const greeting = trimmedName
+    ? `Olá, <strong>${escapeHtml(trimmedName)}</strong>.`
+    : "Olá.";
   return `
     <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; padding: 32px;">
       <h2 style="color: #1a1a2e; margin-bottom: 8px;">Redefinir sua senha</h2>
       <p style="color: #555; line-height: 1.6;">
-        Olá, <strong>${escapeHtml(name)}</strong>. Recebemos uma solicitação para redefinir a senha da sua conta no <strong>Inglês na Vida Real</strong>.
+        ${greeting} Recebemos uma solicitação para redefinir a senha da sua conta no <strong>Inglês na Vida Real</strong>.
       </p>
       <p style="color: #555; line-height: 1.6;">
         Clique no botão abaixo para escolher uma nova senha:

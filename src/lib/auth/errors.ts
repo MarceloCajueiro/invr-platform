@@ -11,7 +11,6 @@ const errorTranslations: Record<string, string> = {
   "user not found": "Usuário não encontrado.",
   "invalid token": "Link inválido ou expirado. Solicite um novo.",
   "token expired": "Este link expirou. Solicite um novo.",
-  "token has expired": "Este link expirou. Solicite um novo.",
   "email not verified": "E-mail não verificado.",
   "session expired. re-authenticate to perform this action.":
     "Sessão expirada. Faça login novamente.",
