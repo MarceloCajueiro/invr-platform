@@ -12,6 +12,14 @@ test.describe("Homework — student", () => {
     // O badge "Homework" aparece no mesmo card
     const card = quizCard.locator("xpath=ancestor::a[1]");
     await expect(card.getByText("Homework", { exact: true })).toBeVisible();
+
+    // Card "Daily Routine - Fill the Gaps" NÃO tem is_homework=true — não deve exibir o badge
+    const nonHomeworkCard = page
+      .locator("text=Daily Routine - Fill the Gaps")
+      .first()
+      .locator("xpath=ancestor::a[1]");
+    await expect(nonHomeworkCard).toBeVisible();
+    await expect(nonHomeworkCard.getByText("Homework", { exact: true })).toHaveCount(0);
   });
 
   test("student vê badge Homework na tela de detalhe da tarefa homework", async ({

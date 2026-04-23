@@ -37,4 +37,38 @@ test.describe("Homework — teacher", () => {
     // Badge HomeworkBadge renderiza inline no formulário
     await expect(page.getByText(/homework/i).first()).toBeVisible();
   });
+
+  test("teacher cria tarefa nova marcada como homework e vê badge na listagem", async ({
+    page,
+  }) => {
+    await page.goto("/teacher/tasks/new");
+    await expect(page.getByRole("heading", { name: /nova tarefa/i })).toBeVisible();
+
+    await page.getByLabel(/título/i).fill("E2E Homework Writing");
+
+    // Mudar type para writing (aceita apenas prompt, sem múltiplas questões)
+    await page.locator('select[name="taskType"]').selectOption("writing");
+
+    // Aguardar o QuestionEditor renderizar o WritingEditor
+    await page.waitForTimeout(500);
+
+    // Preencher o prompt de escrita
+    await page.getByLabel(/prompt de escrita/i).fill("Write about homework.");
+
+    // Marcar checkbox de homework
+    await page.locator('input[name="isHomework"]').check();
+
+    // Submeter
+    await page.getByRole("button", { name: /criar tarefa/i }).click();
+
+    // Aguardar redirect para a listagem
+    await page.waitForURL("**/teacher/tasks", { timeout: 15000 });
+
+    // A linha da task recém-criada deve conter o badge "Homework"
+    const newRow = page
+      .locator("text=E2E Homework Writing")
+      .first()
+      .locator("xpath=ancestor::*[contains(@class,'p-4')][1]");
+    await expect(newRow.getByText("Homework", { exact: true })).toBeVisible();
+  });
 });
