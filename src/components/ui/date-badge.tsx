@@ -27,6 +27,7 @@ const channelStyles: Record<
   challenges: {
     bg: "bg-challenges-bg",
     border: "border-challenges/30",
+    // challenges base (#fdcb6e) is too light on its own bg — use shadow for both
     day: "text-challenges-shadow",
     month: "text-challenges-shadow",
   },
@@ -49,9 +50,8 @@ function formatParts(date: Date) {
   const day = date.toLocaleDateString("pt-BR", { day: "2-digit" });
   const monthRaw = date.toLocaleDateString("pt-BR", { month: "short" });
   const month = monthRaw.replace(".", "");
-  const monthCap = month.charAt(0).toUpperCase() + month.slice(1);
   const year = date.toLocaleDateString("pt-BR", { year: "numeric" });
-  return { day, month: monthCap, year };
+  return { day, month, year };
 }
 
 export function DateBadge({
@@ -61,6 +61,7 @@ export function DateBadge({
   className,
 }: DateBadgeProps) {
   const parsed = typeof date === "string" ? new Date(date) : date;
+  if (Number.isNaN(parsed.getTime())) return null;
   const { day, month, year } = formatParts(parsed);
   const style = channelStyles[channel];
 
@@ -69,8 +70,16 @@ export function DateBadge({
   const monthCls = size === "sm" ? "text-[10px]" : "text-xs";
   const yearCls = size === "sm" ? "text-[9px]" : "text-[10px]";
 
+  const readableLabel = parsed.toLocaleDateString("pt-BR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+
   return (
-    <div
+    <time
+      dateTime={parsed.toISOString()}
+      aria-label={readableLabel}
       className={cn(
         "shrink-0 flex flex-col items-center justify-center gap-1 rounded-[var(--radius-md)] border font-display tabular-nums select-none",
         paddingCls,
@@ -90,6 +99,6 @@ export function DateBadge({
         {month}
       </span>
       <span className={cn(yearCls, "text-text-muted")}>{year}</span>
-    </div>
+    </time>
   );
 }
