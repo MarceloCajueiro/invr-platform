@@ -3,6 +3,7 @@ import Image from "next/image";
 import { FileText, Star } from "lucide-react";
 import { Badge, type BadgeVariant } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { DateBadge, type DateBadgeChannel } from "@/components/ui/date-badge";
 
 type PostCategory = "tips" | "grammar" | "culture" | "vocabulary";
 
@@ -29,6 +30,13 @@ const categoryLabels: Record<PostCategory, string> = {
 };
 
 const categoryBadgeVariant: Record<PostCategory, BadgeVariant> = {
+  tips: "tarefas",
+  grammar: "aulas",
+  culture: "fora",
+  vocabulary: "challenges",
+};
+
+const categoryDateChannel: Record<PostCategory, DateBadgeChannel> = {
   tips: "tarefas",
   grammar: "aulas",
   culture: "fora",
@@ -62,10 +70,15 @@ function getExcerpt(content: string | null): string {
 
 export function PostCard({ post, href }: PostCardProps) {
   return (
-    <Link href={href ?? `/blog/${post.slug}`}>
+    <Link href={href ?? `/blog/${post.slug}`} className="flex items-start gap-3">
+      <DateBadge
+        date={post.publishedAt ?? post.createdAt}
+        channel={categoryDateChannel[post.category]}
+        className="mt-1"
+      />
       <Card
         hoverable
-        className={`overflow-hidden ${post.featured ? "ring-2 ring-fora/40 bg-fora-bg/30" : ""}`}
+        className={`flex-1 overflow-hidden ${post.featured ? "ring-2 ring-fora/40 bg-fora-bg/30" : ""}`}
       >
         {/* Cover image — fixed 16:9 aspect ratio */}
         <div className="aspect-video relative">
@@ -103,16 +116,10 @@ export function PostCard({ post, href }: PostCardProps) {
           <h3 className="font-medium text-text-primary mb-1">{post.title}</h3>
 
           {post.content && (
-            <p className="text-sm text-text-secondary line-clamp-2 mb-3">
+            <p className="text-sm text-text-secondary line-clamp-2">
               {getExcerpt(post.content)}
             </p>
           )}
-
-          <div className="text-xs text-text-muted">
-            <span>
-              {new Date(post.publishedAt ?? post.createdAt).toLocaleDateString("pt-BR")}
-            </span>
-          </div>
         </div>
       </Card>
     </Link>

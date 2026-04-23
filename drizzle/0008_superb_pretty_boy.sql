@@ -1,0 +1,1 @@
+ALTER TABLE `tasks` ADD `is_homework` integer DEFAULT false NOT NULL;

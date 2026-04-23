@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Clock, PlayCircle } from "lucide-react";
 import { Badge, type BadgeVariant } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { DateBadge, type DateBadgeChannel } from "@/components/ui/date-badge";
 import { cn } from "@/lib/utils";
 
 const categoryLabels: Record<string, string> = {
@@ -19,6 +20,14 @@ const categoryBadgeVariant: Record<string, BadgeVariant> = {
   vocabulary: "fora",
   listening: "challenges",
   culture: "default",
+};
+
+const categoryDateChannel: Record<string, DateBadgeChannel> = {
+  conversation: "aulas",
+  grammar: "tarefas",
+  vocabulary: "fora",
+  listening: "challenges",
+  culture: "neutral",
 };
 
 const categoryPlaceholderColors: Record<string, string> = {
@@ -46,12 +55,16 @@ interface LessonCardProps {
 
 export function LessonCard({ lesson, progress = 0, index = 0, href }: LessonCardProps) {
   return (
-    <Link href={href ?? `/lessons/${lesson.id}`}>
-      <Card
-        hoverable
-        className="animate-slide-up overflow-hidden"
-        style={{ animationDelay: `${index * 60}ms`, animationFillMode: "both" }}
-      >
+    <Link
+      href={href ?? `/lessons/${lesson.id}`}
+      className="flex items-stretch gap-3 animate-slide-up"
+      style={{ animationDelay: `${index * 60}ms`, animationFillMode: "both" }}
+    >
+      <DateBadge
+        date={lesson.publishedAt ?? lesson.createdAt}
+        channel={categoryDateChannel[lesson.category] ?? "neutral"}
+      />
+      <Card hoverable className="flex-1 overflow-hidden">
         <div className="flex">
           {/* Thumbnail */}
           <div className="relative w-24 sm:w-40 min-h-24 shrink-0">
@@ -100,9 +113,6 @@ export function LessonCard({ lesson, progress = 0, index = 0, href }: LessonCard
                 <span>{lesson.durationMinutes} min</span>
               </div>
             )}
-            <div className="text-xs text-text-muted">
-              {new Date(lesson.publishedAt ?? lesson.createdAt).toLocaleDateString("pt-BR")}
-            </div>
           </div>
         </div>
 

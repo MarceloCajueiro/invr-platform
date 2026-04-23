@@ -10,20 +10,23 @@ import {
 } from "lucide-react";
 import { Badge, type BadgeVariant } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { DateBadge, type DateBadgeChannel } from "@/components/ui/date-badge";
+import { HomeworkBadge } from "@/components/ui/homework-badge";
 import { cn } from "@/lib/utils";
 
 const taskTypeConfig: Record<
   string,
-  { icon: typeof HelpCircle; label: string; color: string }
+  { icon: typeof HelpCircle; label: string; color: string; channel: DateBadgeChannel }
 > = {
-  quiz: { icon: HelpCircle, label: "Quiz", color: "text-aulas" },
-  listening: { icon: Headphones, label: "Listening", color: "text-challenges" },
+  quiz: { icon: HelpCircle, label: "Quiz", color: "text-aulas", channel: "aulas" },
+  listening: { icon: Headphones, label: "Listening", color: "text-challenges", channel: "challenges" },
   fill_gaps: {
     icon: PenLine,
     label: "Lacunas",
     color: "text-tarefas",
+    channel: "tarefas",
   },
-  writing: { icon: FileEdit, label: "Redação", color: "text-fora" },
+  writing: { icon: FileEdit, label: "Redação", color: "text-fora", channel: "fora" },
 };
 
 const levelLabels: Record<string, string> = {
@@ -41,6 +44,7 @@ interface TaskCardProps {
     description?: string | null;
     publishedAt?: Date | null;
     createdAt: Date;
+    isHomework?: boolean;
   };
   submission?: {
     score: number | null;
@@ -79,12 +83,16 @@ export function TaskCard({ task, submission, index = 0, href }: TaskCardProps) {
   const isSubmitted = submission?.status === "submitted";
 
   return (
-    <Link href={href ?? `/tasks/${task.id}`}>
-      <Card
-        hoverable
-        className="animate-slide-up overflow-hidden"
-        style={{ animationDelay: `${index * 60}ms`, animationFillMode: "both" }}
-      >
+    <Link
+      href={href ?? `/tasks/${task.id}`}
+      className="flex items-stretch gap-3 animate-slide-up"
+      style={{ animationDelay: `${index * 60}ms`, animationFillMode: "both" }}
+    >
+      <DateBadge
+        date={task.publishedAt ?? task.createdAt}
+        channel={config.channel}
+      />
+      <Card hoverable className="flex-1 overflow-hidden">
         <div className="p-5 flex items-start gap-4">
           {/* Type icon */}
           <div
@@ -101,7 +109,7 @@ export function TaskCard({ task, submission, index = 0, href }: TaskCardProps) {
 
           {/* Content */}
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1">
+            <div className="flex flex-wrap items-center gap-2 mb-1">
               <Badge
                 variant={
                   (task.level as BadgeVariant) || "default"
@@ -110,6 +118,7 @@ export function TaskCard({ task, submission, index = 0, href }: TaskCardProps) {
                 {levelLabels[task.level] || task.level}
               </Badge>
               <Badge variant="default">{config.label}</Badge>
+              {task.isHomework && <HomeworkBadge />}
             </div>
             <h3 className="font-medium text-text-primary truncate">
               {task.title}
@@ -119,9 +128,6 @@ export function TaskCard({ task, submission, index = 0, href }: TaskCardProps) {
                 {task.description}
               </p>
             )}
-            <p className="text-xs text-text-muted mt-0.5">
-              {new Date(task.publishedAt ?? task.createdAt).toLocaleDateString("pt-BR")}
-            </p>
           </div>
 
           {/* Status / Score */}

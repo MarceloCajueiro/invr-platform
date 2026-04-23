@@ -154,6 +154,7 @@ All in `src/components/ui/`. Use `cn()` from `@/lib/utils` for class merging.
 ```typescript
 import { Button } from "@/components/ui/button";    // variants: primary, secondary, success, danger, ghost
 import { Badge } from "@/components/ui/badge";       // variants: aulas, tarefas, fora, challenges, draft, published, scheduled, beginner, intermediate, advanced
+import { HomeworkBadge } from "@/components/ui/homework-badge"; // selo fixo para tarefas marcadas como "homework" — cor challenges + ícone BookOpenCheck + termo "Homework" em inglês
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";       // with label, error, icon
 import { Select } from "@/components/ui/select";     // with options array
@@ -163,7 +164,10 @@ import { PageHeader } from "@/components/ui/page-header";
 import { EmptyState } from "@/components/ui/empty-state";
 import { BlockEditor } from "@/components/ui/block-editor"; // rich text editor (teacher forms), dynamic import
 import { BlockContent } from "@/components/ui/block-content"; // read-only content renderer (student pages), dynamic import
+import { DateBadge } from "@/components/ui/date-badge"; // agenda-style date card. channels: aulas, tarefas, fora, challenges, neutral
 ```
+
+**DateBadge** — card vertical estilo agenda (dia grande, mês abreviado, ano). Usado à esquerda dos cards de listagem (LessonCard, TaskCard, PostCard, ChallengeCard) para destacar a data de publicação. Cor estática definida pelo canal (categoria do conteúdo). Dentro de um `<Link>` com `flex items-stretch gap-3`.
 
 ### Rich Text Editor (BlockNote)
 

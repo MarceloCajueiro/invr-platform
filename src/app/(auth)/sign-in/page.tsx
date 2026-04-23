@@ -1,14 +1,18 @@
 "use client";
 
-import { useState, useEffect, type FormEvent } from "react";
+import { Suspense, useState, useEffect, type FormEvent } from "react";
 import { authClient } from "@/lib/auth/client";
-import { LogIn, Eye, EyeOff } from "lucide-react";
+import { LogIn, Eye, EyeOff, CheckCircle2 } from "lucide-react";
 import { translateAuthError } from "@/lib/auth/errors";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
-export default function SignInPage() {
+function SignInForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const [showResetBanner, setShowResetBanner] = useState(
+    searchParams.get("reset") === "success",
+  );
   const { data: session } = authClient.useSession();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,7 +20,6 @@ export default function SignInPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Redirect if already authenticated
   useEffect(() => {
     if (session?.user) {
       const role = (session.user as { role?: string }).role;
@@ -24,6 +27,14 @@ export default function SignInPage() {
       router.replace(dest);
     }
   }, [session, router]);
+
+  // Drop the ?reset=success query param from the URL after first paint so the
+  // banner doesn't persist across reloads or back-navigation.
+  useEffect(() => {
+    if (searchParams.get("reset") === "success") {
+      router.replace("/sign-in");
+    }
+  }, [searchParams, router]);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -58,6 +69,16 @@ export default function SignInPage() {
         </p>
       </div>
 
+      {showResetBanner && !session?.user && (
+        <div
+          role="status"
+          className="mb-6 flex items-start gap-2 rounded-[var(--radius-sm)] bg-tarefas-bg px-4 py-3 text-sm text-tarefas"
+        >
+          <CheckCircle2 className="w-4 h-4 mt-0.5 shrink-0" />
+          <span>Senha redefinida com sucesso. Faça login com sua nova senha.</span>
+        </div>
+      )}
+
       {error && (
         <div className="mb-6 rounded-[var(--radius-sm)] bg-fora-bg px-4 py-3 text-sm text-fora">
           {error}
@@ -84,12 +105,20 @@ export default function SignInPage() {
         </div>
 
         <div>
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-text-primary mb-1.5"
-          >
-            Senha
-          </label>
+          <div className="flex items-center justify-between mb-1.5">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-text-primary"
+            >
+              Senha
+            </label>
+            <Link
+              href="/forgot-password"
+              className="text-sm text-aulas hover:underline"
+            >
+              Esqueci minha senha
+            </Link>
+          </div>
           <div className="relative">
             <input
               id="password"
@@ -141,5 +170,13 @@ export default function SignInPage() {
         </Link>
       </p>
     </div>
+  );
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense fallback={null}>
+      <SignInForm />
+    </Suspense>
   );
 }

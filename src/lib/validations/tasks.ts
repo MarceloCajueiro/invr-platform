@@ -42,6 +42,7 @@ export const createTaskSchema = z.object({
   lessonId: z.string().optional(),
   questions: z.string().optional(), // JSON string, validated per type
   publishedAt: z.coerce.date().optional(),
+  isHomework: z.coerce.boolean().default(false),
 });
 
 export const updateTaskSchema = createTaskSchema.partial();

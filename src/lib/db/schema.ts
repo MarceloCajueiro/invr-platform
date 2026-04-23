@@ -213,6 +213,9 @@ export const tasks = sqliteTable(
       .notNull()
       .default(false),
     aiPrompt: text("ai_prompt"),
+    isHomework: integer("is_homework", { mode: "boolean" })
+      .notNull()
+      .default(false),
     publishedAt: integer("published_at", { mode: "timestamp" }),
     createdAt: integer("created_at", { mode: "timestamp" })
       .notNull()
