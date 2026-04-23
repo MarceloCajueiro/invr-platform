@@ -11,6 +11,7 @@ import {
 import { Badge, type BadgeVariant } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { DateBadge, type DateBadgeChannel } from "@/components/ui/date-badge";
+import { HomeworkBadge } from "@/components/ui/homework-badge";
 import { cn } from "@/lib/utils";
 
 const taskTypeConfig: Record<
@@ -43,6 +44,7 @@ interface TaskCardProps {
     description?: string | null;
     publishedAt?: Date | null;
     createdAt: Date;
+    isHomework?: boolean;
   };
   submission?: {
     score: number | null;
@@ -107,7 +109,7 @@ export function TaskCard({ task, submission, index = 0, href }: TaskCardProps) {
 
           {/* Content */}
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1">
+            <div className="flex flex-wrap items-center gap-2 mb-1">
               <Badge
                 variant={
                   (task.level as BadgeVariant) || "default"
@@ -116,6 +118,7 @@ export function TaskCard({ task, submission, index = 0, href }: TaskCardProps) {
                 {levelLabels[task.level] || task.level}
               </Badge>
               <Badge variant="default">{config.label}</Badge>
+              {task.isHomework && <HomeworkBadge />}
             </div>
             <h3 className="font-medium text-text-primary truncate">
               {task.title}
