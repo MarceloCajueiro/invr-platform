@@ -11,6 +11,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
     return (
       <div
         ref={ref}
+        data-slot="card"
         className={cn(
           "bg-bg-card border border-border rounded-[var(--radius-md)] shadow-sm",
           hoverable &&
