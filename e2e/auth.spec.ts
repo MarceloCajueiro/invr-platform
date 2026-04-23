@@ -132,3 +132,53 @@ test.describe.serial("Phase 0 — Auth & Layouts", () => {
     });
   });
 });
+
+// ============================
+// Forgot / Reset Password
+// ============================
+
+test.describe("forgot password", () => {
+  test("link on sign-in leads to forgot password form", async ({ page }) => {
+    await page.goto("/sign-in");
+    await page.getByRole("link", { name: /esqueci minha senha/i }).click();
+    await expect(page).toHaveURL(/\/forgot-password$/);
+    await expect(page.getByRole("heading", { name: /esqueceu a senha\?/i })).toBeVisible();
+  });
+
+  test("submitting email shows success state regardless of account existence", async ({ page }) => {
+    await page.goto("/forgot-password");
+    await page.getByLabel(/email/i).fill("nonexistent-user@example.com");
+    await page.getByRole("button", { name: /enviar link/i }).click();
+    await expect(page.getByRole("heading", { name: /verifique seu email/i })).toBeVisible();
+    await expect(page.getByText("nonexistent-user@example.com")).toBeVisible();
+  });
+
+  test("sign-in shows success banner when arriving with reset=success", async ({ page }) => {
+    await page.goto("/sign-in?reset=success");
+    await expect(
+      page.getByText(/senha redefinida com sucesso\. faça login/i),
+    ).toBeVisible();
+  });
+
+  test("reset-password without token shows invalid link state", async ({ page }) => {
+    await page.goto("/reset-password");
+    await expect(page.getByRole("heading", { name: /link inválido/i })).toBeVisible();
+    await expect(page.getByRole("link", { name: /solicitar novo link/i })).toBeVisible();
+  });
+
+  test("reset-password client validation: mismatched passwords", async ({ page }) => {
+    await page.goto("/reset-password?token=any-token");
+    await page.getByLabel("Nova senha", { exact: true }).fill("password123");
+    await page.getByLabel(/confirmar nova senha/i).fill("password456");
+    await page.getByRole("button", { name: /redefinir senha/i }).click();
+    await expect(page.getByText(/senhas não conferem/i)).toBeVisible();
+  });
+
+  test("reset-password with invalid token shows translated error", async ({ page }) => {
+    await page.goto("/reset-password?token=bogus-token-not-in-db");
+    await page.getByLabel("Nova senha", { exact: true }).fill("password123");
+    await page.getByLabel(/confirmar nova senha/i).fill("password123");
+    await page.getByRole("button", { name: /redefinir senha/i }).click();
+    await expect(page.getByText(/link inválido ou expirado/i)).toBeVisible();
+  });
+});
