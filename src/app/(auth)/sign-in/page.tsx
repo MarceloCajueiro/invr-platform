@@ -10,7 +10,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 function SignInForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const resetFlag = searchParams.get("reset");
+  const [showResetBanner, setShowResetBanner] = useState(
+    searchParams.get("reset") === "success",
+  );
   const { data: session } = authClient.useSession();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,6 +27,14 @@ function SignInForm() {
       router.replace(dest);
     }
   }, [session, router]);
+
+  // Drop the ?reset=success query param from the URL after first paint so the
+  // banner doesn't persist across reloads or back-navigation.
+  useEffect(() => {
+    if (searchParams.get("reset") === "success") {
+      router.replace("/sign-in");
+    }
+  }, [searchParams, router]);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -59,7 +69,7 @@ function SignInForm() {
         </p>
       </div>
 
-      {resetFlag === "success" && (
+      {showResetBanner && !session?.user && (
         <div
           role="status"
           className="mb-6 flex items-start gap-2 rounded-[var(--radius-sm)] bg-tarefas-bg px-4 py-3 text-sm text-tarefas"
