@@ -4,6 +4,8 @@ import { nextCookies } from "better-auth/next-js";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { drizzle } from "drizzle-orm/d1";
 import * as schema from "@/lib/db/schema";
+import { sendEmail } from "@/lib/services/email/resend";
+import { renderResetPasswordEmail } from "@/lib/services/email/templates/reset-password";
 
 export async function createAuth() {
   const { env } = await getCloudflareContext({ async: true });
@@ -20,6 +22,14 @@ export async function createAuth() {
     emailAndPassword: {
       enabled: true,
       autoSignIn: true,
+      resetPasswordTokenExpiresIn: 60 * 60 * 24,
+      sendResetPassword: async ({ user, url }) => {
+        await sendEmail({
+          to: user.email,
+          subject: "Redefinir sua senha — Inglês na Vida Real",
+          html: renderResetPasswordEmail({ url, name: user.name }),
+        });
+      },
     },
     user: {
       additionalFields: {
