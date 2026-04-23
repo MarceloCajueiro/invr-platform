@@ -154,6 +154,7 @@ All in `src/components/ui/`. Use `cn()` from `@/lib/utils` for class merging.
 ```typescript
 import { Button } from "@/components/ui/button";    // variants: primary, secondary, success, danger, ghost
 import { Badge } from "@/components/ui/badge";       // variants: aulas, tarefas, fora, challenges, draft, published, scheduled, beginner, intermediate, advanced
+import { HomeworkBadge } from "@/components/ui/homework-badge"; // selo fixo para tarefas marcadas como "homework" — cor challenges + ícone BookOpenCheck + termo "Homework" em inglês
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";       // with label, error, icon
 import { Select } from "@/components/ui/select";     // with options array
