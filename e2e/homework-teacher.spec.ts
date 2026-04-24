@@ -36,6 +36,57 @@ test.describe("Homework — teacher", () => {
     await expect(page.getByTestId("homework-badge")).toBeVisible();
   });
 
+  // CT-61: regressão do commit 72354ff — FormData omite checkboxes desmarcados,
+  // e o fix garante que updateTask trate essa ausência como `false` em vez de
+  // manter o valor antigo. Sem esse fix, desmarcar seria silenciosamente ignorado.
+  test("CT-61: desmarcar isHomework em task existente persiste (regressão)", async ({
+    page,
+  }) => {
+    // Estado inicial: seed tem "Present Simple Quiz" com isHomework=true.
+    await page.goto("/teacher/tasks");
+    const card = page
+      .locator("[data-slot='card']")
+      .filter({ hasText: "Present Simple Quiz" })
+      .first();
+    await expect(card.getByTestId("homework-badge")).toBeVisible();
+
+    // Abre o editor, desmarca, salva.
+    await card.getByRole("link", { name: /editar/i }).click();
+    await page.waitForURL("**/edit", { timeout: 10000 });
+
+    const checkbox = page.locator('input[name="isHomework"]');
+    await expect(checkbox).toBeChecked();
+    await checkbox.uncheck();
+    await expect(checkbox).not.toBeChecked();
+
+    await page.getByRole("button", { name: /salvar alterações/i }).click();
+    await page.waitForURL("**/teacher/tasks", { timeout: 15000 });
+
+    // Asserção: badge sumiu do card (valor false persistiu).
+    const cardAfter = page
+      .locator("[data-slot='card']")
+      .filter({ hasText: "Present Simple Quiz" })
+      .first();
+    await expect(cardAfter.getByTestId("homework-badge")).toHaveCount(0);
+
+    // Cleanup: re-marca pelo editor para preservar o estado do seed para
+    // outros specs (homework-teacher/homework-student dependem disso).
+    await cardAfter.getByRole("link", { name: /editar/i }).click();
+    await page.waitForURL("**/edit", { timeout: 10000 });
+    const cb = page.locator('input[name="isHomework"]');
+    await cb.check();
+    await expect(cb).toBeChecked();
+    await page.getByRole("button", { name: /salvar alterações/i }).click();
+    await page.waitForURL("**/teacher/tasks", { timeout: 15000 });
+    await expect(
+      page
+        .locator("[data-slot='card']")
+        .filter({ hasText: "Present Simple Quiz" })
+        .first()
+        .getByTestId("homework-badge"),
+    ).toBeVisible();
+  });
+
   test("teacher cria tarefa nova marcada como homework e vê badge na listagem", async ({
     page,
   }) => {
