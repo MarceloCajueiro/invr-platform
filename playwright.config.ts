@@ -34,7 +34,7 @@ export default defineConfig({
     },
     {
       name: "student",
-      testMatch: /student\.spec\.ts|homework-student\.spec\.ts/,
+      testMatch: /student\.spec\.ts|homework-student\.spec\.ts|date-badge\.spec\.ts/,
       use: {
         browserName: "chromium",
         storageState: "e2e/.auth/student.json",
