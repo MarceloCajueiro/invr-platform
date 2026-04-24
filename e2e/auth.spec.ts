@@ -1,4 +1,5 @@
 import { test, expect, type Page } from "@playwright/test";
+import { execFileSync } from "node:child_process";
 
 // ============================
 // Constantes
@@ -181,4 +182,83 @@ test.describe("forgot password", () => {
     await page.getByRole("button", { name: /redefinir senha/i }).click();
     await expect(page.getByText(/link inválido ou expirado/i)).toBeVisible();
   });
+
+  // CT-60: happy path end-to-end. Cobre o gap do PR #4 — os testes anteriores
+  // validam UI/erros, mas nenhum verifica que o fluxo de fato redefine a senha.
+  // Usa um usuário throwaway criado via sign-up para não tocar nos seeds
+  // (reset com `revokeSessionsOnPasswordReset: true` invalidaria o
+  // storageState compartilhado de fran/marcelo).
+  test("CT-60: happy path — redefine a senha e faz login com a nova", async ({ page }) => {
+    const suffix = Date.now();
+    const EMAIL = `reset-flow-${suffix}@test.local`;
+    const INITIAL_PASSWORD = "senha-inicial-12345";
+    const NEW_PASSWORD = "nova-senha-e2e-12345";
+    // better-auth rejeita POSTs sem header Origin (MISSING_OR_NULL_ORIGIN).
+    const authHeaders = { Origin: "http://localhost:3001" };
+
+    // Cria o user isolado via sign-up (better-auth endpoint).
+    const signUp = await page.request.post("/api/auth/sign-up/email", {
+      headers: authHeaders,
+      data: {
+        email: EMAIL,
+        password: INITIAL_PASSWORD,
+        name: "E2E Reset Flow User",
+      },
+    });
+    expect(signUp.ok()).toBeTruthy();
+
+    // Dispara o request-password-reset (equivalente ao submit do
+    // /forgot-password — UI já coberta em testes anteriores).
+    const reqRes = await page.request.post("/api/auth/request-password-reset", {
+      headers: authHeaders,
+      data: { email: EMAIL, redirectTo: "/reset-password" },
+    });
+    expect(reqRes.ok()).toBeTruthy();
+
+    // Lê o token real da tabela verification no D1 local. better-auth salva
+    // como identifier = "reset-password:<token>".
+    const token = readLatestResetToken();
+    expect(token).toMatch(/^[A-Za-z0-9]+$/);
+
+    // Completa o fluxo pela UI.
+    await page.goto(`/reset-password?token=${token}`);
+    await page.getByLabel("Nova senha", { exact: true }).fill(NEW_PASSWORD);
+    await page.getByLabel(/confirmar nova senha/i).fill(NEW_PASSWORD);
+    await page.getByRole("button", { name: /redefinir senha/i }).click();
+
+    // Após sucesso: /reset-password navega para /sign-in?reset=success, e o
+    // /sign-in remove o query param após o primeiro paint. Asseguramos o banner.
+    await expect(
+      page.getByText(/senha redefinida com sucesso\. faça login/i),
+    ).toBeVisible();
+
+    // Login com a senha nova funciona. A senha antiga fica inutilizável.
+    await page.getByLabel("Email").fill(EMAIL);
+    await page.getByLabel("Senha").fill(NEW_PASSWORD);
+    await page.getByRole("button", { name: /entrar/i }).click();
+    // User novo é teacher por default (config: role defaultValue = "teacher").
+    await page.waitForURL(/\/(teacher\/dashboard|home)/, { timeout: 15000 });
+  });
 });
+
+function readLatestResetToken(): string {
+  const raw = execFileSync(
+    "wrangler",
+    [
+      "d1",
+      "execute",
+      "fluent-db",
+      "--local",
+      "--json",
+      "--command",
+      "SELECT identifier FROM verification WHERE identifier LIKE 'reset-password:%' ORDER BY createdAt DESC LIMIT 1",
+    ],
+    { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] },
+  );
+  const parsed = JSON.parse(raw);
+  const identifier = parsed[0]?.results?.[0]?.identifier;
+  if (typeof identifier !== "string" || !identifier.startsWith("reset-password:")) {
+    throw new Error(`Unexpected identifier shape: ${identifier}`);
+  }
+  return identifier.slice("reset-password:".length);
+}
